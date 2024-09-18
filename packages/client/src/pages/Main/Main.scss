@@ -1,0 +1,21 @@
+@import "../../scss/vars";
+
+.promo-page {
+  background-color: $c_default-background;
+  height: 100%;
+  display: flex;
+  position: relative;
+
+  &__logo {
+    width: 100%;
+    height: auto;
+  }
+
+  &__button {
+    position: absolute;
+
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
