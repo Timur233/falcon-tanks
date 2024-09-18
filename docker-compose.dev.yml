@@ -1,0 +1,25 @@
+version: '3.7'
+
+networks:
+  traefik:
+    name: 'traefik_traefik'
+    external: true
+
+services:
+  node:
+    build:
+      context: .
+      dockerfile: .docker/nodejs/Dockerfile
+      target: dev
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tanks.rule=Host(`tanks.docker`)"
+      - "traefik.docker.network=${TRAEFIK_NETWORK_NAME}"
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - "${CLIENT_PORT}:${CLIENT_PORT}"
+      - "${SERVER_PORT}:${SERVER_PORT}"
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    networks:
+      - traefik
