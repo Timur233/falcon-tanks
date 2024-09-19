@@ -13,6 +13,11 @@ import { SignUp } from "@/pages/SignUp/SignUp";
 import { Game } from "@/pages/Game/Game";
 import { Forum } from "@/pages/Forum/Forum";
 import { Error } from "@/pages/Error/Error";
+import { Thread } from "@/pages/Thread/Thread";
+import { Leaderboard } from "@/pages/Leaderboard/Leaderboard";
+import { Profile } from "@/pages/Profile/Profile";
+import { ProfileEdit } from "@/pages/Profile/Edit";
+import { ChangePassword } from "@/pages/Profile/ChangePassword";
 
 const routerConfig = createBrowserRouter([
   {
@@ -38,6 +43,26 @@ const routerConfig = createBrowserRouter([
           {
             path: '/forum',
             element: <Forum />
+          },
+          {
+            path: '/forum/:threadId',
+            element: <Thread />
+          },
+          {
+            path: '/leaderboard',
+            element: <Leaderboard />
+          },
+          {
+            path: '/profile',
+            element: <Profile />
+          },
+          {
+            path: '/profile/edit',
+            element: <ProfileEdit />
+          },
+          {
+            path: '/profile/change-password',
+            element: <ChangePassword />
           }
         ]
       },
