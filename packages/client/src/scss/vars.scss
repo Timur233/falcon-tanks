@@ -1,10 +1,17 @@
 $border-radius--default: 12px;
+
+// fonts
+$f_default-font-family: 'Roboto', sans-serif;
+
+// images
+$img_default-background: url('@/assets/images/page-background.png');
+
 // colors
 $c_default-background: #010101;
-$c_button: #839D22;
-$c_button-top: #D9ECA2;
-$c_button-bottom: #53650B;
-$c_white: #FFFFFF;
+$c_button: #839d22;
+$c_button-top: #d9eca2;
+$c_button-bottom: #53650b;
+$c_white: #ffffff;
 $c_black: #000;
 
 // fonts/links
