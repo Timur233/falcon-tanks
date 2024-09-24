@@ -97,7 +97,11 @@ function App() {
   //   fetchServerData()
   // }, [])
   //
-  return <RouterProvider router={routerConfig} />
+  return (
+    <div className={'app-layout'}>
+      <RouterProvider router={routerConfig} />
+    </div>
+  )
 }
 
 export default App
