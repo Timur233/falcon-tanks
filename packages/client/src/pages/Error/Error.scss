@@ -15,12 +15,16 @@
     flex-direction: column;
     align-items: center;
 
+    max-width: 350px;
+
+    z-index: 1;
+
     span {
       font-size: 160px;
       font-weight: 900;
       color: $c_font-default;
-      text-shadow: -8px -8px 0 $c_black, 8px -8px 0 $c_black,
-        -8px 8px 0 $c_black, 8px 8px 0 $c_black;
+      text-shadow: -4px -4px 0 $c_black, 4px -4px 0 $c_black,
+        -4px 4px 0 $c_black, 4px 4px 0 $c_black;
     }
 
     h1 {
@@ -28,14 +32,11 @@
       font-weight: 400;
       text-align: center;
       color: $c_font-default;
-
-      max-width: 350px;
     }
   }
 
   &__destroyed-tanks {
-    max-width: 450px;
-    height: auto;
+    max-width: 100%;
 
     position: absolute;
 
