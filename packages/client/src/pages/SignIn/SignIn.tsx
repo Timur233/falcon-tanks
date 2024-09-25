@@ -1,5 +1,3 @@
 export const SignIn = () => {
-  return (
-    <>Тут форма входа</>
-  )
+  return <>Тут форма входа</>
 }

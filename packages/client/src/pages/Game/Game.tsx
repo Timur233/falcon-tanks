@@ -1,5 +1,3 @@
 export const Game = () => {
-  return (
-    <>Тут будет игра</>
-  )
+  return <>Тут будет игра</>
 }

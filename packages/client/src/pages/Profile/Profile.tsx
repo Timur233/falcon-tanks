@@ -1,5 +1,3 @@
 export const Profile = () => {
-  return (
-    <>Страница профиля</>
-  )
+  return <>Страница профиля</>
 }
