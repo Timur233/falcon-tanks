@@ -1,0 +1,43 @@
+@import '../../../scss/vars';
+
+.main-header {
+    &__container {
+        display: flex;
+    }
+
+    &__logo-block {
+        margin-right: auto;
+    }
+}
+
+.logo-block {
+    user-select: none;
+
+    &__image {
+        width: 114px;
+        margin-bottom: -62px;
+    }
+}
+
+.main-nav {
+    display: flex;
+    gap: $nav_list-gap;
+    padding: $nav_list-padding-y $nav_list-padding-x;
+
+    &__link {
+        font-size: $nav_link-font-size;
+        font-weight: $nav_link-font-weight;
+        letter-spacing: 1px;
+        
+        text-shadow: $main-text-shadow;
+        text-transform: uppercase;
+        text-decoration: none;
+
+        color: #fff;
+        transition: color $animation-base-speed;
+
+        &:hover, &_active {
+            color: $primary-color;
+        }
+    }
+}
