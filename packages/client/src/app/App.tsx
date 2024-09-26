@@ -7,7 +7,7 @@ import PublicLayout from '@/layouts/public-layout'
 import RootLayout from '@/layouts/root-layout'
 import { Error } from '@/pages/Error/Error'
 import { Forum } from '@/pages/Forum/Forum'
-import { Game } from '@/pages/Game/Game'
+import { GamePage } from '@/pages/Game/Game'
 import { Leaderboard } from '@/pages/Leaderboard/Leaderboard'
 import { Main } from '@/pages/Main/Main'
 import { ChangePassword } from '@/pages/Profile/ChangePassword'
@@ -40,7 +40,7 @@ const routerConfig = createBrowserRouter([
         children: [
           {
             path: '/game',
-            element: <Game />,
+            element: <GamePage />,
           },
           {
             path: '/forum',
