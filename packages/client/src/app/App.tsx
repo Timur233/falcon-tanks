@@ -22,9 +22,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 const routerConfig = createBrowserRouter([
   {
     element: <RootLayout />,
-    errorElement: (
-      <Error code={404} message={'Запрашиваемая страница не найдена'} />
-    ),
+    errorElement: <Error />,
     children: [
       {
         element: <PublicLayout />,
