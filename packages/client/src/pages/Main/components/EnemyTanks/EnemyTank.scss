@@ -41,14 +41,14 @@
 
 .tank-smoke {
   &::after {
-      content: '';
-      position: absolute;
-      width: 600px;
-      height: 600px;
-      bottom: 0;
-      left: 0;
-      transform: translate(-50%, 50%);
-      background: $red_ligth_gradient;
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    bottom: 0;
+    left: 0;
+    transform: translate(-50%, 50%);
+    background: $red_ligth_gradient;
   }
 
   &_right {
@@ -62,7 +62,7 @@
   &__bottom {
     @include absoluteAndUserselect();
     @include smokeAnimate(2s, 0.6s, 15s);
-    
+
     left: -200px;
     bottom: -200px;
     width: 600px;
@@ -90,7 +90,7 @@
   &__top {
     @include absoluteAndUserselect();
     @include smokeAnimate(0s, 1s, 10s);
-    
+
     left: -50px;
     bottom: 410px;
     width: 200px;

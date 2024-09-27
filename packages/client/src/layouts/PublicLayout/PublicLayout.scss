@@ -1,14 +1,14 @@
-@import "../../scss/vars.scss";
+@import '../../scss/vars.scss';
 
 .public-layout {
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    min-height: 100vh;
-    z-index: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  min-height: 100vh;
+  z-index: 0;
 
-    &__body {
-        flex: 1 1 100%;
-        padding-top: $layout_body-m-top;
-    }
+  &__body {
+    flex: 1 1 100%;
+    padding-top: $layout_body-m-top;
+  }
 }

@@ -33,13 +33,13 @@ export const Main = () => {
           <div className="promo-page__actions">
             <Button
               className="promo-page__btn custom-button_blue"
-              useFixWidth={true}
+              useFixWidth
               href="/game"
               text="Вход / Регистрация"
             />
             <Button
               className="promo-page__btn"
-              useFixWidth={true}
+              useFixWidth
               href="/game"
               text="Играть"
             />

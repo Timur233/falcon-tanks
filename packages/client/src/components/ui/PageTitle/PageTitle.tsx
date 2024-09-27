@@ -1,21 +1,23 @@
 import './PageTitle.scss'
 import React from 'react'
 
-type PageTitleProps = {
+type PageTitlePropsType = {
   text: string
-  className: string
-  tagName: string
+  className?: string
+  tagName?: string
 }
 
-type DynamicTagElementProps = {
+type DynamicTagElementPropsType = {
   tagName: string
   children: React.ReactNode
 }
 
-export const PageTitle = (props: PageTitleProps) => {
+export const PageTitle = (props: PageTitlePropsType) => {
   const { text, className = '', tagName = 'h2' } = props
-  const DynamicTagElement = ({ tagName, children }: DynamicTagElementProps) =>
-    React.createElement(tagName, null, children)
+  const DynamicTagElement = ({
+    tagName,
+    children,
+  }: DynamicTagElementPropsType) => React.createElement(tagName, null, children)
 
   return (
     <div className={`page-title ${className}`}>

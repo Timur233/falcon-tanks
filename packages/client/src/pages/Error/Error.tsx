@@ -18,7 +18,7 @@ export const Error = () => {
 
   return (
     <div className="error-page-layout">
-      <Header className='error-page-layout__header'/>
+      <Header className="error-page-layout__header" />
       <div className="error-page-layout__body">
         <div className={'error-page'}>
           <div className={'error-page__info'}>

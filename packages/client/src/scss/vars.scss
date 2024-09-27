@@ -6,10 +6,10 @@ $f_default-font-family: 'Roboto', sans-serif;
 // images
 $img_default-background: url('@/assets/images/page-background.png');
 
-// main colors 
+// main colors
 $primary-color: #839d22;
-$second-color: #00AEEF;
-$text-color: #F8F8F8;
+$second-color: #00aeef;
+$text-color: #f8f8f8;
 
 // colors
 $c_default-background: #010101;
@@ -19,8 +19,8 @@ $c_button-top: #d9eca2;
 $c_button-bottom: #53650b;
 
 $c_button_blue: $second-color;
-$c_button-top_blue: #5FE1FF;
-$c_button-bottom_blue: #0079A7;
+$c_button-top_blue: #5fe1ff;
+$c_button-bottom_blue: #0079a7;
 
 $c_white: #ffffff;
 $c_black: #000;
@@ -29,13 +29,13 @@ $c_black: #000;
 $c_font-default: $c_white;
 
 // animations
-$animation-base-speed: .18s;
+$animation-base-speed: 0.18s;
 
 // effects
-$red-ligth-gradient: radial-gradient(#FC2204 -40%, transparent 70%);
+$red-ligth-gradient: radial-gradient(#fc2204 -40%, transparent 70%);
 $main-text-shadow: 1px 0 $c_black, -1px 0 $c_black, 0 1px $c_black,
-    0 -1px $c_black, 1px 1px $c_black, -1px -1px $c_black, 1px -1px $c_black,
-    -1px 1px $c_black;  
+  0 -1px $c_black, 1px 1px $c_black, -1px -1px $c_black, 1px -1px $c_black,
+  -1px 1px $c_black;
 
 // headers
 $nav_list-gap: 40px;
