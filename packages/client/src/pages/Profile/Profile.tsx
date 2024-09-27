@@ -1,4 +1,4 @@
-import { logoutUser } from '@/store/reducers/user-reducer'
+import { logoutUser } from '@/store/reducers/auth-reducer'
 import { useAppDispatch } from '@/store'
 
 export const Profile = () => {

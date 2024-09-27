@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { signUpUser } from '@/store/reducers/user-reducer'
+import { signUpUser } from '@/store/reducers/auth-reducer'
 import { useAppDispatch } from '@/store'
 
 export const SignUp = () => {

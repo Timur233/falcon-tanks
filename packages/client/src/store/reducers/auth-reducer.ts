@@ -18,7 +18,7 @@ const initialState = {
 }
 
 const slice = createSlice({
-  name: 'UserReducer',
+  name: 'AuthReducer',
   initialState,
   reducers: {
     setUser(state, actions) {
@@ -27,13 +27,13 @@ const slice = createSlice({
   },
 })
 
-const UserReducer = slice.reducer
+const AuthReducer = slice.reducer
 export const { actions } = slice
 
 export const getUser = () => async (dispatch: AppDispatch) => {
   await backendApi({
     method: 'get',
-    url: `${import.meta.env.VITE_AUTH_URL}/auth/user`,
+    url: '/auth/user',
   })
     .then((data: { data: UserType }) => {
       if (data) {
@@ -48,7 +48,7 @@ export const getUser = () => async (dispatch: AppDispatch) => {
 export const logoutUser = () => async (dispatch: AppDispatch) => {
   await backendApi({
     method: 'post',
-    url: `${import.meta.env.VITE_AUTH_URL}/auth/logout`,
+    url: '/auth/logout',
   })
     .then(() => {
       dispatch(actions.setUser(null))
@@ -64,7 +64,7 @@ export const signInUser =
   (dispatch: AppDispatch) => {
     return backendApi({
       method: 'post',
-      url: `${import.meta.env.VITE_AUTH_URL}/auth/signin`,
+      url: '/auth/signin',
       data: form,
     })
       .then(data => {
@@ -88,7 +88,7 @@ export const signUpUser =
   (form: { login: string; password: string }) => (dispatch: AppDispatch) => {
     backendApi({
       method: 'post',
-      url: `${import.meta.env.VITE_AUTH_URL}/auth/signup`,
+      url: '/auth/signup',
       data: form,
     })
       .then((data: { data: UserType }) => {
@@ -103,4 +103,4 @@ export const signUpUser =
   }
 
 export type ActionsType = InferAppActions<typeof actions>
-export default UserReducer
+export default AuthReducer
