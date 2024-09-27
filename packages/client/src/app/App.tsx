@@ -1,6 +1,3 @@
-// import { useEffect } from 'react'
-
-import '@/app/App.scss'
 import AuthLayout from '@/layouts/AuthLayout/AuthLayout'
 import PrivateLayout from '@/layouts/PrivateLayout/PrivateLayout'
 import PublicLayout from '@/layouts/PublicLayout/PublicLayout'

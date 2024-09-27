@@ -6,13 +6,13 @@ import SmokeMiddle from '@/assets/images/smoke-middle.png'
 import SmokeTop from '@/assets/images/smoke-top.png'
 
 type EnemyTanksPropsType = {
-  side?: '' | 'left' | 'right'
+  side?: 'left' | 'right'
   title?: string
   isLoaded?: boolean
 }
 
 export const EnemyTank = (props: EnemyTanksPropsType) => {
-  const { side = '', title = 'tank wars', isLoaded = false } = props
+  const { side = 'left', title = 'tank wars', isLoaded = false } = props
   const tankImage = side === 'right' ? EnemyTankRight : EnemyTankLeft
 
   return (

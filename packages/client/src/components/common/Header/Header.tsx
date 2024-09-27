@@ -8,8 +8,8 @@ type HeaderProps = {
 
 export const Header = (props: HeaderProps) => {
   const { className = '' } = props
-  const isActiveNavLink = (isActive: boolean) =>
-    isActive ? 'main-nav__link main-nav__link_active' : 'main-nav__link';
+  const getNavLinkClassName = (isActive: boolean) =>
+    isActive ? 'main-nav__link main-nav__link_active' : 'main-nav__link'
 
   return (
     <header className={`main-header ${className}`}>
@@ -26,22 +26,22 @@ export const Header = (props: HeaderProps) => {
         </div>
         <nav className="main-header__nav main-nav">
           <NavLink
-            className={({ isActive }) => isActiveNavLink(isActive)}
+            className={({ isActive }) => getNavLinkClassName(isActive)}
             to="/">
             Главная
           </NavLink>
           <NavLink
-            className={({ isActive }) => isActiveNavLink(isActive)}
+            className={({ isActive }) => getNavLinkClassName(isActive)}
             to="/leaderboard">
             Лидеры
           </NavLink>
           <NavLink
-            className={({ isActive }) => isActiveNavLink(isActive)}
+            className={({ isActive }) => getNavLinkClassName(isActive)}
             to="/forum">
             Форум
           </NavLink>
           <NavLink
-            className={({ isActive }) => isActiveNavLink(isActive)}
+            className={({ isActive }) => getNavLinkClassName(isActive)}
             to="/profile">
             Профиль
           </NavLink>
