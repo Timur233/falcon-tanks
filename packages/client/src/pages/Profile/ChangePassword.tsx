@@ -1,5 +1,3 @@
 export const ChangePassword = () => {
-  return (
-    <>Смена пароля</>
-  )
+  return <>Смена пароля</>
 }

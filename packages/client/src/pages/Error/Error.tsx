@@ -1,5 +1,3 @@
 export const Error = () => {
-  return (
-    <>Ошибочка</>
-  )
+  return <>Ошибочка</>
 }

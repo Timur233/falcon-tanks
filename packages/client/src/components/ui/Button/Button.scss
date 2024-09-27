@@ -1,4 +1,4 @@
-@import "../../../scss/vars";
+@import '../../../scss/vars';
 
 .custom-button {
   outline: none;
@@ -15,7 +15,7 @@
   border-bottom: 5px solid $c_button-bottom;
 
   font-size: 16px;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: 900;
   color: $c_font-default;
   text-decoration: none;
@@ -24,8 +24,9 @@
   span {
     letter-spacing: 2px;
     text-transform: uppercase;
-    text-shadow: 2px 0 $c_black, -2px 0 $c_black, 0 2px $c_black, 0 -2px $c_black,
-    2px 2px $c_black, -2px -2px $c_black, 2px -2px $c_black, -2px 2px $c_black;
+    text-shadow: 2px 0 $c_black, -2px 0 $c_black, 0 2px $c_black,
+      0 -2px $c_black, 2px 2px $c_black, -2px -2px $c_black, 2px -2px $c_black,
+      -2px 2px $c_black;
   }
 
   &_fix-width {
