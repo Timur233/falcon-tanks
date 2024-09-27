@@ -1,5 +1,16 @@
 @import '../../scss/vars';
 
+.error-page-layout {
+  height: 600px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &__body {
+    flex: 1 1 100%;
+  }
+}
+
 .error-page {
   height: 100%;
 
