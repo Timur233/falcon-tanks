@@ -1,3 +1,4 @@
+import '@/app/App.scss'
 import AuthLayout from '@/layouts/AuthLayout/AuthLayout'
 import PrivateLayout from '@/layouts/PrivateLayout/PrivateLayout'
 import PublicLayout from '@/layouts/PublicLayout/PublicLayout'
@@ -13,7 +14,6 @@ import { Profile } from '@/pages/Profile/Profile'
 import { SignIn } from '@/pages/SignIn/SignIn'
 import { SignUp } from '@/pages/SignUp/SignUp'
 import { Thread } from '@/pages/Thread/Thread'
-import '@/scss/styles.scss'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 const routerConfig = createBrowserRouter([
