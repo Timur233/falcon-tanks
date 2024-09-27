@@ -6,9 +6,9 @@
   cursor: pointer;
   border-radius: $border-radius--default;
   background-color: $c_button;
+  transition: border-color $animation-base-speed;
 
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: 16px 12px;
   display: block;
 
   border-top: 5px solid $c_button-top;
@@ -21,20 +21,29 @@
   text-decoration: none;
   text-align: center;
 
-  span {
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-shadow: 2px 0 $c_black, -2px 0 $c_black, 0 2px $c_black,
-      0 -2px $c_black, 2px 2px $c_black, -2px -2px $c_black, 2px -2px $c_black,
-      -2px 2px $c_black;
+  &:hover {
+    border-bottom-color: $c_button-top;
+    border-top-color: $c_button-bottom;
   }
 
   &_fix-width {
     min-width: 300px;
   }
 
-  &:hover {
-    border-top: 5px solid $c_button-bottom;
-    border-bottom: 5px solid $c_button-top;
+  &_blue {
+    background-color: $c_button_blue;
+    border-top: 5px solid $c_button-top_blue;
+    border-bottom: 5px solid $c_button-bottom_blue;
+
+    &:hover {
+      border-top-color: $c_button-bottom_blue;
+      border-bottom-color: $c_button-top_blue;
+    }
+  }
+
+  span {
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: $main-text-shadow;
   }
 }
