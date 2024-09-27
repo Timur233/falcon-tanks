@@ -1,6 +1,6 @@
 import './Main.scss'
 import { useEffect, useState } from 'react'
-import { PageTitle } from '@/components/ui/PageTitle/PageTitle'
+import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { Button } from '@/components/ui/Button/Button'
 import { EnemyTank } from './components/EnemyTanks/EnemyTank'
 
@@ -18,7 +18,7 @@ export const Main = () => {
 
       <div className="container">
         <div className="promo-page__content">
-          <PageTitle
+          <CustomPageTitle
             className="promo-page__title"
             tagName="h1"
             text="Вернись на поле битвы!"

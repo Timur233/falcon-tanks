@@ -6,9 +6,9 @@ export default function PublicLayout() {
   return (
     <div className="public-layout">
       <Header className="public-layout__header"></Header>
-      <div className="public-layout__body">
+      <main className="public-layout__body">
         <Outlet />
-      </div>
+      </main>
     </div>
   )
 }

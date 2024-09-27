@@ -1,118 +1,24 @@
 @import '../../../scss/vars';
 
-@mixin decorParentPosition {
-  position: absolute;
-  top: -$border-width;
-  left: -$border-width;
-  right: -$border-width;
-  bottom: -$border-width;
-}
-
-$bg-color: #1e1e1e;
-$border-width: 7px;
-$border-gradient: linear-gradient(45deg, #414243, #7f7f7f) top left,
-  linear-gradient(135deg, #7f7f7f, #414243) top right,
-  linear-gradient(225deg, #414243, #414042) bottom right,
-  linear-gradient(315deg, #414042, #414243) bottom left;
-$border-radius: 24px;
-$block-width: 350px;
-$outline-color: #101010;
-
 .page-title {
   position: relative;
-  display: flex;
-  justify-content: center;
+  display: block;
+  margin-bottom: 28px;
 
   &__block {
     position: relative;
     display: block;
-    border-radius: $border-radius;
-    z-index: 0;
-    width: $block-width;
-    max-width: 100%;
-  }
-
-  &__border {
-    @mixin borderDecorSettings($top, $bottom) {
-      content: '';
-      position: absolute;
-      top: $top;
-      bottom: $bottom;
-      left: 0;
-      right: 0;
-      height: $border-width;
-
-      background: url('@/assets/images/svg/title-decor.svg') no-repeat center
-        center;
-      background-size: contain;
-    }
-
-    @include decorParentPosition();
-
-    border-radius: $border-radius;
-    background: $border-gradient;
-    background-size: 50% 50%;
-    background-repeat: no-repeat;
-    z-index: -1;
-    padding: 10px;
-    outline: 3px solid $outline-color;
-
-    &::before {
-      @include borderDecorSettings(0, 'auto');
-    }
-
-    &::after {
-      @include borderDecorSettings('auto', 0);
-
-      transform: rotate(180deg);
-    }
-  }
-
-  &__screws {
-    @mixin screwSettings($left, $right) {
-      content: '';
-      position: absolute;
-      left: $left;
-      right: $right;
-      top: 50%;
-      width: 33px;
-      height: 41px;
-      z-index: -2;
-    }
-
-    @include decorParentPosition();
-
-    &::before {
-      @include screwSettings(0, 'auto');
-
-      transform: translate(calc(-100%), -50%) rotate(180deg);
-      background: url('@/assets/images/svg/title-decor--bolt.svg') no-repeat
-        center center;
-      background-size: contain;
-    }
-
-    &::after {
-      @include screwSettings('auto', 0);
-
-      transform: translate(calc(100%), -50%);
-      background: url('@/assets/images/svg/title-decor--bolt.svg') no-repeat
-        center center;
-      background-size: contain;
-    }
   }
 
   &__content {
-    border-radius: calc($border-radius - 6px);
-    border: 1px solid $primary-color;
-    background-color: $bg-color;
-    text-align: center;
     color: $text-color;
-    padding: 12px;
 
     & > * {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: 700;
+      text-transform: uppercase;
       letter-spacing: 1px;
+      text-shadow: $main-text-shadow;
       margin: 0;
       padding: 0;
     }
