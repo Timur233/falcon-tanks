@@ -1,10 +1,10 @@
-import './PageTitle.scss'
 import React from 'react'
+import './PageTitle.scss'
 
 type PageTitlePropsType = {
   text: string
   className?: string
-  tagName?: string
+  tagName: string
 }
 
 type DynamicTagElementPropsType = {
