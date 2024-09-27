@@ -5,9 +5,9 @@ export default function PrivateLayout() {
   return (
     <div className="private-layout">
       <Header className="private-layout__header"></Header>
-      <div className="private-layout__body">
+      <main className="private-layout__body">
         <Outlet />
-      </div>
+      </main>
     </div>
   )
 }
