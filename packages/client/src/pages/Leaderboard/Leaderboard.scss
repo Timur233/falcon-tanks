@@ -1,0 +1,117 @@
+@import './../../scss/vars.scss';
+
+.leaderboard-page {
+  &__logo {
+    display: flex;
+    margin: 0 auto 44px auto;
+    max-width: 255px;
+  }
+
+  &__title {
+    margin-bottom: 40px;
+  }
+
+  .records {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 17px;
+
+    .gradient-wrapper {
+      position: relative;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 16px;
+        background: linear-gradient(90deg, #adadad 52.5%, #474747 100%);
+      }
+    }
+
+    &__record-item {
+      display: flex;
+      justify-content: space-between;
+
+      position: relative;
+      z-index: 1;
+
+      margin: 5px;
+
+      border-radius: 16px;
+
+      background-color: #000;
+      color: white;
+
+      padding: 19px;
+    }
+
+    .record-item {
+      &__user-info {
+        display: flex;
+      }
+
+      &__user-result {
+        display: flex;
+
+        img {
+          width: 62px;
+          height: 62px;
+        }
+      }
+
+      &__title {
+        font-size: 10px;
+        color: $text-color;
+      }
+
+      &__value {
+        font-size: 18px;
+        font-weight: 800px;
+        color: $text-color;
+      }
+
+      .user-info {
+        display: flex;
+        gap: 24px;
+
+        img {
+          width: 97px;
+          height: 97px;
+        }
+
+        &__login {
+          display: flex;
+          flex-direction: column;
+
+          margin: auto;
+
+          h2 {
+            margin: 0;
+          }
+        }
+      }
+
+      .user-result {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+
+        &__score {
+          display: flex;
+          flex-direction: column;
+
+          margin: auto;
+
+          text-align: right;
+
+          h2 {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+}
