@@ -1,23 +1,22 @@
 // import { useEffect } from 'react'
 
 import '@/app/App.scss'
-import AuthLayout from '@/layouts/auth-layout'
-import PrivateLayout from '@/layouts/private-layout'
-import PublicLayout from '@/layouts/public-layout'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import RootLayout from '@/layouts/root-layout'
-import { Error } from '@/pages/Error/Error'
-import { Forum } from '@/pages/Forum/Forum'
-import { Game } from '@/pages/Game/Game'
-import { Leaderboard } from '@/pages/Leaderboard/Leaderboard'
+import PrivateLayout from '@/layouts/private-layout'
+import AuthLayout from '@/layouts/auth-layout'
+import PublicLayout from '@/layouts/public-layout'
 import { Main } from '@/pages/Main/Main'
-import { ChangePassword } from '@/pages/Profile/ChangePassword'
-import { ProfileEdit } from '@/pages/Profile/Edit'
-import { Profile } from '@/pages/Profile/Profile'
 import { SignIn } from '@/pages/SignIn/SignIn'
 import { SignUp } from '@/pages/SignUp/SignUp'
+import { Game } from '@/pages/Game/Game'
+import { Forum } from '@/pages/Forum/Forum'
+import { Error } from '@/pages/Error/Error'
 import { Thread } from '@/pages/Thread/Thread'
-import '@/scss/styles.scss'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Leaderboard } from '@/pages/Leaderboard/Leaderboard'
+import { Profile } from '@/pages/Profile/Profile'
+import { ProfileEdit } from '@/pages/Profile/Edit'
+import { ChangePassword } from '@/pages/Profile/ChangePassword'
 
 const routerConfig = createBrowserRouter([
   {
@@ -84,23 +83,7 @@ const routerConfig = createBrowserRouter([
 ])
 
 function App() {
-  // useEffect(() => {
-  //   const fetchServerData = async () => {
-  //     const url = `http://localhost:${__SERVER_PORT__}`
-  //     const response = await fetch(url)
-  //     const data = await response.json()
-  //     console.log(data)
-  //   }
-  //
-  //   fetchServerData()
-  // }, [])
-  //
-
-  return (
-    <div className={'app-layout'}>
-      <RouterProvider router={routerConfig} />
-    </div>
-  )
+  return <RouterProvider router={routerConfig} />
 }
 
 export default App
