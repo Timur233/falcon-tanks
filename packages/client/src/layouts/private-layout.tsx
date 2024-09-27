@@ -1,13 +1,13 @@
 import { useSelector } from 'react-redux'
 import { Outlet } from 'react-router-dom'
 import { RootState } from '@/store'
-import { getUser, UserType } from '@/store/reducers/user-reducer'
+import { getUser, UserType } from '@/store/reducers/auth-reducer'
 import { useEffect } from 'react'
 import { useAppDispatch } from '@/store'
 
 export default function PrivateLayout() {
   // get user from store
-  const user = useSelector<RootState, UserType>(state => state.UserReducer.user)
+  const user = useSelector<RootState, UserType>(state => state.AuthReducer.user)
   const dispatch = useAppDispatch()
 
   useEffect(() => {

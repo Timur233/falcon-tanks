@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useAppDispatch } from '@/store'
-import { signInUser } from '@/store/reducers/user-reducer'
+import { signInUser } from '@/store/reducers/auth-reducer'
 import { Button } from '@/components/ui/Button/Button'
 import { useSearchParams } from 'react-router-dom'
 
