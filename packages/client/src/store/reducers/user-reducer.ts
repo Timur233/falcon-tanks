@@ -35,12 +35,14 @@ export const getUser = () => async (dispatch: AppDispatch) => {
     method: 'get',
     url: `${import.meta.env.VITE_AUTH_URL}/auth/user`,
   })
-    .then((data: any) => {
+    .then((data: { data: UserType }) => {
       if (data) {
         dispatch(actions.setUser(data.data))
       }
     })
-    .catch(() => {})
+    .catch((error) => {
+      console.error(error)
+    })
 }
 
 export const logoutUser = () => async (dispatch: AppDispatch) => {
@@ -48,14 +50,13 @@ export const logoutUser = () => async (dispatch: AppDispatch) => {
     method: 'post',
     url: `${import.meta.env.VITE_AUTH_URL}/auth/logout`,
   })
-    .then((data: any) => {
-      if (data) {
-        dispatch(actions.setUser(null))
-
-        window.location.href = '/'
-      }
+    .then(() => {
+      dispatch(actions.setUser(null))
+      window.location.href = '/'
     })
-    .catch(() => {})
+    .catch((error) => {
+      console.error(error)
+    })
 }
 
 export const signInUser =
@@ -78,7 +79,9 @@ export const signInUser =
           }
         }
       })
-      .catch(() => {})
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
 export const signUpUser =
@@ -88,13 +91,15 @@ export const signUpUser =
       url: `${import.meta.env.VITE_AUTH_URL}/auth/signup`,
       data: form,
     })
-      .then(data => {
+      .then((data: { data: UserType }) => {
         if (data) {
-          dispatch(actions.setUser(data))
+          dispatch(actions.setUser(data.data))
           dispatch(getUser())
         }
       })
-      .catch(() => {})
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
 export type ActionsType = InferAppActions<typeof actions>

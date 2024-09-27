@@ -6,6 +6,7 @@ export const Button = (props: {
   className?: string | undefined
   useFixWidth?: boolean | undefined
   href?: string | undefined
+  /* eslint-disable @typescript-eslint/no-explicit-any */
   onClick?: (() => Promise<void>) | (() => any) | undefined
 }) => {
   const { text, className, useFixWidth = false, href = '/', onClick } = props
