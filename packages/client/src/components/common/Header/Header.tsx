@@ -3,13 +3,13 @@ import SiteLogo from '@/assets/images/site-logo.svg'
 import './Header.scss'
 
 type HeaderProps = {
-  className: string
+  className?: string
 }
 
 export const Header = (props: HeaderProps) => {
   const { className = '' } = props
   const isActiveNavLink = (isActive: boolean) =>
-    isActive ? 'main-nav__link main-nav__link_active' : 'main-nav__link'
+    isActive ? 'main-nav__link main-nav__link_active' : 'main-nav__link';
 
   return (
     <header className={`main-header ${className}`}>
