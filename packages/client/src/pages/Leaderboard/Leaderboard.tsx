@@ -15,9 +15,9 @@ export const Leaderboard = () => {
         tagName="h1"
         className="leaderboard-page__title"></PageTitle>
       <div className="records">
-        {Array.from({ length: RECORD_ITEMS_COUNT }).map(_ => {
+        {Array.from({ length: RECORD_ITEMS_COUNT }).map((_, index) => {
           return (
-            <div className="records__item-wrapper">
+            <div key={index} className="records__item-wrapper">
               <div className="records__item record-item">
                 <div className="record-item__user-info user-info">
                   <img
