@@ -16,6 +16,7 @@ import { SignUp } from '@/pages/SignUp/SignUp'
 import { Thread } from '@/pages/Thread/Thread'
 import '@/scss/styles.scss'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { SvgSprite } from '@/components/ui/SvgSprite/SvgSprite'
 
 const routerConfig = createBrowserRouter([
   {
@@ -86,7 +87,12 @@ const routerConfig = createBrowserRouter([
 ])
 
 function App() {
-  return <RouterProvider router={routerConfig} />
+  return (
+    <>
+      <RouterProvider router={routerConfig} />
+      <SvgSprite />
+    </>
+  )
 }
 
 export default App
