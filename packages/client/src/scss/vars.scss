@@ -9,6 +9,7 @@ $img_default-background: url('@/assets/images/page-background.png');
 // main colors
 $primary-color: #839d22;
 $second-color: #00aeef;
+$error-color: #a51300;
 $text-color: #f8f8f8;
 $text-color-muted: #f5f5f5;
 // colors
@@ -24,6 +25,8 @@ $c_button_blue: $second-color;
 $c_button-top_blue: #5fe1ff;
 $c_button-bottom_blue: #0079a7;
 
+$c_button_red: $error-color;
+
 $c_white: #fff;
 $c_black: #000;
 
@@ -38,6 +41,7 @@ $red-ligth-gradient: radial-gradient(#fc2204 -40%, transparent 70%);
 $main-text-shadow: 1px 0 $c_black, -1px 0 $c_black, 0 1px $c_black,
   0 -1px $c_black, 1px 1px $c_black, -1px -1px $c_black, 1px -1px $c_black,
   -1px 1px $c_black;
+$overlay-color: #000000bd;
 
 // headers
 $nav_list-gap: 40px;
