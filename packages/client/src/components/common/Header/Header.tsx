@@ -13,39 +13,41 @@ export const Header = (props: HeaderProps) => {
 
   return (
     <header className={`main-header ${className}`}>
-      <div className="container-fluid main-header__container">
-        <div className="main-header__logo-block logo-block">
-          <Link className="logo-block__link" to="/">
-            <img
-              src={SiteLogo}
-              className="logo-block__image"
-              alt="Falcon Tanks Logo"
-              draggable="false"
-            />
-          </Link>
+      <div className="container-fluid">
+        <div className="main-header__container">
+          <div className="main-header__logo-block logo-block">
+            <Link className="logo-block__link" to="/">
+              <img
+                src={SiteLogo}
+                className="logo-block__image"
+                alt="Falcon Tanks Logo"
+                draggable="false"
+              />
+            </Link>
+          </div>
+          <nav className="main-header__nav main-nav">
+            <NavLink
+              className={({ isActive }) => getNavLinkClassName(isActive)}
+              to="/">
+              Главная
+            </NavLink>
+            <NavLink
+              className={({ isActive }) => getNavLinkClassName(isActive)}
+              to="/leaderboard">
+              Лидеры
+            </NavLink>
+            <NavLink
+              className={({ isActive }) => getNavLinkClassName(isActive)}
+              to="/forum">
+              Форум
+            </NavLink>
+            <NavLink
+              className={({ isActive }) => getNavLinkClassName(isActive)}
+              to="/profile">
+              Профиль
+            </NavLink>
+          </nav>
         </div>
-        <nav className="main-header__nav main-nav">
-          <NavLink
-            className={({ isActive }) => getNavLinkClassName(isActive)}
-            to="/">
-            Главная
-          </NavLink>
-          <NavLink
-            className={({ isActive }) => getNavLinkClassName(isActive)}
-            to="/leaderboard">
-            Лидеры
-          </NavLink>
-          <NavLink
-            className={({ isActive }) => getNavLinkClassName(isActive)}
-            to="/forum">
-            Форум
-          </NavLink>
-          <NavLink
-            className={({ isActive }) => getNavLinkClassName(isActive)}
-            to="/profile">
-            Профиль
-          </NavLink>
-        </nav>
       </div>
     </header>
   )
