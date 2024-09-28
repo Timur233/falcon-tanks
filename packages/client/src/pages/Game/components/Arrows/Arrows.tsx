@@ -1,6 +1,6 @@
+import { Icon } from '@/components/ui/Icon/Icon'
 import { ControllBtn } from '../ControllBtn/ControllBtn'
 import './Arrows.scss'
-import { Icon } from '@/components/ui/Icon/Icon'
 
 type ArrowsPropsType = {
   className?: string

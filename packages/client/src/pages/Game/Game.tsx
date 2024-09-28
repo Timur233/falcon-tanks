@@ -1,13 +1,13 @@
-import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
-import { Arrows } from './components/Arrows/Arrows'
-import { KillsCounter } from './components/KillsCounter/KillsCounter'
-import './Game.scss'
-import { PauseHelp } from './components/PauseHelp/PauseHelp'
-import { FireControll } from './components/FireControll/FireControll'
-import { useEffect, useState } from 'react'
-import { Modal } from '@/components/common/Modal/Modal'
 import GameInfo from '@/assets/images/game-info.jpg'
+import { Modal } from '@/components/common/Modal/Modal'
 import { Button } from '@/components/ui/Button/Button'
+import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
+import { useEffect, useState } from 'react'
+import { Arrows } from './components/Arrows/Arrows'
+import { FireControll } from './components/FireControll/FireControll'
+import { KillsCounter } from './components/KillsCounter/KillsCounter'
+import { PauseHelp } from './components/PauseHelp/PauseHelp'
+import './Game.scss'
 
 export const Game = () => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
