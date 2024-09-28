@@ -3,11 +3,11 @@ import './Button.scss'
 
 export const Button = (props: {
   text: string
-  className: string
-  useFixWidth: boolean
+  className?: string
+  useFixWidth?: boolean
   href?: string
 }) => {
-  const { text, className, useFixWidth = false, href = '/' } = props
+  const { text, className = '', useFixWidth = false, href = '/' } = props
   return (
     <Link
       to={href}
