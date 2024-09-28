@@ -1,5 +1,6 @@
 import { Header } from '@/components/common/Header/Header'
 import { Outlet } from 'react-router-dom'
+import './PrivateLayout.scss';
 
 export default function PrivateLayout() {
   return (
