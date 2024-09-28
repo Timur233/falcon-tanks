@@ -58,11 +58,11 @@ $outline-color: #101010;
     outline: 3px solid $outline-color;
 
     &::before {
-      @include borderDecorSettings(0, 'auto');
+      @include borderDecorSettings(0, auto);
     }
 
     &::after {
-      @include borderDecorSettings('auto', 0);
+      @include borderDecorSettings(auto, 0);
 
       transform: rotate(180deg);
     }
