@@ -151,3 +151,22 @@ $border-color: #70842f;
   inset: 12px;
   background-color: $overlay-color;
 }
+
+.game-over-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 12px;
+  background-color: $overlay-color;
+  background-image: url('@/assets/images/game-over.png');
+  background-size: cover;
+
+  &__title {
+    font-size: 40px;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+}
