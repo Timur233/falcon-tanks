@@ -1,0 +1,24 @@
+@import '../../../../scss/vars.scss';
+
+.kills-counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 127px;
+  height: 50px;
+
+  background: url('@/assets/images/svg/kills-count-bg.svg') no-repeat center
+    center;
+  background-size: contain;
+
+  &__number {
+    display: block;
+    width: 100%;
+    padding: 0 32px 0 60px;
+    line-height: 1;
+
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+  }
+}
