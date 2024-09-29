@@ -10,8 +10,8 @@ type ArrowsPropsType = {
     leftButton: boolean
     rightButton: boolean
     fireButton: boolean
-  },
-  clickHandler: () => void,
+  }
+  clickHandler: () => void
 }
 
 export const Arrows = (props: ArrowsPropsType) => {
