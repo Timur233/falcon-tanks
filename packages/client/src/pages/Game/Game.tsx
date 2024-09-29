@@ -28,7 +28,7 @@ export const Game = () => {
   }
 
   const arrowClickHandler = () => {
-    return;
+    return
   }
 
   const toggleButton = (event: Event, buttonName: string, state: boolean) => {
