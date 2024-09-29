@@ -1,0 +1,153 @@
+@import '../../scss/vars.scss';
+
+@mixin customPosition($left, $top, $right, $bottom) {
+  left: $left;
+  top: $top;
+  right: $right;
+  bottom: $bottom;
+}
+
+$border-color: #70842f;
+
+.game-page {
+  &__container {
+    margin: 0 auto;
+    max-width: 1400px !important;
+  }
+}
+
+.game-wrapper {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  background-color: $c_black;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 4px solid $c_black;
+  padding: 12px;
+  z-index: 1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to left, #5e5e5e, #414243);
+    z-index: -1;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 7px;
+    border: 2px solid $border-color;
+    background: $c_black;
+    z-index: -1;
+  }
+
+  &__decor-hr {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    &::before {
+      content: '';
+      position: absolute;
+      height: 8px;
+
+      @include customPosition(0, 0, 0, auto);
+
+      background: url('@/assets/images/svg/title-decor.svg') no-repeat center
+        center;
+      background-size: contain;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      height: 8px;
+
+      @include customPosition(auto, 0, 0, 0);
+
+      background: url('@/assets/images/svg/title-decor.svg') no-repeat center
+        center;
+      background-size: contain;
+      transform: rotate(180deg);
+    }
+  }
+
+  &__decor-vr {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 8px;
+
+      @include customPosition(0, 0, auto, 0);
+
+      background: url('@/assets/images/svg/title-decor-vertical.svg') no-repeat
+        center center;
+      background-size: contain;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+
+      @include customPosition(auto, 0, 0, 0);
+
+      background: url('@/assets/images/svg/title-decor-vertical.svg') no-repeat
+        center center;
+      background-size: contain;
+
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.game-controll {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 290px;
+  margin: auto;
+
+  &__lives {
+    width: 223px;
+    margin: 8px 0;
+
+    & .custom-page-title__content {
+      padding: 28px 12px;
+    }
+
+    & .custom-page-title__content > * {
+      font-size: 44px;
+    }
+  }
+
+  &__kills,
+  &__lives,
+  &__pause-help-buttons {
+    margin-bottom: 32px;
+  }
+
+  &__arrows {
+    margin-bottom: 20px;
+  }
+
+  &__fire {
+    margin-right: auto;
+  }
+}
+
+.start-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 12px;
+  background-color: $overlay-color;
+}
