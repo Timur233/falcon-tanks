@@ -1,0 +1,21 @@
+@import '../../../scss/vars';
+
+.breadcrumbs {
+  &__item {
+    color: $c_white;
+
+    &:not(:last-child)::after {
+      content: '>';
+      margin: 9px;
+
+      font-size: 14px;
+
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    &:last-child {
+      text-decoration: none;
+    }
+  }
+}
