@@ -16,7 +16,9 @@ export const handleKeyUp = (key: string) => {
 export const updatePlayerMovement = (
   player: Player,
   setPlayer: React.Dispatch<React.SetStateAction<Player>>,
-  speedFactor: number
+  speedFactor: number,
+  canvasWidth: number,
+  canvasHeight: number
 ) => {
   const speed = player.speed * speedFactor
 
@@ -24,6 +26,7 @@ export const updatePlayerMovement = (
     let newX = prevPlayer.x
     let newY = prevPlayer.y
 
+    // Определение направления движения
     if (keyMap['ArrowUp'] || keyMap['w'] || keyMap['ц']) {
       newY -= speed
     }
@@ -37,9 +40,9 @@ export const updatePlayerMovement = (
       newX += speed
     }
 
-    // Ограничение движения по краям экрана
-    newX = Math.max(0, Math.min(newX, window.innerWidth - prevPlayer.width))
-    newY = Math.max(0, Math.min(newY, window.innerHeight - prevPlayer.height))
+    // Ограничение движения по краям canvas
+    newX = Math.max(0, Math.min(newX, canvasWidth - prevPlayer.width))
+    newY = Math.max(0, Math.min(newY, canvasHeight - prevPlayer.height))
 
     return { ...prevPlayer, x: newX, y: newY }
   })

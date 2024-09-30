@@ -52,7 +52,15 @@ export const Game: React.FC = () => {
           const elapsed = timestamp - lastTimestamp
           setDelay(elapsed)
         }
-        updatePlayerMovement(player, setPlayer, speedFactor)
+        const canvas = getCanvas()
+        if (!canvas) return
+        updatePlayerMovement(
+          player,
+          setPlayer,
+          speedFactor,
+          canvas.width,
+          canvas.height
+        )
         gameLoop(
           timestamp,
           context,
@@ -102,8 +110,7 @@ export const Game: React.FC = () => {
 
   useEffect(() => {
     if (gameStarted && !isPaused) {
-      const canvas = canvasRef.current
-      context = canvas?.getContext('2d')
+      context = getContext()
 
       if (context) {
         requestAnimationFrame(loop)
