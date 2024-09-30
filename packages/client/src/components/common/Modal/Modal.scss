@@ -61,30 +61,27 @@ $border-color: #70842f;
     inset: 0;
     z-index: -1;
 
-    &::before {
+    @mixin borderDecorSettings($top, $bottom) {
       content: '';
       position: absolute;
-      height: 8px;
+      top: $top;
+      bottom: $bottom;
       left: 0;
-      top: 0;
       right: 0;
+      height: 8px;
 
       background: url('@/assets/images/svg/title-decor.svg') no-repeat center
         center;
       background-size: contain;
     }
 
-    &::after {
-      content: '';
-      position: absolute;
-      height: 8px;
-      left: 0;
-      bottom: 0;
-      right: 0;
+    &::before {
+      @include borderDecorSettings(0, auto);
+    }
 
-      background: url('@/assets/images/svg/title-decor.svg') no-repeat center
-        center;
-      background-size: contain;
+    &::after {
+      @include borderDecorSettings(auto, 0);
+
       transform: rotate(180deg);
     }
   }

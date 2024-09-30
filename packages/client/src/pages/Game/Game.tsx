@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { Modal } from '@/components/common/Modal/Modal'
 import GameInfo from '@/assets/images/game-info.jpg'
 import { Button } from '@/components/ui/Button/Button'
+import { Loader } from '@/components/ui/Loader/Loader'
 
 export const Game = () => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
@@ -37,6 +38,7 @@ export const Game = () => {
     setButtonsState({ ...buttonsState, [buttonName]: state })
   }
 
+  // TODO: Заменить на финальное решение для отслеживания кнопок
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       const isKeydown = event.type === 'keydown'
