@@ -1,13 +1,19 @@
 import { Link } from 'react-router-dom'
 import './Button.scss'
+import React from 'react'
 
 export const Button = (props: {
   text: string
   className?: string | undefined
   useFixWidth?: boolean | undefined
   href?: string | undefined
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  onClick?: (() => Promise<void>) | (() => any) | undefined
+  onClick?:
+    | ((
+        event:
+          | React.MouseEvent<HTMLButtonElement>
+          | React.FormEvent<HTMLFormElement>
+      ) => void)
+    | (() => Promise<void>)
 }) => {
   const { text, className, useFixWidth = false, href = '/', onClick } = props
   return (

@@ -1,11 +1,10 @@
 // import { useEffect } from 'react'
 
-import '@/app/App.scss'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import RootLayout from '@/layouts/root-layout'
-import PrivateLayout from '@/layouts/private-layout'
-import AuthLayout from '@/layouts/auth-layout'
-import PublicLayout from '@/layouts/public-layout'
+import RootLayout from '@/layouts/RootLayout/RootLayout'
+import PrivateLayout from '@/layouts/PrivateLayout/PrivateLayout'
+import AuthLayout from '@/layouts/AuthLayout/AuthLayout'
+import PublicLayout from '@/layouts/PublicLayout/PublicLayout'
 import { Main } from '@/pages/Main/Main'
 import { SignIn } from '@/pages/SignIn/SignIn'
 import { SignUp } from '@/pages/SignUp/SignUp'
@@ -15,7 +14,6 @@ import { Error } from '@/pages/Error/Error'
 import { Thread } from '@/pages/Thread/Thread'
 import { Leaderboard } from '@/pages/Leaderboard/Leaderboard'
 import { Profile } from '@/pages/Profile/Profile'
-import { ProfileEdit } from '@/pages/Profile/Edit'
 import { ChangePassword } from '@/pages/Profile/ChangePassword'
 
 const routerConfig = createBrowserRouter([
@@ -54,10 +52,6 @@ const routerConfig = createBrowserRouter([
           {
             path: '/profile',
             element: <Profile />,
-          },
-          {
-            path: '/profile/edit',
-            element: <ProfileEdit />,
           },
           {
             path: '/profile/change-password',

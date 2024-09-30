@@ -40,7 +40,7 @@ export const getUser = () => async (dispatch: AppDispatch) => {
         dispatch(actions.setUser(data.data))
       }
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error)
     })
 }
@@ -54,7 +54,7 @@ export const logoutUser = () => async (dispatch: AppDispatch) => {
       dispatch(actions.setUser(null))
       window.location.href = '/'
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error)
     })
 }
@@ -79,7 +79,7 @@ export const signInUser =
           }
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error)
       })
   }
@@ -97,7 +97,7 @@ export const signUpUser =
           dispatch(getUser())
         }
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error)
       })
   }

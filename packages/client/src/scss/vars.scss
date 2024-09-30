@@ -22,6 +22,11 @@ $c_button_blue: $second-color;
 $c_button-top_blue: #5fe1ff;
 $c_button-bottom_blue: #0079a7;
 
+$c_input-default-border: #707070;
+$c_input-default-border-hover: #b1b1b1;
+
+$c_success: #48c548;
+
 $c_white: #ffffff;
 $c_black: #000;
 
@@ -36,6 +41,9 @@ $red-ligth-gradient: radial-gradient(#fc2204 -40%, transparent 70%);
 $main-text-shadow: 1px 0 $c_black, -1px 0 $c_black, 0 1px $c_black,
   0 -1px $c_black, 1px 1px $c_black, -1px -1px $c_black, 1px -1px $c_black,
   -1px 1px $c_black;
+$success-text-shadow: 1px 0 $c_success, -1px 0 $c_success, 0 1px $c_success,
+  0 -1px $c_success, 1px 1px $c_success, -1px -1px $c_success,
+  1px -1px $c_success, -1px 1px $c_success;
 
 // headers
 $nav_list-gap: 40px;

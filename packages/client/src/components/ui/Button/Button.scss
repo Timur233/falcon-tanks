@@ -47,3 +47,23 @@
     text-shadow: $main-text-shadow;
   }
 }
+
+.link-button {
+  background: none;
+  border: none;
+  font-size: $nav_link-font-size;
+  font-weight: $nav_link-font-weight;
+  letter-spacing: 1px;
+
+  text-shadow: $main-text-shadow;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  color: $text-color;
+  transition: color $animation-base-speed;
+
+  &:hover,
+  &_active {
+    color: $primary-color;
+  }
+}
