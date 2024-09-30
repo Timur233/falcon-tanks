@@ -3,13 +3,13 @@ import { KeyMap, Player } from '@/components/Game/gameTypes'
 const keyMap: KeyMap = {}
 
 // Обработчик нажатия клавиш
-export const handleKeyDown = (event: KeyboardEvent) => {
-  keyMap[event.key] = true
+export const handleKeyDown = (key: string) => {
+  keyMap[key] = true
 }
 
 // Обработчик отпускания клавиш
-export const handleKeyUp = (event: KeyboardEvent) => {
-  keyMap[event.key] = false
+export const handleKeyUp = (key: string) => {
+  delete keyMap[key]
 }
 
 // Функция для обновления позиции игрока на основе нажатых клавиш

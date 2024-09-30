@@ -83,14 +83,22 @@ export const Game: React.FC = () => {
   )
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown)
-    window.addEventListener('keyup', handleKeyUp)
+    const handleKeyDownWrapper = (event: KeyboardEvent) =>
+      handleKeyDown(event.key)
+    const handleKeyUpWrapper = (event: KeyboardEvent) => handleKeyUp(event.key)
+
+    window.addEventListener('keydown', handleKeyDownWrapper)
+    window.addEventListener('keyup', handleKeyUpWrapper)
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-      window.removeEventListener('keyup', handleKeyUp)
+      window.removeEventListener('keydown', handleKeyDownWrapper)
+      window.removeEventListener('keyup', handleKeyUpWrapper)
     }
   }, [])
+
+  const getCanvas = () => canvasRef.current
+
+  const getContext = () => getCanvas()?.getContext('2d')
 
   useEffect(() => {
     if (gameStarted && !isPaused) {
