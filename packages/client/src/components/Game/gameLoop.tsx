@@ -1,15 +1,11 @@
 import { handlePlayerHit, resetPlayerPosition } from './player'
-import {
-  updateEnemyPositions,
-  respawnEnemies,
-  detectEnemyCollision,
-} from './enemy'
+import { updateEnemyPositions, respawnEnemies } from './enemy'
 import { clearCanvas, drawPlayer, drawEnemies, drawObstacles } from './utils'
 import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
+import { detectEnemyCollision } from '@/components/Game/collision'
 
 /**
  * Основной игровой цикл, который обновляет состояние игры и перерисовывает экран каждый кадр.
- * @param timestamp - Время, прошедшее с начала игры, используется для расчета обновлений.
  * @param context - Контекст рисования для Canvas.
  * @param player - Объект игрока.
  * @param setPlayer - Функция для обновления состояния игрока.
@@ -18,13 +14,11 @@ import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
  * @param obstacles - Массив препятствий.
  * @param lives - Текущее количество жизней игрока.
  * @param setLives - Функция для изменения количества жизней игрока.
- * @param speedFactor - Коэффициент скорости.
  * @param handleGameOver - Обработчик события окончания игры.
  * @param isPaused - Флаг паузы.
  * @param isGameOver - Флаг окончания игры.
  */
 export const gameLoop = (
-  timestamp: number,
   context: CanvasRenderingContext2D,
   player: Player,
   setPlayer: React.Dispatch<React.SetStateAction<Player>>,
@@ -33,7 +27,6 @@ export const gameLoop = (
   obstacles: Obstacle[],
   lives: number,
   setLives: React.Dispatch<React.SetStateAction<number>>,
-  speedFactor: number,
   handleGameOver: () => void,
   isPaused: boolean,
   isGameOver: boolean
@@ -41,7 +34,7 @@ export const gameLoop = (
   clearCanvas(context)
 
   // Обновление позиций врагов
-  updateEnemyPositions(player, enemies, setEnemies, speedFactor)
+  updateEnemyPositions(player, enemies, setEnemies)
   // Отрисовка всех игровых объектов
   drawObstacles(context, obstacles)
   drawPlayer(context, player)
@@ -68,9 +61,8 @@ export const gameLoop = (
 
   // Запуск следующего кадра (будет работать только если игра не на паузе)
   if (!isPaused && !isGameOver) {
-    requestAnimationFrame(newTimestamp =>
+    requestAnimationFrame(() =>
       gameLoop(
-        newTimestamp,
         context,
         player,
         setPlayer,
@@ -79,7 +71,6 @@ export const gameLoop = (
         obstacles,
         lives,
         setLives,
-        speedFactor,
         handleGameOver,
         isPaused,
         isGameOver

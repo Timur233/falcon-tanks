@@ -1,5 +1,6 @@
 import { ControlsProps, KeyMap } from '@/components/Game/gameTypes'
-import { detectCollision } from '@/components/Game/player'
+
+import { detectCollision } from '@/components/Game/collision'
 
 const keyMap: KeyMap = {}
 
@@ -15,7 +16,7 @@ export const handleKeyUp = (key: string) => {
 
 // Функция для обновления позиции игрока на основе нажатых клавиш
 export const updatePlayerMovement = (props: ControlsProps) => {
-  const speed = props.player.speed * props.speedFactor
+  const speed = props.player.speed
 
   props.setPlayer(prevPlayer => {
     let newX = prevPlayer.x

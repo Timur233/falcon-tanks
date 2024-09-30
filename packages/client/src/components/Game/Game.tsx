@@ -11,7 +11,7 @@ import {
 import { ControlsProps, Obstacle } from '@/components/Game/gameTypes'
 import { initializeObstacle } from '@/components/Game/obstacle'
 
-const speedFactor = 1
+const maxFPS = 60
 const livesUse = 3
 
 export const Game: React.FC = () => {
@@ -19,12 +19,11 @@ export const Game: React.FC = () => {
   let context: CanvasRenderingContext2D | null | undefined
   const [lives, setLives] = useState<number>(livesUse)
   const [player, setPlayer] = useState(initializePlayer())
-  const [enemies, setEnemies] = useState(initializeEnemies())
-  const [obstacles, setObstacles] = useState<Obstacle[]>(initializeObstacle())
+  const [enemies, setEnemies] = useState(initializeEnemies(5))
+  const [obstacles] = useState<Obstacle[]>(initializeObstacle())
   const [isPaused, setIsPaused] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
   const [gameStarted, setGameStarted] = useState(false)
-  const [delay, setDelay] = useState(0)
   const [lastTimestamp, setLastTimestamp] = useState(0)
 
   const togglePause = () => {
@@ -48,37 +47,35 @@ export const Game: React.FC = () => {
   const loop = useCallback(
     (timestamp: number) => {
       if (!isPaused && !isGameOver && context) {
-        if (lastTimestamp) {
-          const elapsed = timestamp - lastTimestamp
-          setDelay(elapsed)
+        const deltaTime = timestamp - lastTimestamp
+
+        if (deltaTime >= 1000 / maxFPS) {
+          setLastTimestamp(timestamp)
+          const canvas = getCanvas()
+          if (!canvas) return
+          const moveProps: ControlsProps = {
+            player,
+            setPlayer,
+            obstacles,
+            canvasWidth: canvas.width,
+            canvasHeight: canvas.height,
+          }
+          updatePlayerMovement(moveProps)
+          gameLoop(
+            context,
+            player,
+            setPlayer,
+            enemies,
+            setEnemies,
+            obstacles,
+            lives,
+            setLives,
+            handleGameOver,
+            isPaused,
+            isGameOver
+          )
+          requestAnimationFrame(loop)
         }
-        const canvas = getCanvas()
-        if (!canvas) return
-        const moveProps: ControlsProps = {
-          player,
-          setPlayer,
-          speedFactor,
-          obstacles,
-          canvasWidth: canvas.width,
-          canvasHeight: canvas.height,
-        }
-        updatePlayerMovement(moveProps)
-        gameLoop(
-          timestamp,
-          context,
-          player,
-          setPlayer,
-          enemies,
-          setEnemies,
-          obstacles,
-          lives,
-          setLives,
-          speedFactor,
-          handleGameOver,
-          isPaused,
-          isGameOver
-        )
-        requestAnimationFrame(loop)
       }
     },
     [

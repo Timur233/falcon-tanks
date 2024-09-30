@@ -1,48 +1,13 @@
-import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
+import { Enemy, Player } from '@/components/Game/gameTypes'
 
 export const initializePlayer = () => ({
   x: 400,
   y: 300,
   width: 30,
   height: 30,
-  speed: 0.1,
+  speed: 0.5,
   direction: { x: 0, y: 0 },
 })
-
-export const detectCollision = (
-  player: Player,
-  obstacle: Obstacle
-): boolean => {
-  return (
-    player.x < obstacle.x + obstacle.width &&
-    player.x + player.width > obstacle.x &&
-    player.y < obstacle.y + obstacle.height &&
-    player.y + player.height > obstacle.y
-  )
-}
-
-export const updatePlayerPosition = (
-  player: Player,
-  setPlayer: React.Dispatch<React.SetStateAction<Player>>,
-  obstacles: Obstacle[]
-) => {
-  const newX = player.x + player.direction.x * player.speed
-  const newY = player.y + player.direction.y * player.speed
-
-  let collisionDetected = false
-  obstacles.forEach(obstacle => {
-    if (detectCollision({ ...player, x: newX, y: newY }, obstacle)) {
-      collisionDetected = true
-    }
-  })
-  if (!collisionDetected) {
-    setPlayer(prev => ({
-      ...prev,
-      x: newX,
-      y: newY,
-    }))
-  }
-}
 
 export const resetPlayerPosition = (
   setPlayer: React.Dispatch<React.SetStateAction<Player>>
