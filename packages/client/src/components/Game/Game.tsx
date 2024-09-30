@@ -110,7 +110,7 @@ export const Game: React.FC = () => {
 
   return (
     <div className="game-container">
-      <div className="lives">Жизни: {lives}</div>
+      <div className="lives">{`Жизни: ${lives}`}</div>
       <canvas ref={canvasRef} width={800} height={600}></canvas>
 
       {!gameStarted ? (
