@@ -1,5 +1,3 @@
-// import { useEffect } from 'react'
-
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import RootLayout from '@/layouts/RootLayout/RootLayout'
 import PrivateLayout from '@/layouts/PrivateLayout/PrivateLayout'
