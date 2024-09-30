@@ -34,6 +34,25 @@ $road-color: #2c414c;
   &__image {
     width: 60px;
   }
+
+  &__close-btn {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, 100px);
+    cursor: pointer;
+
+    background: none;
+    border: none;
+    outline: none;
+
+    color: $text-color;
+    font-size: 14px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 @keyframes moveRoad {

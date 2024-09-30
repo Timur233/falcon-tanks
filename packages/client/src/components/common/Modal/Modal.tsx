@@ -2,7 +2,7 @@ import { Icon } from '@/components/ui/Icon/Icon'
 import './Modal.scss'
 
 type ModalPropsType = {
-  show?: boolean
+  show: boolean
   onClose: () => void
   width?: number | null
   height?: number | null
