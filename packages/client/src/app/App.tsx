@@ -2,6 +2,7 @@ import AuthLayout from '@/layouts/AuthLayout/AuthLayout'
 import PrivateLayout from '@/layouts/PrivateLayout/PrivateLayout'
 import PublicLayout from '@/layouts/PublicLayout/PublicLayout'
 import RootLayout from '@/layouts/RootLayout/RootLayout'
+import { CreateThread } from '@/pages/CreateThread/CreateThread'
 import { Error } from '@/pages/Error/Error'
 import { Forum } from '@/pages/Forum/Forum'
 import { Game } from '@/pages/Game/Game'
@@ -44,6 +45,10 @@ const routerConfig = createBrowserRouter([
           {
             path: '/forum/:threadId',
             element: <Thread />,
+          },
+          {
+            path: '/forum/new',
+            element: <CreateThread />,
           },
           {
             path: '/leaderboard',
