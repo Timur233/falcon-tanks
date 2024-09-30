@@ -1,4 +1,5 @@
-import { KeyMap, Player } from '@/components/Game/gameTypes'
+import { ControlsProps, KeyMap } from '@/components/Game/gameTypes'
+import { detectCollision } from '@/components/Game/player'
 
 const keyMap: KeyMap = {}
 
@@ -13,16 +14,10 @@ export const handleKeyUp = (key: string) => {
 }
 
 // Функция для обновления позиции игрока на основе нажатых клавиш
-export const updatePlayerMovement = (
-  player: Player,
-  setPlayer: React.Dispatch<React.SetStateAction<Player>>,
-  speedFactor: number,
-  canvasWidth: number,
-  canvasHeight: number
-) => {
-  const speed = player.speed * speedFactor
+export const updatePlayerMovement = (props: ControlsProps) => {
+  const speed = props.player.speed * props.speedFactor
 
-  setPlayer(prevPlayer => {
+  props.setPlayer(prevPlayer => {
     let newX = prevPlayer.x
     let newY = prevPlayer.y
 
@@ -40,9 +35,20 @@ export const updatePlayerMovement = (
       newX += speed
     }
 
-    // Ограничение движения по краям canvas
-    newX = Math.max(0, Math.min(newX, canvasWidth - prevPlayer.width))
-    newY = Math.max(0, Math.min(newY, canvasHeight - prevPlayer.height))
+    // Обработка столкновений с препятствиями
+    props.obstacles.forEach(obstacle => {
+      if (detectCollision({ ...prevPlayer, x: newX, y: newY }, obstacle)) {
+        newX = prevPlayer.x
+        newY = prevPlayer.y
+      } else {
+        // Ограничение движения по краям canvas
+        newX = Math.max(0, Math.min(newX, props.canvasWidth - prevPlayer.width))
+        newY = Math.max(
+          0,
+          Math.min(newY, props.canvasHeight - prevPlayer.height)
+        )
+      }
+    })
 
     return { ...prevPlayer, x: newX, y: newY }
   })

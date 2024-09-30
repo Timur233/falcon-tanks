@@ -8,10 +8,10 @@ import {
   handleKeyUp,
   updatePlayerMovement,
 } from '@/components/Game/controls'
-import { Obstacle } from '@/components/Game/gameTypes'
+import { ControlsProps, Obstacle } from '@/components/Game/gameTypes'
 import { initializeObstacle } from '@/components/Game/obstacle'
 
-const speedFactor = 0.3
+const speedFactor = 1
 const livesUse = 3
 
 export const Game: React.FC = () => {
@@ -54,13 +54,15 @@ export const Game: React.FC = () => {
         }
         const canvas = getCanvas()
         if (!canvas) return
-        updatePlayerMovement(
+        const moveProps: ControlsProps = {
           player,
           setPlayer,
           speedFactor,
-          canvas.width,
-          canvas.height
-        )
+          obstacles,
+          canvasWidth: canvas.width,
+          canvasHeight: canvas.height,
+        }
+        updatePlayerMovement(moveProps)
         gameLoop(
           timestamp,
           context,

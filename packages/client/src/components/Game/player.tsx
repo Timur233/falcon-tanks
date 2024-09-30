@@ -1,4 +1,3 @@
-import { respawnEnemies } from '@/components/Game/enemy'
 import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
 
 export const initializePlayer = () => ({
@@ -10,7 +9,10 @@ export const initializePlayer = () => ({
   direction: { x: 0, y: 0 },
 })
 
-const detectCollision = (player: Player, obstacle: Obstacle): boolean => {
+export const detectCollision = (
+  player: Player,
+  obstacle: Obstacle
+): boolean => {
   return (
     player.x < obstacle.x + obstacle.width &&
     player.x + player.width > obstacle.x &&
@@ -50,6 +52,7 @@ export const resetPlayerPosition = (
 
 /**
  * Функция для обработки столкновения игрока с врагом.
+ * @param setPlayer - Функция для обновления состояния игрока.
  * @param setLives - Функция для изменения количества жизней игрока.
  * @param resetPlayerPosition - Функция для сброса позиции игрока.
  * @param respawnEnemies - Функция для респауна врагов.

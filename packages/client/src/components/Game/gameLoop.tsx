@@ -1,8 +1,4 @@
-import {
-  handlePlayerHit,
-  resetPlayerPosition,
-  updatePlayerPosition,
-} from './player'
+import { handlePlayerHit, resetPlayerPosition } from './player'
 import {
   updateEnemyPositions,
   respawnEnemies,
@@ -23,6 +19,9 @@ import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
  * @param lives - Текущее количество жизней игрока.
  * @param setLives - Функция для изменения количества жизней игрока.
  * @param speedFactor - Коэффициент скорости.
+ * @param handleGameOver - Обработчик события окончания игры.
+ * @param isPaused - Флаг паузы.
+ * @param isGameOver - Флаг окончания игры.
  */
 export const gameLoop = (
   timestamp: number,

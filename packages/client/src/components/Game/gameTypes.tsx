@@ -26,3 +26,12 @@ export interface Obstacle {
 export interface KeyMap {
   [key: string]: boolean
 }
+
+export interface ControlsProps {
+  player: Player
+  setPlayer: React.Dispatch<React.SetStateAction<Player>>
+  speedFactor: number
+  obstacles: Obstacle[]
+  canvasWidth: number
+  canvasHeight: number
+}
