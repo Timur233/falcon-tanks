@@ -1,0 +1,42 @@
+@import '../../../scss/vars';
+
+$decor-width: 90px;
+$decor-height: 7px;
+
+@mixin decor($top, $bottom) {
+  content: '';
+  position: absolute;
+  top: $top;
+  bottom: $bottom;
+  left: calc(50% - ($decor-width / 2));
+
+  display: block;
+  width: $decor-width;
+  height: $decor-height;
+
+  background-image: url('@/assets/images/svg/title-decor.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.card {
+  border: 2px solid #9baf5d;
+  background-color: #5e5e5e;
+  border-radius: 16px;
+  padding: 8px;
+  position: relative;
+
+  &::before {
+    @include decor(0, 'auto');
+  }
+
+  &::after {
+    @include decor('auto', 0);
+
+    transform: rotate(180deg);
+  }
+
+  &__content {
+    background-color: #101010;
+  }
+}
