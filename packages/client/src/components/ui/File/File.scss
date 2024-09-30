@@ -1,0 +1,9 @@
+@import '../../../scss/vars';
+
+.file {
+  background-color: transparent;
+  border: none;
+  color: $c_white;
+  text-decoration: underline;
+  align-self: flex-start;
+}
