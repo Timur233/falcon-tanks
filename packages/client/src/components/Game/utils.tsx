@@ -4,18 +4,17 @@ export const getRandomEdgePosition = (
   canvasWidth: number,
   canvasHeight: number
 ): { x: number; y: number } => {
-  const edge = Math.floor(Math.random() * 4)
+  const edge: 0 | 1 | 2 | 3 = Math.floor(Math.random() * 4) as 0 | 1 | 2 | 3
+
   switch (edge) {
-    case 0:
+    case 0: // Верхний край
       return { x: Math.random() * canvasWidth, y: 0 }
-    case 1:
+    case 1: // Правый край
       return { x: canvasWidth, y: Math.random() * canvasHeight }
-    case 2:
+    case 2: // Нижний край
       return { x: Math.random() * canvasWidth, y: canvasHeight }
-    case 3:
+    case 3: // Левый край
       return { x: 0, y: Math.random() * canvasHeight }
-    default:
-      return { x: 0, y: 0 }
   }
 }
 
