@@ -1,6 +1,6 @@
 import { ControlsProps, KeyMap } from '@/components/Game/gameTypes'
 
-import { hasCollision } from '@/components/Game/collision'
+import { detectCollision } from '@/components/Game/collision'
 
 const keyMap: KeyMap = {}
 
@@ -37,19 +37,19 @@ export const updatePlayerMovement = (props: ControlsProps) => {
     }
 
     // Обработка столкновений с препятствиями
-    props.obstacles.forEach(obstacle => {
-      if (hasCollision({ ...prevPlayer, x: newX, y: newY }, obstacle)) {
-        newX = prevPlayer.x
-        newY = prevPlayer.y
-      } else {
-        // Ограничение движения по краям canvas
-        newX = Math.max(0, Math.min(newX, props.canvasWidth - prevPlayer.width))
-        newY = Math.max(
-          0,
-          Math.min(newY, props.canvasHeight - prevPlayer.height)
-        )
-      }
+    const hasCollision = props.obstacles.find(obstacle => {
+      return detectCollision({ ...prevPlayer, x: newX, y: newY }, obstacle)
     })
+
+    // Если есть столкновение, то вернуть предыдущую позицию
+    if (hasCollision) {
+      newX = prevPlayer.x
+      newY = prevPlayer.y
+    } else {
+      // Ограничение движения по краям canvas
+      newX = Math.max(0, Math.min(newX, props.canvasWidth - prevPlayer.width))
+      newY = Math.max(0, Math.min(newY, props.canvasHeight - prevPlayer.height))
+    }
 
     return { ...prevPlayer, x: newX, y: newY }
   })
