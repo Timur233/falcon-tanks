@@ -13,7 +13,6 @@ import { Avatar, AVATAR_SRC } from '@/components/ui/Avatar/Avatar'
 import { logoutUser, UserType } from '@/store/reducers/auth-reducer'
 import { RootState, useAppDispatch } from '@/store'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
-import { Header } from '@/components/common/Header/Header'
 
 const fieldLabels: { [key: string]: string } = {
   first_name: 'Имя',
@@ -141,8 +140,7 @@ export const Profile = () => {
 
   return (
     <div className={'profile-page-layout'}>
-      <Header className={'profile-page-layout__header'} />
-      <main className={'profile-page-layout__profile-page'}>
+      <div className={'profile-page-layout__profile-page'}>
         <div className={'profile-page-layout__profile-page__sidebar'}>
           <Image
             src={ProfileSidebarImg}
@@ -247,7 +245,7 @@ export const Profile = () => {
           className={'profile-page-layout__tank-dead'}
           alt={'Profile Right Side'}
         />
-      </main>
+      </div>
     </div>
   )
 }

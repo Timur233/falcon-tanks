@@ -10,7 +10,6 @@ import { Button } from '@/components/ui/Button/Button'
 import { useNavigate } from 'react-router-dom'
 import { changeUserPassword } from '@/store/reducers/user-reducer'
 import { useAppDispatch } from '@/store'
-import { Header } from '@/components/common/Header/Header'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 
 export const ChangePassword = () => {
@@ -78,8 +77,7 @@ export const ChangePassword = () => {
 
   return (
     <div className={'profile-page-layout'}>
-      <Header className={'profile-page-layout__header'} />
-      <main className={'profile-page-layout__profile-page'}>
+      <div className={'profile-page-layout__profile-page'}>
         <div className={'profile-page-layout__profile-page__sidebar'}>
           <Image
             src={ProfileSidebarImg}
@@ -145,7 +143,7 @@ export const ChangePassword = () => {
           className={'profile-page-layout__tank-dead'}
           alt={'Profile Right Side'}
         />
-      </main>
+      </div>
     </div>
   )
 }
