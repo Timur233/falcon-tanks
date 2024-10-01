@@ -37,7 +37,6 @@ export const handlePlayerHit = (
   setLives(prevLives => {
     const newLives = prevLives - 1
     if (newLives <= 0) {
-      console.log('Game over!')
       window.location.reload()
     } else {
       resetPlayerPosition(setPlayer)
