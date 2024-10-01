@@ -2,7 +2,7 @@ import { handlePlayerHit, resetPlayerPosition } from './player'
 import { updateEnemyPositions, respawnEnemies } from './enemy'
 import { clearCanvas, drawPlayer, drawEnemies, drawObstacles } from './utils'
 import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
-import { detectEnemyCollision } from '@/components/Game/collision'
+import { hasEnemyCollision } from '@/components/Game/collision'
 
 /**
  * Основной игровой цикл, который обновляет состояние игры и перерисовывает экран каждый кадр.
@@ -42,7 +42,7 @@ export const gameLoop = (
 
   // Проверка на столкновения между игроком и врагами
   enemies.forEach(enemy => {
-    if (detectEnemyCollision(player, enemy)) {
+    if (hasEnemyCollision(player, enemy)) {
       // Обработка столкновения: уменьшаем жизни
       handlePlayerHit(
         setPlayer,

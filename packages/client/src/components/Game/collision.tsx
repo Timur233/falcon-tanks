@@ -1,9 +1,6 @@
 import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
 
-export const detectCollision = (
-  player: Player,
-  obstacle: Obstacle
-): boolean => {
+export const hasCollision = (player: Player, obstacle: Obstacle): boolean => {
   return (
     player.x < obstacle.x + obstacle.width &&
     player.x + player.width > obstacle.x &&
@@ -11,7 +8,7 @@ export const detectCollision = (
     player.y + player.height > obstacle.y
   )
 }
-export const detectEnemyCollision = (
+export const hasEnemyCollision = (
   rect1: Player | Enemy,
   rect2: Obstacle | Enemy
 ): boolean => {

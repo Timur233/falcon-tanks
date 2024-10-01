@@ -1,6 +1,6 @@
 import { ControlsProps, KeyMap } from '@/components/Game/gameTypes'
 
-import { detectCollision } from '@/components/Game/collision'
+import { hasCollision } from '@/components/Game/collision'
 
 const keyMap: KeyMap = {}
 
@@ -38,7 +38,7 @@ export const updatePlayerMovement = (props: ControlsProps) => {
 
     // Обработка столкновений с препятствиями
     props.obstacles.forEach(obstacle => {
-      if (detectCollision({ ...prevPlayer, x: newX, y: newY }, obstacle)) {
+      if (hasCollision({ ...prevPlayer, x: newX, y: newY }, obstacle)) {
         newX = prevPlayer.x
         newY = prevPlayer.y
       } else {
