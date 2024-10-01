@@ -3,14 +3,14 @@ import { useAppDispatch } from '@/store'
 import { signInUser } from '@/store/reducers/auth-reducer'
 import { Button } from '@/components/ui/Button/Button'
 import { useSearchParams } from 'react-router-dom'
-import { useNavigate } from "react-router-dom";
-import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 export const SignIn = () => {
   const [form, setForm] = useState({ login: '', password: '' })
   const [searchParams] = useSearchParams()
   const [query] = useState(searchParams.get('redirectUrl'))
-  const navigate = useNavigate();
+  const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
   const handleForm = (name: string, value: string) => {
@@ -18,7 +18,7 @@ export const SignIn = () => {
   }
 
   const handleSubmit = () => {
-    dispatch(signInUser({form: form, query: query}))
+    dispatch(signInUser({ form: form, query: query }))
       .unwrap()
       .then((response: any) => {
         navigate('/game')
@@ -61,7 +61,9 @@ export const SignIn = () => {
       <Button
         text={'Регистрация'}
         useFixWidth={true}
-        onClick={() => { navigate('/sign-up') }}
+        onClick={() => {
+          navigate('/sign-up')
+        }}
       />
     </>
   )

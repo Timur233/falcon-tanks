@@ -1,7 +1,6 @@
-import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import {AppDispatch, InferAppActions} from '@/store'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { AppDispatch, InferAppActions } from '@/store'
 import backendApi from '@/api/backendApi'
-
 
 export type UserType = {
   avatar: string | null
@@ -31,15 +30,32 @@ const slice = createSlice({
 const AuthReducer = slice.reducer
 export const { actions } = slice
 
-export const getUser = createAsyncThunk('AuthUser/getUser',
-  async (thunkAPI) => {
+export const getUser = createAsyncThunk('AuthUser/getUser', async thunkAPI => {
+  try {
+    const response = await backendApi({
+      method: 'get',
+      url: '/auth/user',
+    })
+
+    return response.data
+  } catch (err: any) {
+    if (!err.response) {
+      throw err
+    }
+    // @ts-ignore
+    return thunkAPI.rejectWithValue(err.response.data)
+  }
+})
+
+export const logoutUser = createAsyncThunk(
+  'AuthUser/logoutUser',
+  async thunkAPI => {
     try {
       const response = await backendApi({
-        method: 'get',
-        url: '/auth/user',
+        method: 'post',
+        url: '/auth/logout',
       })
-
-      return response.data;
+      return response.data
     } catch (err: any) {
       if (!err.response) {
         throw err
@@ -50,73 +66,57 @@ export const getUser = createAsyncThunk('AuthUser/getUser',
   }
 )
 
-export const logoutUser = createAsyncThunk('AuthUser/logoutUser',
-  async (thunkAPI) => {
-  try {
-    const response = await backendApi({
-      method: 'post',
-      url: '/auth/logout',
-    })
-    return response.data;
-  } catch (err: any) {
-    if (!err.response) {
-      throw err
-    }
-    // @ts-ignore
-    return thunkAPI.rejectWithValue(err.response.data)
-  }
-
-})
-
 type TypeSignInForm = {
-  login: string;
+  login: string
   password: string
 }
 
-export const signInUser = createAsyncThunk('AuthUser/signInUser',
-    async (data: {form: TypeSignInForm, query?: string | null}, thunkAPI) => {
-      try {
-        const response = await backendApi({
-          method: 'post',
-          url: '/auth/signin',
-          data: data.form,
-        })
-        return response.data
-      } catch (err: any) {
-        if (!err.response) {
-          throw err
-        }
-        return thunkAPI.rejectWithValue(err.response.data)
+export const signInUser = createAsyncThunk(
+  'AuthUser/signInUser',
+  async (data: { form: TypeSignInForm; query?: string | null }, thunkAPI) => {
+    try {
+      const response = await backendApi({
+        method: 'post',
+        url: '/auth/signin',
+        data: data.form,
+      })
+      return response.data
+    } catch (err: any) {
+      if (!err.response) {
+        throw err
       }
+      return thunkAPI.rejectWithValue(err.response.data)
     }
-  )
+  }
+)
 
 type TypeSignUpForm = {
-  first_name: string;
-  second_name: string;
-  login: string;
-  email: string;
-  password: string;
-  phone: string;
+  first_name: string
+  second_name: string
+  login: string
+  email: string
+  password: string
+  phone: string
 }
 
-export const signUpUser = createAsyncThunk('AuthUser/signUpUser',
-    async (data: {form: TypeSignUpForm}, thunkAPI) => {
-      try {
-        const response = await backendApi({
-          method: 'post',
-          url: '/auth/signup',
-          data: data.form,
-        })
-        return response.data
-      } catch (err: any) {
-        if (!err.response) {
-          throw err
-        }
-        return thunkAPI.rejectWithValue(err.response.data)
+export const signUpUser = createAsyncThunk(
+  'AuthUser/signUpUser',
+  async (data: { form: TypeSignUpForm }, thunkAPI) => {
+    try {
+      const response = await backendApi({
+        method: 'post',
+        url: '/auth/signup',
+        data: data.form,
+      })
+      return response.data
+    } catch (err: any) {
+      if (!err.response) {
+        throw err
       }
+      return thunkAPI.rejectWithValue(err.response.data)
     }
-  )
+  }
+)
 
 export type ActionsType = InferAppActions<typeof actions>
 export default AuthReducer
