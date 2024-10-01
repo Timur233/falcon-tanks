@@ -16,7 +16,6 @@ const livesUse = 3
 
 export const Game: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  let context: CanvasRenderingContext2D | null | undefined
   const [lives, setLives] = useState<number>(livesUse)
   const [player, setPlayer] = useState(initializePlayer())
   const [enemies, setEnemies] = useState(initializeEnemies(5))
@@ -37,45 +36,45 @@ export const Game: React.FC = () => {
 
   const handleContinue = () => {
     setIsPaused(false)
-    if (isGameOver) {
-      setIsGameOver(false)
-      setLives(livesUse)
-      setGameStarted(false)
-    }
+    setIsGameOver(false)
+    setLives(livesUse)
+    setPlayer(initializePlayer())
+    setEnemies(initializeEnemies(5))
   }
 
   const loop = useCallback(
     (timestamp: number) => {
-      if (!isPaused && !isGameOver && context) {
+      if (!isPaused && !isGameOver && canvasRef.current) {
         const deltaTime = timestamp - lastTimestamp
 
         if (deltaTime >= 1000 / maxFPS) {
           setLastTimestamp(timestamp)
-          const canvas = getCanvas()
-          if (!canvas) return
-          const moveProps: ControlsProps = {
-            player,
-            setPlayer,
-            obstacles,
-            canvasWidth: canvas.width,
-            canvasHeight: canvas.height,
+          const context = canvasRef.current.getContext('2d')
+          if (context) {
+            const moveProps: ControlsProps = {
+              player,
+              setPlayer,
+              obstacles,
+              canvasWidth: canvasRef.current.width,
+              canvasHeight: canvasRef.current.height,
+            }
+            updatePlayerMovement(moveProps)
+            gameLoop(
+              context,
+              player,
+              setPlayer,
+              enemies,
+              setEnemies,
+              obstacles,
+              lives,
+              setLives,
+              handleGameOver,
+              isPaused,
+              isGameOver
+            )
           }
-          updatePlayerMovement(moveProps)
-          gameLoop(
-            context,
-            player,
-            setPlayer,
-            enemies,
-            setEnemies,
-            obstacles,
-            lives,
-            setLives,
-            handleGameOver,
-            isPaused,
-            isGameOver
-          )
-          requestAnimationFrame(loop)
         }
+        requestAnimationFrame(loop)
       }
     },
     [
@@ -103,23 +102,19 @@ export const Game: React.FC = () => {
     }
   }, [])
 
-  const getCanvas = () => canvasRef.current
-
-  const getContext = () => getCanvas()?.getContext('2d')
-
   useEffect(() => {
     if (gameStarted && !isPaused) {
-      context = getContext()
-
-      if (context) {
-        requestAnimationFrame(loop)
-      }
+      requestAnimationFrame(loop)
     }
-  }, [isPaused, isGameOver, loop])
+  }, [gameStarted, isPaused, loop])
 
   const startGame = () => {
     setGameStarted(true)
-    handleContinue()
+    setIsPaused(false)
+    setIsGameOver(false)
+    setLives(livesUse)
+    setPlayer(initializePlayer())
+    setEnemies(initializeEnemies(5))
   }
 
   return (
