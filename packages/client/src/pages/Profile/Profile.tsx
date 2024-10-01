@@ -4,9 +4,6 @@ import { useSelector } from 'react-redux'
 import { Form } from '@/components/ui/Form/Form'
 import { Input } from '@/components/ui/Input/Input'
 import { saveUserData, changeUserAvatar } from '@/store/reducers/user-reducer'
-import ProfileSidebarImg from '../../assets/images/profile-sidebar.png'
-import ProfileRightSideImg from '../../assets/images/tank-dead.png'
-import { Image } from '@/components/ui/Image/Image'
 import { Button } from '@/components/ui/Button/Button'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Avatar, AVATAR_SRC } from '@/components/ui/Avatar/Avatar'
@@ -139,111 +136,83 @@ export const Profile = () => {
   }
 
   return (
-    <div className={'profile-page-layout'}>
-      <div className={'profile-page-layout__profile-page'}>
-        <div className={'profile-page-layout__profile-page__sidebar'}>
-          <Image
-            src={ProfileSidebarImg}
-            className={'profile-page-layout__profile-page__sidebar__image'}
-            alt={'Profile Sidebar'}
-          />
-        </div>
-        <div className="profile-page-layout__profile-page__profile-container">
-          <CustomPageTitle
-            className={
-              'profile-page-layout__profile-page__profile-container__title'
-            }
-            text={'Личный кабинет'}
-          />
-          <Avatar
-            containerClassName={
-              'profile-page-layout__profile-page__profile-container__profile-avatar'
-            }
-            imageClassName={
-              'profile-page-layout__profile-page__profile-container__profile-avatar__avatar'
-            }
-            src={`${AVATAR_SRC}/${user.avatar}`}
-            onAvatarChange={handleAvatarChange}
-          />
-          {showSaveMessage && (
-            <div
-              className={
-                'profile-page-layout__profile-page__profile-container__success-message'
-              }>
-              {(location.state as LocationState)?.successMessage ||
-                'Данные профиля успешно обновлены!'}
-            </div>
-          )}
-          {error && (
-            <div
-              className={
-                'profile-page-layout__profile-page__profile-container__error-message'
-              }>
-              {error}
-            </div>
-          )}
-          <Form
-            className={
-              'profile-page-layout__profile-page__profile-container__profile-form'
-            }>
-            {Object.keys(fieldLabels).map(field => (
-              <div key={field} className="form-group">
-                <label htmlFor={field}>{fieldLabels[field]}</label>
-                <div className="dotted-line"></div>
-                <div className="input-wrapper">
-                  <Input
-                    value={formData[field as keyof UserType] || ''}
-                    className={`${field} dynamic-input ${
-                      changedFields[field] ? 'changed' : ''
-                    }`}
-                    disabled={!isEditable}
-                    onChange={handleInputChange(field as keyof UserType)}
-                    style={{ width: `${inputWidths[field] || 50}px` }}
-                  />
-                </div>
+    <div className={'profile-page'}>
+      <div className="profile-page__profile-container">
+        <CustomPageTitle
+          className={'profile-page__profile-container__title'}
+          text={'Личный кабинет'}
+        />
+        <Avatar
+          containerClassName={'profile-page__profile-container__profile-avatar'}
+          imageClassName={
+            'profile-page__profile-container__profile-avatar__avatar'
+          }
+          src={user.avatar ? `${AVATAR_SRC}/${user.avatar}` : ''}
+          onChange={handleAvatarChange}
+        />
+        {showSaveMessage && (
+          <div className={'profile-page__profile-container__success-message'}>
+            {(location.state as LocationState)?.successMessage ||
+              'Данные профиля успешно обновлены!'}
+          </div>
+        )}
+        {error && (
+          <div className={'profile-page__profile-container__error-message'}>
+            {error}
+          </div>
+        )}
+        <Form className={'profile-page__profile-container__profile-form'}>
+          {Object.keys(fieldLabels).map(field => (
+            <div key={field} className="form-group">
+              <label htmlFor={field}>{fieldLabels[field]}</label>
+              <div className="dotted-line"></div>
+              <div className="input-wrapper">
+                <Input
+                  value={formData[field as keyof UserType] || ''}
+                  className={`${field} dynamic-input ${
+                    changedFields[field] ? 'changed' : ''
+                  }`}
+                  disabled={!isEditable}
+                  onChange={handleInputChange(field as keyof UserType)}
+                  style={{ width: `${inputWidths[field] || 50}px` }}
+                />
               </div>
-            ))}
-          </Form>
-          <Button
-            className={`profile-page-layout__profile-page__profile-container__profile-form__edit-button ${
-              isEditable ? 'link-button' : ''
-            }`}
-            text={isEditable ? 'Отменить' : 'Редактировать'}
-            useFixWidth
-            onClick={toggleSettings}
-          />
-          {isEditable && (
-            <Button
-              className={
-                'profile-page-layout__profile-page__profile-container__profile-form__save-button'
-              }
-              text={'Сохранить'}
-              useFixWidth
-              onClick={handleSaveData}
-            />
-          )}
-          {!isEditable && (
-            <Button
-              className={
-                'custom-button_blue profile-page-layout__profile-page__profile-container__profile-form__edit-button'
-              }
-              text={'Сменить пароль'}
-              useFixWidth
-              href={'/profile/change-password'}
-            />
-          )}
+            </div>
+          ))}
+        </Form>
+        <Button
+          className={`profile-page__profile-container__profile-form__edit-button ${
+            isEditable ? 'link-button' : ''
+          }`}
+          text={isEditable ? 'Отменить' : 'Редактировать'}
+          useFixWidth
+          onClick={toggleSettings}
+        />
+        {isEditable ? (
           <Button
             className={
-              'link-button profile-page-layout__profile-page__profile-container__profile-form__exit-button'
+              'profile-page__profile-container__profile-form__save-button'
             }
-            text={'Выйти'}
-            onClick={() => dispatch(logoutUser())}
+            text={'Сохранить'}
+            useFixWidth
+            onClick={handleSaveData}
           />
-        </div>
-        <Image
-          src={ProfileRightSideImg}
-          className={'profile-page-layout__tank-dead'}
-          alt={'Profile Right Side'}
+        ) : (
+          <Button
+            className={
+              'custom-button_blue profile-page__profile-container__profile-form__edit-button'
+            }
+            text={'Сменить пароль'}
+            useFixWidth
+            href={'/profile/change-password'}
+          />
+        )}
+        <Button
+          className={
+            'link-button profile-page__profile-container__profile-form__exit-button'
+          }
+          text={'Выйти'}
+          onClick={() => dispatch(logoutUser())}
         />
       </div>
     </div>

@@ -1,194 +1,95 @@
 @import '../../scss/vars';
 
-.profile-page-layout {
+.profile-page {
+  background-image: $img_profile_background_left;
+  background-repeat: no-repeat;
+  background-position: left bottom;
+  background-size: contain;
+  display: flex;
   position: relative;
   min-height: 100vh;
+  overflow: visible;
 
-  &__profile-page {
-    display: flex;
+  &__profile-container {
     position: relative;
+    z-index: 2;
+    flex: 1;
+    margin-left: 35%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     min-height: 100vh;
+    box-sizing: border-box;
 
-    &__sidebar {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      left: 0;
-      width: 60%;
-      height: 100%;
-      overflow: visible;
-      z-index: 1;
-
-      &__image {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: bottom;
-        overflow: visible;
-      }
+    &__title {
+      margin-bottom: 2rem;
     }
 
-    &__profile-container {
-      position: relative;
-      z-index: 2;
-      flex: 1;
-      margin-left: 35%;
+    &__success-message {
+      color: $c_font-default;
+      font-size: 18px;
+      letter-spacing: 1px;
+      text-shadow: $success-text-shadow;
+      margin-bottom: 1rem;
+    }
+
+    &__profile-form {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-      box-sizing: border-box;
+      width: 90%;
+      max-width: 400px;
+      margin: 0 auto;
 
-      &__title {
+      .form-group {
+        display: flex;
+        align-items: baseline;
+        margin-bottom: 0.5rem;
+        justify-content: flex-start;
+
+        label {
+          flex: 0 0 auto;
+          color: $c_font-default;
+          white-space: nowrap;
+        }
+
+        .dotted-line {
+          flex: 1;
+          height: 1px;
+          border-bottom: 1px dotted $c_font-default;
+          margin: 0 10px;
+          min-width: 20px;
+        }
+
+        .input-wrapper {
+          flex: 0 0 auto;
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        .dynamic-input {
+          background: transparent;
+          border: none;
+          color: $c_font-default;
+          padding: 0.5rem 0;
+          text-align: right;
+          transition: width 0.3s ease;
+        }
+      }
+
+      &__edit-button {
         margin-bottom: 2rem;
       }
 
-      &__profile-avatar {
-        width: 160px;
-        max-width: 100%;
-        height: 158px;
-        max-height: 100%;
-        margin: 0 auto 2rem;
-        position: relative;
-
-        &__avatar {
-          border-radius: 50%;
-          border: 5px solid #313131;
-          width: inherit;
-          height: inherit;
-        }
-
-        .overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: rgba(0, 0, 0, 0.5);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-          border-radius: 50%;
-
-          &:hover {
-            opacity: 1;
-          }
-        }
-
-        .change-button {
-          background: none;
-          border: none;
-          color: white;
-          font-size: 14px;
-          font-weight: bold;
-          text-transform: uppercase;
-          cursor: pointer;
-          padding: 8px 16px;
-          border-radius: 20px;
-          background-color: rgba(0, 0, 0, 0.5);
-          transition: background-color 0.3s ease;
-
-          &:hover {
-            background-color: rgba(0, 0, 0, 0.7);
-          }
-        }
-      }
-
-      &__success-message {
-        color: $c_font-default;
-        font-size: 18px;
-        letter-spacing: 1px;
-        text-shadow: $success-text-shadow;
-        margin-bottom: 1rem;
-      }
-
-      &__profile-form {
+      &__change-password {
         display: flex;
         flex-direction: column;
-        width: 90%;
-        max-width: 400px;
-        margin: 0 auto;
+        margin-bottom: 2rem;
 
-        .form-group {
-          display: flex;
-          align-items: baseline;
-          margin-bottom: 0.5rem;
-          justify-content: flex-start;
-
-          label {
-            flex: 0 0 auto;
-            color: $c_font-default;
-            white-space: nowrap;
-          }
-
-          .dotted-line {
-            flex: 1;
-            height: 1px;
-            border-bottom: 1px dotted $c_font-default;
-            margin: 0 10px;
-            min-width: 20px;
-          }
-
-          .input-wrapper {
-            flex: 0 0 auto;
-            display: flex;
-            justify-content: flex-end;
-          }
-
-          .dynamic-input {
-            background: transparent;
-            border: none;
-            color: $c_font-default;
-            padding: 0.5rem 0;
-            text-align: right;
-            transition: width 0.3s ease;
-          }
-        }
-
-        button {
-          margin-top: 1rem;
-          padding: 0.5rem 1rem;
-          background-color: #4caf50;
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background-color 0.3s;
-
-          &:hover {
-            background-color: #45a049;
-          }
-
-          &:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-          }
-        }
-
-        &__edit-button {
-          margin-bottom: 2rem;
-        }
-
-        &__change-password {
-          display: flex;
-          flex-direction: column;
-          margin-bottom: 2rem;
-
-          .input-default {
-            margin-bottom: 1rem;
-          }
+        .input-default {
+          margin-bottom: 1rem;
         }
       }
     }
-  }
-
-  &__tank-dead {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    z-index: 1;
   }
 }
 

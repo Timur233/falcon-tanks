@@ -1,6 +1,7 @@
+import './Avatar.scss'
 import React, { useState, useRef, useEffect } from 'react'
 import { Image } from '@/components/ui/Image/Image'
-import { Button } from '@/components/ui/Button/Button'
+import AvatarPlaceholder from '@/assets/images/avatar-placeholder.png'
 
 export const AVATAR_SRC = 'https://ya-praktikum.tech/api/v2/resources'
 
@@ -8,10 +9,9 @@ export const Avatar = (props: {
   src: string
   containerClassName?: string
   imageClassName?: string
-  onAvatarChange: (file: File) => void
+  onChange: (file: File) => void
 }) => {
-  const { src, containerClassName, imageClassName, onAvatarChange } = props
-  const [isHovered, setIsHovered] = useState(false)
+  const { src, containerClassName, imageClassName, onChange } = props
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -28,7 +28,7 @@ export const Avatar = (props: {
     if (file) {
       const fileUrl = URL.createObjectURL(file)
       setPreviewUrl(fileUrl)
-      onAvatarChange(file)
+      onChange(file)
     }
   }
 
@@ -39,31 +39,29 @@ export const Avatar = (props: {
   const displaySrc = previewUrl || src
 
   return (
-    <div
-      className={`${containerClassName}`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}>
+    <div className={`avatar ${containerClassName}`}>
       {displaySrc ? (
-        <Image src={displaySrc} className={imageClassName} alt="Avatar" />
+        <Image
+          src={displaySrc}
+          className={`avatar__image ${imageClassName}`}
+          alt="Avatar"
+        />
       ) : (
-        <div className="avatar-placeholder">
-          {/* Здесь можно добавить иконку или текст для placeholder */}
-        </div>
+        <Image
+          src={AvatarPlaceholder}
+          className={'avatar__image-placeholder'}
+          alt="Avatar"
+        />
       )}
-      {isHovered && (
-        <div className="overlay">
-          <Button
-            text="Изменить аватар"
-            className="change-button"
-            useFixWidth={false}
-            onClick={handleButtonClick}
-          />
-        </div>
-      )}
+      <div className="avatar__overlay">
+        <button className={'avatar__change-button'} onClick={handleButtonClick}>
+          {'Изменить аватар'}
+        </button>
+      </div>
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*"
+        accept="image/png, image/jpeg, image/jpg, image/gif"
         onChange={handleFileChange}
         style={{ display: 'none' }}
       />
