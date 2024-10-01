@@ -11,24 +11,12 @@ export const Button = (props: {
 }) => {
   const { text, className, useFixWidth = false, href = '/', onClick } = props
   return (
-    <>
-      {onClick && typeof onClick === 'function' ? (
-        <button
-          className={`custom-button ${className} ${
-            useFixWidth ? 'custom-button_fix-width' : ''
-          }`}
-          onClick={onClick}>
-          <span>{text}</span>
-        </button>
-      ) : (
-        <Link
-          to={href}
-          className={`custom-button ${className} ${
-            useFixWidth ? 'custom-button_fix-width' : ''
-          }`}>
-          <span>{text}</span>
-        </Link>
-      )}
-    </>
+    <button
+      className={`custom-button ${className} ${
+        useFixWidth ? 'custom-button_fix-width' : ''
+      }`}
+      onClick={onClick}>
+      <span>{text}</span>
+    </button>
   )
 }

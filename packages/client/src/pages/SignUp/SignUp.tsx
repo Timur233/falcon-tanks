@@ -1,6 +1,9 @@
 import { useState } from 'react'
 import { signUpUser } from '@/store/reducers/auth-reducer'
 import { useAppDispatch } from '@/store'
+import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
+import {Button} from "@/components/ui/Button/Button";
 
 export const SignUp = () => {
   const [form, setForm] = useState({
@@ -12,12 +15,22 @@ export const SignUp = () => {
     phone: '',
   })
   const dispatch = useAppDispatch()
+  const navigate = useNavigate();
 
   const handleForm = (name: string, value: string) => {
     setForm({ ...form, [name]: value })
   }
 
-  const handleSubmit = () => dispatch(signUpUser(form))
+  const handleSubmit = () => {
+    dispatch(signUpUser({form: form}))
+      .unwrap()
+      .then(() => {
+        navigate('/sign-in')
+      })
+      .catch((error) => {
+        toast.error(error.reason)
+      })
+  }
 
   return (
     <>
@@ -73,7 +86,11 @@ export const SignUp = () => {
             name={'phone'}
           />
         </label>
-        <button onClick={() => handleSubmit()}>зарегистрироваться</button>
+        <Button
+          text={'зарегистрироваться'}
+          useFixWidth={true}
+          onClick={() => handleSubmit()}
+        />
       </form>
     </>
   )

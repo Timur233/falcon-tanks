@@ -1,22 +1,39 @@
 import { useSelector } from 'react-redux'
-import { Outlet } from 'react-router-dom'
-import { RootState } from '@/store'
-import { getUser, UserType } from '@/store/reducers/auth-reducer'
+import {Outlet, useNavigate} from 'react-router-dom'
+import {RootState, useAppDispatch} from '@/store'
+import {actions, getUser, UserType} from '@/store/reducers/auth-reducer'
 import { useEffect } from 'react'
-import { useAppDispatch } from '@/store'
+import {toast} from "react-toastify";
 
 export default function PrivateLayout() {
-  // get user from store
   const user = useSelector<RootState, UserType>(state => state.AuthReducer.user)
+  const navigate = useNavigate();
+  const userIsLogged = window.sessionStorage.getItem('userIsLogged') === '1';
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    // if user is empty call backend
-    if (user === null) {
+    if (!userIsLogged) {
       dispatch(getUser())
-    }
-  }, [user])
+        .unwrap()
+        .then((data) => {
+          dispatch(actions.setUser(data.data))
+          window.sessionStorage.setItem('userIsLogged', '1') // 0
+        })
+        .catch(() => {
+          window.sessionStorage.setItem('userIsLogged', '0') // 0
 
-  // if the user is full, show page
+          toast.error('Необходимо авторизоваться', {
+            autoClose: 1500,
+            onClose: () => {
+              navigate('/sign-in')
+            }
+          })
+        })
+    }
+  }, [])
+
+  if (userIsLogged) {
+    return <Outlet />
+  }
   return user === null ? <h1>Загрузка...</h1> : <Outlet />
 }
