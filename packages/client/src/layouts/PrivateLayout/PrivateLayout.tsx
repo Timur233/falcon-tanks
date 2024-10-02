@@ -1,29 +1,51 @@
 import { Header } from '@/components/common/Header/Header'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { RootState } from '@/store'
-import { getUser, UserType } from '@/store/reducers/auth-reducer'
+import { RootState, useAppDispatch } from '@/store'
+import { actions, getUser, UserType } from '@/store/reducers/auth-reducer'
 import { useEffect } from 'react'
-import { useAppDispatch } from '@/store'
+import { toast } from 'react-toastify'
 
 export default function PrivateLayout() {
-  const user = useSelector<RootState, UserType>(state => state.AuthReducer.user)
+  const user = useSelector<RootState, UserType>(state => state.authReducer.user)
+  const navigate = useNavigate()
+  const userIsLogged = window.sessionStorage.getItem('userIsLogged') === '1'
   const dispatch = useAppDispatch()
-  
+
   useEffect(() => {
-    if (user === null) {
+    if (!userIsLogged) {
       dispatch(getUser())
+        .unwrap()
+        .then(data => {
+          dispatch(actions.setUser(data))
+          window.sessionStorage.setItem('userIsLogged', '1') // 0
+        })
+        .catch(() => {
+          window.sessionStorage.setItem('userIsLogged', '0') // 0
+
+          toast.error('Необходимо авторизоваться', {
+            autoClose: 1500,
+            onClose: () => {
+              navigate('/sign-in')
+            },
+          })
+        })
     }
-  }, [user])
+  }, [])
 
-  if (user === null) return <h1>Загрузка...</h1>
+  // useEffect(() => {
+  // console.log(user)
+  // }, [user])
 
-  return (
-    <div className="private-layout">
-      <Header className="private-layout__header"></Header>
-      <main className="private-layout__body">
-        <Outlet />
-      </main>
-    </div>
-  )
+  if (userIsLogged) {
+    return (
+      <div className="private-layout">
+        <Header className="private-layout__header"></Header>
+        <main className="private-layout__body">
+          <Outlet />
+        </main>
+      </div>
+    )
+  }
+  return user === null ? <h1>Загрузка...</h1> : <Outlet />
 }
