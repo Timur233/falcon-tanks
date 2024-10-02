@@ -8,8 +8,17 @@ export const CreateThread = () => {
     <div className="create-thread-page container">
       <form action="#" className="create-thread-page__form form">
         <PageTitle tagName="h1" text="Создать тему"></PageTitle>
-        <input type="text" name="thread-title" />
-        <textarea name="first-comment" id="first-comment"></textarea>
+        <input
+          placeholder="Тема"
+          className="form__input"
+          type="text"
+          name="thread-title"
+        />
+        <textarea
+          placeholder="Сообщение"
+          className="form__textarea"
+          name="first-comment"
+          id="first-comment"></textarea>
         <File></File>
         <Button text="Отправить" useFixWidth className="form__submit"></Button>
       </form>

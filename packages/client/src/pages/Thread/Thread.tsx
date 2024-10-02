@@ -82,7 +82,11 @@ export const Thread = () => {
             <div>|</div>
             <span>Ответить Timur233:</span>
           </label>
-          <textarea name="answer-message" id="answer-message"></textarea>
+          <textarea
+            className="form__textarea"
+            name="answer-message"
+            id="answer-message"
+            placeholder="Сообщение"></textarea>
           <File></File>
           <Button
             text="Отправить"
