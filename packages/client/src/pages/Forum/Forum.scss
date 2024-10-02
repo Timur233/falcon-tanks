@@ -38,19 +38,6 @@ $title-color: #bebebe;
       display: flex;
       margin: 40px 0;
     }
-
-    &__create {
-      border-width: 2px;
-      padding: 10px;
-
-      span {
-        text-transform: none;
-        text-shadow: none;
-        font-size: 14px;
-        font-weight: 800;
-        letter-spacing: 1px;
-      }
-    }
   }
 
   &__logo {

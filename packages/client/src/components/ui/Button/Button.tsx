@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import './Button.scss'
+import './CompactButton.scss'
 
 export const Button = (props: {
   text: string

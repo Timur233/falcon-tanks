@@ -16,7 +16,7 @@ export const Forum = () => {
           text={'Форумы'}
           tagName="h1"
           className="header__title"></PageTitle>
-        <Button text="Создать" href="/forum/new" className="header__create" />
+        <Button text="Создать" href="/forum/new" className="compact-button" />
       </div>
       <div className="forum-page__threads threads">
         <Card className="threads__item thread">
