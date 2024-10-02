@@ -17,14 +17,16 @@
 }
 
 .profile-page {
-  background-image: $img_profile_background_left;
+  background-image: $img_profile_background_right;
   background-repeat: no-repeat;
   background-position: left bottom;
   background-size: contain;
   display: flex;
-  overflow: visible;
 
   &__profile-container {
+    background-image: $img_profile_background_left;
+    background-repeat: no-repeat;
+    background-position: right bottom;
     position: relative;
     z-index: 2;
     flex: 1;
