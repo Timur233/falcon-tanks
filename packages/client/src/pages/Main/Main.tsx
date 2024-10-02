@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { Button } from '@/components/ui/Button/Button'
 import { EnemyTank } from './components/EnemyTanks/EnemyTank'
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom'
 
 export const Main = () => {
   const [isLoaded, setIsLoaded] = useState(false)

@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { RootState, useAppDispatch } from '@/store'
-import { actions, getUser, UserType } from '@/store/reducers/auth-reducer'
+import { RootState } from '@/store'
+import { UserType } from '@/store/reducers/auth-reducer'
 import { toast } from 'react-toastify'
 import { useEffect } from 'react'
 

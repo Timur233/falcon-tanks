@@ -20,7 +20,7 @@ export const SignIn = () => {
   const handleSubmit = () => {
     dispatch(signInUser({ form: form, query: query }))
       .unwrap()
-      .then((response: any) => {
+      .then(() => {
         navigate('/game')
       })
       .catch((error?: any, code?: any) => {
