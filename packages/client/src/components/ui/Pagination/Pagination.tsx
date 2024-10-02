@@ -22,14 +22,14 @@ export const Pagination = (props: PaginationProps) => {
           <Button
             key={index}
             className={getClassName(index)}
-            href={'/game'}
+            href={`/forum/${index + 1}`}
             text={(++index).toString()}
             useFixWidth={false}></Button>
         )
       })}
       <Button
         className="compact-button compact-button_white"
-        href={'/game'}
+        href={'/forum'}
         text="Вперед"
         useFixWidth={false}></Button>
     </div>
