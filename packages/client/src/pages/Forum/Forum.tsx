@@ -16,11 +16,7 @@ export const Forum = () => {
           text={'Форумы'}
           tagName="h1"
           className="header__title"></PageTitle>
-        <Button
-          className="header__create"
-          href={'/forum/new'}
-          text="Создать"
-          useFixWidth></Button>
+        <Button text="Создать" href="/forum/new" className="header__create" />
       </div>
       <div className="forum-page__threads threads">
         <Card className="threads__item thread">
