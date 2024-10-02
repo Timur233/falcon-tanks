@@ -13,7 +13,6 @@ import { Profile } from '@/pages/Profile/Profile'
 import { SignIn } from '@/pages/SignIn/SignIn'
 import { SignUp } from '@/pages/SignUp/SignUp'
 import { Thread } from '@/pages/Thread/Thread'
-import '@/scss/styles.scss'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 const routerConfig = createBrowserRouter([
