@@ -9,20 +9,26 @@ interface PaginationProps {
 export const Pagination = (props: PaginationProps) => {
   const { total, className = '' } = props
 
+  const getClassName = (index: number) => {
+    return `pagination__item compact-button${
+      index !== 0 ? ' compact-button_white' : ''
+    }`
+  }
+
   return (
     <div className={`pagination${className ? ` ${className}` : ''}`}>
       {Array.from({ length: total }).map((_, index) => {
         return (
           <Button
             key={index}
-            className="pagination__item"
+            className={getClassName(index)}
             href={'/game'}
             text={(++index).toString()}
             useFixWidth={false}></Button>
         )
       })}
       <Button
-        className="pagination__next"
+        className="compact-button compact-button_white"
         href={'/game'}
         text="Вперед"
         useFixWidth={false}></Button>

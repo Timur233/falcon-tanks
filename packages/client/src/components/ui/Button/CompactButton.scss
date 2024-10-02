@@ -1,0 +1,34 @@
+@import '../../../scss/vars';
+
+.compact-button {
+  border-width: 2px;
+  border-radius: 8px;
+  padding: 10px;
+
+  span {
+    text-transform: none;
+    text-shadow: none;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  &_white {
+    background-color: #d2d2d2;
+    border-top: 2px solid $c_white;
+    border-bottom: 2px solid #999999;
+    padding: 10px;
+
+    &:hover {
+      border-top: 52x solid #999999;
+      border-bottom: 2px solid $c_white;
+    }
+
+    span {
+      text-shadow: none;
+      color: #242424;
+      text-transform: none;
+      letter-spacing: 1px;
+    }
+  }
+}
