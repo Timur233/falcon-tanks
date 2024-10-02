@@ -1,4 +1,5 @@
 import { Enemy, Player } from '@/components/Game/gameTypes'
+import { useNavigate } from 'react-router-dom'
 
 export const initializePlayer = () => ({
   x: 400,
@@ -34,10 +35,11 @@ export const handlePlayerHit = (
   ) => void,
   setEnemies: React.Dispatch<React.SetStateAction<Enemy[]>>
 ) => {
+  const navigate = useNavigate()
   setLives(prevLives => {
     const newLives = prevLives - 1
     if (newLives <= 0) {
-      window.location.reload()
+      navigate('/game-over')
     } else {
       resetPlayerPosition(setPlayer)
       respawnEnemies(setEnemies)
