@@ -68,6 +68,12 @@
           border: none;
           cursor: pointer;
         }
+
+        .item {
+          &__message {
+            align-items: center;
+          }
+        }
       }
     }
 
