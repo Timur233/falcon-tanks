@@ -1,8 +1,5 @@
 import './Profile.scss'
 import React from 'react'
-import { Image } from '@/components/ui/Image/Image'
-import ProfileSidebarImg from '@/assets/images/profile-sidebar.png'
-import ProfileRightSideImg from '@/assets/images/tank-dead.png'
 import { Form } from '@/components/ui/Form/Form'
 import { Input } from '@/components/ui/Input/Input'
 import { useState } from 'react'
@@ -76,72 +73,53 @@ export const ChangePassword = () => {
   }
 
   return (
-    <div className={'profile-page-layout'}>
-      <div className={'profile-page-layout__profile-page'}>
-        <div className={'profile-page-layout__profile-page__sidebar'}>
-          <Image
-            src={ProfileSidebarImg}
-            className={'profile-page-layout__profile-page__sidebar__image'}
-            alt={'Profile Sidebar'}
+    <div className={'profile-page'}>
+      <div className="profile-page__profile-container">
+        <CustomPageTitle
+          className={'profile-page__profile-container__title'}
+          text={'Личный кабинет'}
+        />
+        <Form
+          className={
+            'profile-page__profile-container__profile-form__change-password'
+          }>
+          <Input
+            className={'old_password'}
+            name={'oldPassword'}
+            type={'password'}
+            placeholder={'Текущий пароль'}
+            onChange={handleInputChange('old_password')}
           />
-        </div>
-        <div className="profile-page-layout__profile-page__profile-container">
-          <CustomPageTitle
-            className={
-              'profile-page-layout__profile-page__profile-container__title'
-            }
-            text={'Личный кабинет'}
+          <Input
+            className={'new_password'}
+            name={'newPassword'}
+            type={'password'}
+            placeholder={'Новый пароль'}
+            onChange={handleInputChange('new_password')}
           />
-          <Form
-            className={
-              'profile-page-layout__profile-page__profile-container__profile-form__change-password'
-            }>
-            <Input
-              className={'input-default old_password'}
-              name={'oldPassword'}
-              type={'password'}
-              placeholder={'Текущий пароль'}
-              onChange={handleInputChange('old_password')}
-            />
-            <Input
-              className={'input-default new_password'}
-              name={'newPassword'}
-              type={'password'}
-              placeholder={'Новый пароль'}
-              onChange={handleInputChange('new_password')}
-            />
-            <Input
-              className={'input-default new_password_confirm'}
-              name={'new_password_confirm'}
-              type={'password'}
-              placeholder={'Подтвердите пароль'}
-              onChange={handleInputChange('new_password_confirm')}
-            />
-            {error && (
-              <div
-                className={
-                  'profile-page-layout__profile-page__profile-container__error-message'
-                }>
-                {error}
-              </div>
-            )}
-            <Button
-              text={'Сохранить'}
-              className={'save'}
-              useFixWidth={true}
-              onClick={saveData}
-            />
-          </Form>
+          <Input
+            className={'new_password_confirm'}
+            name={'new_password_confirm'}
+            type={'password'}
+            placeholder={'Подтвердите пароль'}
+            onChange={handleInputChange('new_password_confirm')}
+          />
+          {error && (
+            <div className={'profile-page__profile-container__error-message'}>
+              {error}
+            </div>
+          )}
           <Button
-            text={'Назад'}
-            className={'link-button back'}
-            href={'/profile'}
+            text={'Сохранить'}
+            className={'save'}
+            useFixWidth={true}
+            onClick={saveData}
           />
-        </div>
-        <Image
-          src={ProfileRightSideImg}
-          className={'profile-page-layout__tank-dead'}
-          alt={'Profile Right Side'}
+        </Form>
+        <Button
+          text={'Назад'}
+          className={'link-button back'}
+          href={'/profile'}
         />
       </div>
     </div>

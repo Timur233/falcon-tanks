@@ -8,20 +8,25 @@ interface InputProps {
   disabled?: boolean
   value?: string
   type?: string
+  label?: string
   onChange?: ChangeEventHandler | undefined
   style?: CSSProperties | undefined
 }
 
 export const Input = (props: InputProps) => {
-  const { value, className, disabled, onChange, style } = props
+  const { value, name, className, label, disabled, onChange, style } = props
   return (
-    <input
-      value={value}
-      className={className}
-      disabled={disabled}
-      onChange={onChange}
-      style={style}
-      {...props}
-    />
+    <div className={'input-wrapper'}>
+      {label && <label htmlFor={name}>{label}</label>}
+      <input
+        {...props}
+        name={name}
+        value={value}
+        className={`input-default ${className}`}
+        disabled={disabled}
+        onChange={onChange}
+        style={style}
+      />
+    </div>
   )
 }

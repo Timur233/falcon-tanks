@@ -32,7 +32,6 @@ export const Profile = () => {
   const [changedFields, setChangedFields] = useState<{
     [key: string]: boolean
   }>({})
-  const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [inputWidths, setInputWidths] = useState<{ [key: string]: number }>({})
 
@@ -54,19 +53,15 @@ export const Profile = () => {
     }
   }, [location, navigate])
 
-  useEffect(() => {
-    adjustInputWidths()
-  }, [formData, isEditable])
-
   const calculateWidth = useCallback((text: string) => {
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')
     if (context) {
-      context.font = getComputedStyle(document.body).font
-      const width = context.measureText(text).width
-      return Math.max(50, Math.ceil(width))
+      context.font = '20px Roboto'
+      const metrics = context.measureText(text)
+      return Math.ceil(metrics.width)
     }
-    return 50
+    return 10
   }, [])
 
   const adjustInputWidths = useCallback(() => {
@@ -78,8 +73,11 @@ export const Profile = () => {
     setInputWidths(newWidths)
   }, [formData, calculateWidth])
 
+  useEffect(() => {
+    adjustInputWidths()
+  }, [formData, isEditable, adjustInputWidths])
+
   const handleSaveData = async () => {
-    setIsLoading(true)
     setError(null)
     try {
       await dispatch(saveUserData(formData))
@@ -92,8 +90,6 @@ export const Profile = () => {
     } catch (err) {
       setError('Ошибка при сохранении данных')
       console.error(err)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -129,8 +125,8 @@ export const Profile = () => {
       setTimeout(() => {
         setShowSaveMessage(false)
       }, 3000)
-    } catch (error) {
-      console.error('Ошибка при обновлении аватара:', error)
+    } catch (err) {
+      console.error('Ошибка при обновлении аватара:', err)
       setError('Ошибка при обновлении аватара')
     }
   }
@@ -150,35 +146,33 @@ export const Profile = () => {
           src={user.avatar ? `${AVATAR_SRC}/${user.avatar}` : ''}
           onChange={handleAvatarChange}
         />
-        {showSaveMessage && (
-          <div className={'profile-page__profile-container__success-message'}>
-            {(location.state as LocationState)?.successMessage ||
-              'Данные профиля успешно обновлены!'}
-          </div>
-        )}
-        {error && (
-          <div className={'profile-page__profile-container__error-message'}>
-            {error}
-          </div>
-        )}
         <Form className={'profile-page__profile-container__profile-form'}>
           {Object.keys(fieldLabels).map(field => (
             <div key={field} className="form-group">
               <label htmlFor={field}>{fieldLabels[field]}</label>
               <div className="dotted-line"></div>
-              <div className="input-wrapper">
-                <Input
-                  value={formData[field as keyof UserType] || ''}
-                  className={`${field} dynamic-input ${
-                    changedFields[field] ? 'changed' : ''
-                  }`}
-                  disabled={!isEditable}
-                  onChange={handleInputChange(field as keyof UserType)}
-                  style={{ width: `${inputWidths[field] || 50}px` }}
-                />
-              </div>
+              <Input
+                value={formData[field as keyof UserType] || ''}
+                className={`${field} dynamic-input ${
+                  changedFields[field] ? 'changed' : ''
+                }`}
+                disabled={!isEditable}
+                onChange={handleInputChange(field as keyof UserType)}
+                style={{ width: `${inputWidths[field] || 50}px` }}
+              />
             </div>
           ))}
+          {showSaveMessage && (
+            <div className={'profile-page__profile-container__success-message'}>
+              {(location.state as LocationState)?.successMessage ||
+                'Данные профиля успешно обновлены!'}
+            </div>
+          )}
+          {error && (
+            <div className={'profile-page__profile-container__error-message'}>
+              {error}
+            </div>
+          )}
         </Form>
         <Button
           className={`profile-page__profile-container__profile-form__edit-button ${

@@ -28,6 +28,7 @@ $c_button-bottom_blue: #0079a7;
 
 $c_input-default-border: #707070;
 $c_input-default-border-hover: #b1b1b1;
+$c_input-default-label: #a5a5a5;
 
 $c_avatar-border-color: #313131;
 
@@ -44,6 +45,8 @@ $c_black: #000;
 
 // fonts/links
 $c_font-default: $c_white;
+$c_font-success-message: #a2c61d;
+$c_font-error-message: #ef2121;
 
 // animations
 $animation-base-speed: 0.18s;
@@ -53,9 +56,6 @@ $red-ligth-gradient: radial-gradient(#fc2204 -40%, transparent 70%);
 $main-text-shadow: 1px 0 $c_black, -1px 0 $c_black, 0 1px $c_black,
   0 -1px $c_black, 1px 1px $c_black, -1px -1px $c_black, 1px -1px $c_black,
   -1px 1px $c_black;
-$success-text-shadow: 1px 0 $c_success, -1px 0 $c_success, 0 1px $c_success,
-  0 -1px $c_success, 1px 1px $c_success, -1px -1px $c_success,
-  1px -1px $c_success, -1px 1px $c_success;
 
 // headers
 $nav_list-gap: 40px;
