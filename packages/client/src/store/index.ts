@@ -1,11 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
-import AuthReducer from '@/store/reducers/auth-reducer'
+import authReducer from '@/store/reducers/auth-reducer'
 import { useDispatch } from 'react-redux'
 
 import { combineReducers } from '@reduxjs/toolkit'
 
 const rootReducer = combineReducers({
-  AuthReducer,
+  authReducer,
 })
 export const store = configureStore({
   reducer: rootReducer,

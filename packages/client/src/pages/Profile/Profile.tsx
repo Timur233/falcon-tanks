@@ -131,6 +131,13 @@ export const Profile = () => {
     }
   }
 
+  const onLogoutUser = () => {
+    dispatch(logoutUser()).then(() => {
+      window.sessionStorage.setItem('userIsLogged', '0') // 0
+      navigate('/')
+    })
+  }
+
   return (
     <div className={'profile-page'}>
       <div className="profile-page__profile-container">
@@ -206,7 +213,7 @@ export const Profile = () => {
             'link-button profile-page__profile-container__profile-form__exit-button'
           }
           text={'Выйти'}
-          onClick={() => dispatch(logoutUser())}
+          onClick={onLogoutUser}
         />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { AppDispatch, InferAppActions } from '@/store'
 import backendApi from '@/api/backendApi'
 
@@ -13,12 +13,16 @@ export type UserType = {
   second_name: string | null
 }
 
-const initialState = {
+type InitialState = {
+  user: UserType
+}
+
+const initialState: InitialState = {
   user: null as unknown as UserType,
 }
 
 const slice = createSlice({
-  name: 'AuthReducer',
+  name: 'authReducer',
   initialState,
   reducers: {
     setUser(state, actions) {
@@ -27,80 +31,96 @@ const slice = createSlice({
   },
 })
 
-const AuthReducer = slice.reducer
+const authReducer = slice.reducer
 export const { actions } = slice
 
-export const getUser = () => async (dispatch: AppDispatch) => {
-  await backendApi({
-    method: 'get',
-    url: '/auth/user',
-  })
-    .then((data: { data: UserType }) => {
-      if (data) {
-        dispatch(actions.setUser(data.data))
+export const getUser = createAsyncThunk('AuthUser/getUser', async thunkAPI => {
+  try {
+    const response = await backendApi({
+      method: 'get',
+      url: '/auth/user',
+    })
+
+    return response.data
+  } catch (err: any) {
+    if (!err.response) {
+      throw err
+    }
+    // @ts-ignore
+    return thunkAPI.rejectWithValue(err.response.data)
+  }
+})
+
+export const logoutUser = createAsyncThunk(
+  'AuthUser/logoutUser',
+  async thunkAPI => {
+    try {
+      const response = await backendApi({
+        method: 'post',
+        url: '/auth/logout',
+      })
+      return response.data
+    } catch (err: any) {
+      if (!err.response) {
+        throw err
       }
-    })
-    .catch(error => {
-      console.error(error)
-    })
+      // @ts-ignore
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
+
+type TypeSignInForm = {
+  login: string
+  password: string
 }
 
-export const logoutUser = () => async (dispatch: AppDispatch) => {
-  await backendApi({
-    method: 'post',
-    url: '/auth/logout',
-  })
-    .then(() => {
-      dispatch(actions.setUser(null))
-      window.location.href = '/'
-    })
-    .catch(error => {
-      console.error(error)
-    })
+export const signInUser = createAsyncThunk(
+  'AuthUser/signInUser',
+  async (data: { form: TypeSignInForm; query?: string | null }, thunkAPI) => {
+    try {
+      const response = await backendApi({
+        method: 'post',
+        url: '/auth/signin',
+        data: data.form,
+      })
+      return response.data
+    } catch (err: any) {
+      if (!err.response) {
+        throw err
+      }
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
+  }
+)
+
+type TypeSignUpForm = {
+  first_name: string
+  second_name: string
+  login: string
+  email: string
+  password: string
+  phone: string
 }
 
-export const signInUser =
-  (form: { login: string; password: string }, query?: string | null) =>
-  (dispatch: AppDispatch) => {
-    return backendApi({
-      method: 'post',
-      url: '/auth/signin',
-      data: form,
-    })
-      .then(data => {
-        if (data) {
-          dispatch(actions.setUser(data))
-          dispatch(getUser())
-
-          if (query) {
-            window.location.href = query
-          } else {
-            window.location.href = '/game'
-          }
-        }
+export const signUpUser = createAsyncThunk(
+  'AuthUser/signUpUser',
+  async (data: { form: TypeSignUpForm }, thunkAPI) => {
+    try {
+      const response = await backendApi({
+        method: 'post',
+        url: '/auth/signup',
+        data: data.form,
       })
-      .catch(error => {
-        console.error(error)
-      })
+      return response.data
+    } catch (err: any) {
+      if (!err.response) {
+        throw err
+      }
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
   }
-
-export const signUpUser =
-  (form: { login: string; password: string }) => (dispatch: AppDispatch) => {
-    backendApi({
-      method: 'post',
-      url: '/auth/signup',
-      data: form,
-    })
-      .then((data: { data: UserType }) => {
-        if (data) {
-          dispatch(actions.setUser(data.data))
-          dispatch(getUser())
-        }
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }
+)
 
 export type ActionsType = InferAppActions<typeof actions>
-export default AuthReducer
+export default authReducer
