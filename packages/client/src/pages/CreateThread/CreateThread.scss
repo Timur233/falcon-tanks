@@ -13,6 +13,16 @@
 }
 
 .create-thread-page {
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 360px;
+    height: 165px;
+    background-image: url('@/assets/images/destroyed-tanks.png');
+  }
+
   margin-top: 100px;
 
   .form {

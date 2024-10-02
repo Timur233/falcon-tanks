@@ -3,6 +3,16 @@
 .leaderboard-page {
   margin-top: 40px;
 
+  &::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 360px;
+    height: 165px;
+    background-image: url('@/assets/images/destroyed-tanks.png');
+  }
+
   &__logo {
     display: block;
     margin: 0 auto 44px auto;
