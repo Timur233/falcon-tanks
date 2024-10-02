@@ -1,10 +1,7 @@
-// import { useEffect } from 'react'
-
-import '@/app/App.scss'
-import AuthLayout from '@/layouts/auth-layout'
-import PrivateLayout from '@/layouts/private-layout'
-import PublicLayout from '@/layouts/public-layout'
-import RootLayout from '@/layouts/root-layout'
+import AuthLayout from '@/layouts/AuthLayout/AuthLayout'
+import PrivateLayout from '@/layouts/PrivateLayout/PrivateLayout'
+import PublicLayout from '@/layouts/PublicLayout/PublicLayout'
+import RootLayout from '@/layouts/RootLayout/RootLayout'
 import { Error } from '@/pages/Error/Error'
 import { Forum } from '@/pages/Forum/Forum'
 import { GamePage } from '@/pages/Game/Game'
@@ -16,15 +13,12 @@ import { Profile } from '@/pages/Profile/Profile'
 import { SignIn } from '@/pages/SignIn/SignIn'
 import { SignUp } from '@/pages/SignUp/SignUp'
 import { Thread } from '@/pages/Thread/Thread'
-import '@/scss/styles.scss'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 const routerConfig = createBrowserRouter([
   {
     element: <RootLayout />,
-    errorElement: (
-      <Error code={404} message={'Запрашиваемая страница не найдена'} />
-    ),
+    errorElement: <Error />,
     children: [
       {
         element: <PublicLayout />,
@@ -86,22 +80,7 @@ const routerConfig = createBrowserRouter([
 ])
 
 function App() {
-  // useEffect(() => {
-  //   const fetchServerData = async () => {
-  //     const url = `http://localhost:${__SERVER_PORT__}`
-  //     const response = await fetch(url)
-  //     const data = await response.json()
-  //     console.log(data)
-  //   }
-  //
-  //   fetchServerData()
-  // }, [])
-  //
-  return (
-    <div className={'app-layout'}>
-      <RouterProvider router={routerConfig} />
-    </div>
-  )
+  return <RouterProvider router={routerConfig} />
 }
 
 export default App

@@ -1,0 +1,127 @@
+@import '../../../../scss/vars.scss';
+
+@mixin absoluteAndUserselect {
+  position: absolute;
+  user-select: none;
+}
+
+@mixin smokeAnimate($delay, $fadeInUp, $float) {
+  animation-delay: $delay;
+  animation: fadeInUp $fadeInUp ease-out forwards,
+    float $float ease-in-out infinite;
+}
+
+.enemy-tank {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  overflow: hidden;
+  z-index: -1;
+
+  &_right {
+    left: auto;
+    right: 0;
+  }
+
+  &__machine {
+    @include absoluteAndUserselect();
+
+    left: 0;
+    bottom: 0;
+    width: 300px;
+
+    &_right {
+      left: auto;
+      right: 0;
+    }
+  }
+}
+
+.tank-smoke {
+  &::after {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    bottom: 0;
+    left: 0;
+    transform: translate(-50%, 50%);
+    background: $red_ligth_gradient;
+  }
+
+  &_right {
+    &::after {
+      left: auto;
+      right: 0;
+      transform: translate(50%, 50%);
+    }
+  }
+
+  &__bottom {
+    @include absoluteAndUserselect();
+    @include smokeAnimate(2s, 0.6s, 15s);
+
+    left: -200px;
+    bottom: -200px;
+    width: 600px;
+
+    &_right {
+      left: auto;
+      right: -200px;
+    }
+  }
+
+  &__middle {
+    @include absoluteAndUserselect();
+    @include smokeAnimate(4s, 0.8s, 8s);
+
+    left: -62px;
+    bottom: 220px;
+    width: 280px;
+
+    &_right {
+      left: auto;
+      right: -62px;
+    }
+  }
+
+  &__top {
+    @include absoluteAndUserselect();
+    @include smokeAnimate(0s, 1s, 10s);
+
+    left: -50px;
+    bottom: 410px;
+    width: 200px;
+
+    &_right {
+      left: auto;
+      right: -50px;
+    }
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(5px, -5px);
+  }
+  50% {
+    transform: translate(-5px, 10px);
+  }
+  75% {
+    transform: translate(10px, -5px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    bottom: -300px;
+  }
+}

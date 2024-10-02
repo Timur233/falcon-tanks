@@ -1,0 +1,26 @@
+@import '../../../scss/vars';
+
+.page-title {
+  position: relative;
+  display: block;
+  margin-bottom: 28px;
+
+  &__block {
+    position: relative;
+    display: block;
+  }
+
+  &__content {
+    color: $text-color;
+
+    & > * {
+      font-size: 28px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-shadow: $main-text-shadow;
+      margin: 0;
+      padding: 0;
+    }
+  }
+}
