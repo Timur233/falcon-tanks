@@ -88,7 +88,7 @@ export const SignUp = () => {
         </label>
         <Button
           text={'зарегистрироваться'}
-          useFixWidth={true}
+          useFixWidth
           onClick={() => handleSubmit()}
         />
       </form>

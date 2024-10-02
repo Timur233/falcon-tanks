@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
 export default function PrivateLayout() {
-  const user = useSelector<RootState, UserType>(state => state.AuthReducer.user)
+  const user = useSelector<RootState, UserType>(state => state.authReducer.user)
   const navigate = useNavigate()
   const userIsLogged = window.sessionStorage.getItem('userIsLogged') === '1'
   const dispatch = useAppDispatch()

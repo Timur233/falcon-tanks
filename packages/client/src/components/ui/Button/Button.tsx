@@ -5,11 +5,9 @@ export const Button = (props: {
   text: string
   className?: string | undefined
   useFixWidth?: boolean | undefined
-  href?: string | undefined
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  onClick?: (() => Promise<void>) | (() => any) | undefined
+  onClick?: () => void
 }) => {
-  const { text, className, useFixWidth = false, href = '/', onClick } = props
+  const { text, className, useFixWidth = false, onClick } = props
   return (
     <button
       className={`custom-button ${className} ${

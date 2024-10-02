@@ -13,12 +13,16 @@ export type UserType = {
   second_name: string | null
 }
 
-const initialState = {
+type InitialState = {
+  user: UserType
+}
+
+const initialState: InitialState = {
   user: null as unknown as UserType,
 }
 
 const slice = createSlice({
-  name: 'AuthReducer',
+  name: 'authReducer',
   initialState,
   reducers: {
     setUser(state, actions) {
@@ -27,7 +31,7 @@ const slice = createSlice({
   },
 })
 
-const AuthReducer = slice.reducer
+const authReducer = slice.reducer
 export const { actions } = slice
 
 export const getUser = createAsyncThunk('AuthUser/getUser', async thunkAPI => {
@@ -119,4 +123,4 @@ export const signUpUser = createAsyncThunk(
 )
 
 export type ActionsType = InferAppActions<typeof actions>
-export default AuthReducer
+export default authReducer

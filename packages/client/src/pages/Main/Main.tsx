@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { Button } from '@/components/ui/Button/Button'
 import { EnemyTank } from './components/EnemyTanks/EnemyTank'
+import {useNavigate} from "react-router-dom";
 
 export const Main = () => {
   const [isLoaded, setIsLoaded] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     setIsLoaded(true)
@@ -34,13 +36,13 @@ export const Main = () => {
             <Button
               className="promo-page__btn custom-button_blue"
               useFixWidth
-              href="/game"
+              onClick={() => navigate('/sign-in')}
               text="Вход / Регистрация"
             />
             <Button
               className="promo-page__btn"
               useFixWidth
-              href="/game"
+              onClick={() => navigate('/game')}
               text="Играть"
             />
           </div>
