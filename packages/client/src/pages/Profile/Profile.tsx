@@ -7,7 +7,12 @@ import { saveUserData, changeUserAvatar } from '@/store/reducers/user-reducer'
 import { Button } from '@/components/ui/Button/Button'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Avatar, AVATAR_SRC } from '@/components/ui/Avatar/Avatar'
-import { logoutUser, UserType } from '@/store/reducers/auth-reducer'
+import {
+  actions,
+  getUser,
+  logoutUser,
+  UserType,
+} from '@/store/reducers/auth-reducer'
 import { RootState, useAppDispatch } from '@/store'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 
@@ -25,8 +30,10 @@ interface LocationState {
 
 export const Profile = () => {
   const dispatch = useAppDispatch()
-  const user = useSelector<RootState, UserType>(state => state.AuthReducer.user)
-  const [formData, setFormData] = useState<UserType>(user)
+  const user = useSelector<RootState, UserType | null>(
+    state => state.authReducer.user
+  )
+  const [formData, setFormData] = useState<UserType | null>(null)
   const [isEditable, setIsEditable] = useState(false)
   const [showSaveMessage, setShowSaveMessage] = useState(false)
   const [changedFields, setChangedFields] = useState<{
@@ -34,13 +41,31 @@ export const Profile = () => {
   }>({})
   const [error, setError] = useState<string | null>(null)
   const [inputWidths, setInputWidths] = useState<{ [key: string]: number }>({})
+  const [isLoading, setIsLoading] = useState(true)
 
   const location = useLocation()
   const navigate = useNavigate()
 
   useEffect(() => {
-    setFormData(user)
-  }, [user])
+    if (user) {
+      setFormData(user)
+      setIsLoading(false)
+    } else {
+      setIsLoading(true)
+      dispatch(getUser())
+        .unwrap()
+        .then(data => {
+          dispatch(actions.setUser(data))
+          setFormData(data)
+          setIsLoading(false)
+        })
+        .catch(error => {
+          console.error('Ошибка при загрузке данных пользователя:', error)
+          setError('Не удалось загрузить данные пользователя')
+          setIsLoading(false)
+        })
+    }
+  }, [dispatch, user])
 
   useEffect(() => {
     const state = location.state as LocationState
@@ -67,7 +92,7 @@ export const Profile = () => {
   const adjustInputWidths = useCallback(() => {
     const newWidths: { [key: string]: number } = {}
     Object.keys(fieldLabels).forEach(field => {
-      const value = formData[field as keyof UserType] || fieldLabels[field]
+      const value = formData?.[field as keyof UserType] || fieldLabels[field]
       newWidths[field] = calculateWidth(value)
     })
     setInputWidths(newWidths)
@@ -80,16 +105,24 @@ export const Profile = () => {
   const handleSaveData = async () => {
     setError(null)
     try {
-      await dispatch(saveUserData(formData))
-      setChangedFields({})
-      setIsEditable(false)
-      setShowSaveMessage(true)
-      setTimeout(() => {
-        setShowSaveMessage(false)
-      }, 5000)
+      const updatedUser = await dispatch(
+        saveUserData({ form: formData })
+      ).unwrap()
+      if (updatedUser) {
+        dispatch(actions.setUser(updatedUser))
+        setFormData(updatedUser)
+        setChangedFields({})
+        setIsEditable(false)
+        setShowSaveMessage(true)
+        setTimeout(() => {
+          setShowSaveMessage(false)
+        }, 5000)
+      } else {
+        setError('Не удалось обновить данные пользователя')
+      }
     } catch (err) {
+      console.error('Ошибка при сохранении данных:', err)
       setError('Ошибка при сохранении данных')
-      console.error(err)
     }
   }
 
@@ -104,13 +137,17 @@ export const Profile = () => {
   const handleInputChange =
     (field: keyof UserType) => (event: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = event.target.value
-      setFormData(prevData => ({
-        ...prevData,
-        [field]: newValue,
-      }))
+      setFormData(prevData =>
+        prevData
+          ? {
+              ...prevData,
+              [field]: newValue,
+            }
+          : null
+      )
       setChangedFields(prevFields => ({
         ...prevFields,
-        [field]: newValue !== user[field],
+        [field]: newValue !== user?.[field],
       }))
       setInputWidths(prevWidths => ({
         ...prevWidths,
@@ -119,8 +156,9 @@ export const Profile = () => {
     }
 
   const handleAvatarChange = async (file: File) => {
+    setError(null)
     try {
-      await dispatch(changeUserAvatar(file))
+      await dispatch(changeUserAvatar(file)).unwrap()
       setShowSaveMessage(true)
       setTimeout(() => {
         setShowSaveMessage(false)
@@ -138,6 +176,28 @@ export const Profile = () => {
     })
   }
 
+  // TODO: заменить на компонент прелоадера из другого реквеста
+  if (isLoading) {
+    return (
+      <div className={'profile-page'}>
+        <div className="profile-page__profile-container">
+          <CustomPageTitle
+            className={'profile-page__profile-container__title'}
+            text={'Личный кабинет'}
+          />
+          <div className="profile-loading">
+            <div className="profile-loading__spinner"></div>
+            <p>Загрузка данных пользователя...</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!formData) {
+    return <h1>Ошибка загрузки данных</h1>
+  }
+
   return (
     <div className={'profile-page'}>
       <div className="profile-page__profile-container">
@@ -150,7 +210,7 @@ export const Profile = () => {
           imageClassName={
             'profile-page__profile-container__profile-avatar__avatar'
           }
-          src={user.avatar ? `${AVATAR_SRC}/${user.avatar}` : ''}
+          src={formData.avatar ? `${AVATAR_SRC}/${formData.avatar}` : ''}
           onChange={handleAvatarChange}
         />
         <Form className={'profile-page__profile-container__profile-form'}>
@@ -205,7 +265,7 @@ export const Profile = () => {
             }
             text={'Сменить пароль'}
             useFixWidth
-            href={'/profile/change-password'}
+            onClick={() => navigate('/profile/change-password')}
           />
         )}
         <Button

@@ -106,19 +106,25 @@
 
       &__edit-button, &__save-button {
         margin-bottom: 16px;
+        font-size: 16px;
       }
 
       &__change-password {
         display: flex;
         flex-direction: column;
-        margin-bottom: 16px;
+        margin-bottom: 48px;
+        width: 301px;
 
-        .input-default {
+        .input-wrapper {
           margin-bottom: 16px;
           width: 100%;
 
-          &.new_password_confirm {
-            margin-bottom: 48px;
+          .input-default {
+            width: 100%;
+          }
+
+          &:last-child {
+            margin-bottom: 0;
           }
         }
       }

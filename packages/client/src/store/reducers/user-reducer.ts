@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { AppDispatch, InferAppActions } from '@/store'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { InferAppActions } from '@/store'
 import backendApi from '@/api/backendApi'
 
 export type UserType = {
@@ -13,89 +13,92 @@ export type UserType = {
   second_name: string | null
 }
 
-export type PasswordData = {
-  oldPassword: string
-  newPassword: string
+type InitialState = {
+  user: UserType
 }
 
-const initialState = {
+const initialState: InitialState = {
   user: null as unknown as UserType,
 }
 
 const slice = createSlice({
-  name: 'UserReducer',
+  name: 'userReducer',
   initialState,
   reducers: {
     setUser(state, action) {
       state.user = action.payload
     },
-    updateAvatar(state, action) {
-      if (state.user) {
-        state.user.avatar = action.payload
-      }
-    },
   },
 })
 
-const UserReducer = slice.reducer
+const userReducer = slice.reducer
 export const { actions } = slice
 
-export const saveUserData =
-  (userData: UserType) => async (dispatch: AppDispatch) => {
-    await backendApi({
-      method: 'put',
-      url: '/user/profile',
-      data: userData,
-    })
-      .then((response: { data: UserType }) => {
-        if (response.data) {
-          dispatch(actions.setUser(response.data))
-        }
+export const saveUserData = createAsyncThunk(
+  'User/saveUserData',
+  async (data: { form: UserType | null }, thunkAPI) => {
+    try {
+      const response = await backendApi({
+        method: 'put',
+        url: '/user/profile',
+        data: data.form,
       })
-      .catch(error => {
-        console.error('Error saving user data:', error)
-      })
+      return response.data
+    } catch (err: any) {
+      if (!err.response) {
+        throw err
+      }
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
   }
+)
 
-export const changeUserPassword =
-  (passwordData: PasswordData) => async (dispatch: AppDispatch) => {
-    await backendApi({
-      method: 'put',
-      url: '/user/password',
-      data: passwordData,
-    })
-      .then((response: { data: UserType }) => {
-        if (response.data) {
-          dispatch(actions.setUser(response.data))
-        }
+export const changeUserPassword = createAsyncThunk(
+  'User/changeUserPassword',
+  async (
+    passwordData: { oldPassword: string; newPassword: string },
+    thunkAPI
+  ) => {
+    try {
+      const response = await backendApi({
+        method: 'put',
+        url: '/user/password',
+        data: passwordData,
       })
-      .catch(error => {
-        console.error('Error changing user password:', error)
-      })
+      return response.data
+    } catch (err: any) {
+      if (!err.response) {
+        throw err
+      }
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
   }
+)
 
-export const changeUserAvatar =
-  (file: File) => async (dispatch: AppDispatch) => {
-    const formData = new FormData()
-    formData.append('avatar', file)
+export const changeUserAvatar = createAsyncThunk(
+  'User/changeUserAvatar',
+  async (file: File, thunkAPI) => {
+    try {
+      const formData = new FormData()
+      formData.append('avatar', file)
 
-    await backendApi({
-      method: 'put',
-      url: '/user/profile/avatar',
-      data: formData,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    })
-      .then((response: { data: { avatar: string } }) => {
-        if (response.data) {
-          dispatch(actions.updateAvatar(response.data.avatar))
-        }
+      const response = await backendApi({
+        method: 'put',
+        url: '/user/profile/avatar',
+        data: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       })
-      .catch(error => {
-        console.error('Error changing avatar:', error)
-      })
+      return response.data.avatar
+    } catch (err: any) {
+      if (!err.response) {
+        throw err
+      }
+      return thunkAPI.rejectWithValue(err.response.data)
+    }
   }
+)
 
 export type ActionsType = InferAppActions<typeof actions>
-export default UserReducer
+export default userReducer

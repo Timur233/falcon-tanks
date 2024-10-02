@@ -51,7 +51,7 @@
 
 .link-button {
   background: none;
-  border: none;
+  border-color: transparent;
   font-size: $nav_link-font-size;
   font-weight: $nav_link-font-weight;
   letter-spacing: 1px;
@@ -65,6 +65,7 @@
 
   &:hover,
   &_active {
+    border-color: transparent;
     color: $primary-color;
   }
 }

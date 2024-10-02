@@ -54,7 +54,7 @@ export const ChangePassword = () => {
           oldPassword: userData.old_password,
           newPassword: userData.new_password,
         })
-      )
+      ).unwrap()
 
       setShowSaveMessage(true)
       setUserData({
@@ -109,17 +109,17 @@ export const ChangePassword = () => {
               {error}
             </div>
           )}
-          <Button
-            text={'Сохранить'}
-            className={'save'}
-            useFixWidth={true}
-            onClick={saveData}
-          />
         </Form>
+        <Button
+          text={'Сохранить'}
+          className={'save'}
+          useFixWidth
+          onClick={saveData}
+        />
         <Button
           text={'Назад'}
           className={'link-button back'}
-          href={'/profile'}
+          onClick={() => navigate('/profile')}
         />
       </div>
     </div>
