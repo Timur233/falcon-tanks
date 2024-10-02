@@ -20,12 +20,15 @@ export const Thread = () => {
   return (
     <div className="thread-page container">
       <PageTitle tagName="h1" text="Новые игры"></PageTitle>
-      {/* TODO: add here svg after */}
-      {/* https://github.com/Timur233/falcon-tanks/pull/11 */}
-      {/* will be delivered to develop branch */}
       <div className="thread-page__info thread-info">
-        <div className="thread-info__author">Timur233</div>
-        <div className="thread-info__date">22.03.2025</div>
+        <div className="thread-info__label">
+          <Icon id="profile-icon" width={10} height={12}></Icon>
+          <span>Timur233</span>
+        </div>
+        <div className="thread-info__label">
+          <Icon id="time-icon" width={13} height={12}></Icon>
+          <span>22.03.2025</span>
+        </div>
       </div>
       <BreadCrumbs
         className="thread-page__bread-crumbs"

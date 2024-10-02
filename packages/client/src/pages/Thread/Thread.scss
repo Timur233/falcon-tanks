@@ -12,6 +12,13 @@
     display: flex;
     gap: 16px;
     color: #c5c5c5;
+    font-size: 14px;
+
+    &__label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
   }
 
   &__bread-crumbs {
