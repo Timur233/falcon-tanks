@@ -33,10 +33,6 @@ export default function PrivateLayout() {
     }
   }, [])
 
-  // useEffect(() => {
-  // console.log(user)
-  // }, [user])
-
   if (userIsLogged) {
     return (
       <div className="private-layout">
