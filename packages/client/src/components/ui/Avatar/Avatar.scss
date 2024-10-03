@@ -21,7 +21,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: $c_overlay-background;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -48,11 +48,11 @@
     cursor: pointer;
     padding: 8px 16px;
     border-radius: 20px;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: $c_overlay-background;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.7);
+      background-color: $c_overlay-background-hover;
     }
   }
 }
