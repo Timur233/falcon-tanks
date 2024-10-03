@@ -5,6 +5,8 @@ $f_default-font-family: 'Roboto', sans-serif;
 
 // images
 $img_default-background: url('@/assets/images/page-background.png');
+$img_profile_background_right: url('@/assets/images/profile-background-right.png');
+$img_profile_background_left: url('@/assets/images/tank-dead.png');
 
 // main colors
 $primary-color: #839d22;
@@ -24,11 +26,29 @@ $c_button_blue: $second-color;
 $c_button-top_blue: #5fe1ff;
 $c_button-bottom_blue: #0079a7;
 
+$c_input-default-border: #707070;
+$c_input-default-border-hover: #b1b1b1;
+$c_input-default-label: #a5a5a5;
+
+$c_avatar-border-color: #313131;
+$c_overlay-background: rgba(0, 0, 0, 0.5);
+$c_overlay-background-hover: rgba(0, 0, 0, 0.7);
+
+$c_success: #48c548;
+
+$c_white: #ffffff;
+
+$c_button_blue: $second-color;
+$c_button-top_blue: #5fe1ff;
+$c_button-bottom_blue: #0079a7;
+
 $c_white: #fff;
 $c_black: #000;
 
 // fonts/links
 $c_font-default: $c_white;
+$c_font-success-message: #a2c61d;
+$c_font-error-message: #ef2121;
 
 // animations
 $animation-base-speed: 0.18s;

@@ -1,10 +1,11 @@
 import './Button.scss'
+import React from 'react'
 
 export const Button = (props: {
   text: string
   className?: string | undefined
   useFixWidth?: boolean | undefined
-  onClick?: () => void
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>
 }) => {
   const { text, className, useFixWidth = false, onClick } = props
   return (

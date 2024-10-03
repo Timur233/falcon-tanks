@@ -1,19 +1,18 @@
-import AuthLayout from '@/layouts/AuthLayout/AuthLayout'
-import PrivateLayout from '@/layouts/PrivateLayout/PrivateLayout'
-import PublicLayout from '@/layouts/PublicLayout/PublicLayout'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import RootLayout from '@/layouts/RootLayout/RootLayout'
-import { Error } from '@/pages/Error/Error'
-import { Forum } from '@/pages/Forum/Forum'
-import { Game } from '@/pages/Game/Game'
-import { Leaderboard } from '@/pages/Leaderboard/Leaderboard'
+import PrivateLayout from '@/layouts/PrivateLayout/PrivateLayout'
+import AuthLayout from '@/layouts/AuthLayout/AuthLayout'
+import PublicLayout from '@/layouts/PublicLayout/PublicLayout'
 import { Main } from '@/pages/Main/Main'
-import { ChangePassword } from '@/pages/Profile/ChangePassword'
-import { ProfileEdit } from '@/pages/Profile/Edit'
-import { Profile } from '@/pages/Profile/Profile'
 import { SignIn } from '@/pages/SignIn/SignIn'
 import { SignUp } from '@/pages/SignUp/SignUp'
+import { Game } from '@/pages/Game/Game'
+import { Forum } from '@/pages/Forum/Forum'
+import { Error } from '@/pages/Error/Error'
 import { Thread } from '@/pages/Thread/Thread'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { Leaderboard } from '@/pages/Leaderboard/Leaderboard'
+import { Profile } from '@/pages/Profile/Profile'
+import { ChangePassword } from '@/pages/Profile/ChangePassword'
 
 const routerConfig = createBrowserRouter([
   {
@@ -51,10 +50,6 @@ const routerConfig = createBrowserRouter([
           {
             path: '/profile',
             element: <Profile />,
-          },
-          {
-            path: '/profile/edit',
-            element: <ProfileEdit />,
           },
           {
             path: '/profile/change-password',

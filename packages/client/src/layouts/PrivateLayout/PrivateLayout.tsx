@@ -1,10 +1,10 @@
 import { Header } from '@/components/common/Header/Header'
-import {Outlet, useNavigate} from 'react-router-dom'
-import {useSelector} from "react-redux";
-import {RootState, useAppDispatch} from "@/store";
-import {actions, getUser, UserType} from "@/store/reducers/auth-reducer";
-import {useEffect} from "react";
-import {toast} from "react-toastify";
+import { Outlet, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { RootState, useAppDispatch } from '@/store'
+import { actions, getUser, UserType } from '@/store/reducers/auth-reducer'
+import { useEffect } from 'react'
+import { toast } from 'react-toastify'
 
 export default function PrivateLayout() {
   const user = useSelector<RootState, UserType>(state => state.authReducer.user)
@@ -33,20 +33,15 @@ export default function PrivateLayout() {
     }
   }, [])
 
-  // useEffect(() => {
-    // console.log(user)
-  // }, [user])
-
   if (userIsLogged) {
     return (
       <div className="private-layout">
         <Header className="private-layout__header"></Header>
         <main className="private-layout__body">
-          <Outlet/>
+          <Outlet />
         </main>
       </div>
     )
   }
   return user === null ? <h1>Загрузка...</h1> : <Outlet />
-
 }

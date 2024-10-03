@@ -1,0 +1,58 @@
+@import '../../../scss/vars.scss';
+
+.avatar {
+  width: 160px;
+  max-width: 100%;
+  height: 158px;
+  max-height: 100%;
+  position: relative;
+
+  &__image, &__image-placeholder {
+    border-radius: 50%;
+    border: 5px solid $c_avatar-border-color;
+    width: inherit;
+    height: inherit;
+  }
+
+  &__overlay {
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $c_overlay-background;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+    border-radius: 50%;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  &:hover {
+    .overlay {
+      opacity: 1;
+    }
+  }
+
+  &__change-button {
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: $c_overlay-background;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: $c_overlay-background-hover;
+    }
+  }
+}
