@@ -1,0 +1,6 @@
+@import '../../scss/form-mixin';
+
+.registration-page {
+  @include page-background-layout();
+  @include form-styles();
+}
