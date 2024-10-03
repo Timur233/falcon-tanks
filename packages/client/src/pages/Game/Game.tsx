@@ -37,6 +37,7 @@ export const Game = () => {
     setButtonsState({ ...buttonsState, [buttonName]: state })
   }
 
+  // TODO: Заменить на финальное решение для отслеживания кнопок
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       const isKeydown = event.type === 'keydown'
@@ -76,7 +77,6 @@ export const Game = () => {
       <Modal show={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
         <img src={GameInfo} alt="Инструкция к игре" />
       </Modal>
-
       <div className="container-fluid game-page__container">
         <div className="row">
           <div className="column col-8">

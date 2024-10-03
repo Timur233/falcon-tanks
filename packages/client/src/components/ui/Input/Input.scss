@@ -1,0 +1,17 @@
+@import '../../../scss/vars';
+
+.input-default {
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 2px solid $c_input-default-border;
+  text-align: center;
+  background-color: $c_default-background;
+  color: $c_font-default;
+  font-size: 18px;
+
+  &:focus-visible,
+  &:hover {
+    outline: none;
+    border-color: $c_input-default-border-hover;
+  }
+}

@@ -1,20 +1,20 @@
-import { Link } from 'react-router-dom'
 import './Button.scss'
+import React from 'react'
 
 export const Button = (props: {
   text: string
-  className?: string
-  useFixWidth?: boolean
-  href?: string
+  className?: string | undefined
+  useFixWidth?: boolean | undefined
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>
 }) => {
-  const { text, className = '', useFixWidth = false, href = '/' } = props
+  const { text, className = '', useFixWidth = false, onClick } = props
   return (
-    <Link
-      to={href}
+    <button
       className={`custom-button ${className} ${
         useFixWidth ? 'custom-button_fix-width' : ''
-      }`}>
+      }`}
+      onClick={onClick}>
       <span>{text}</span>
-    </Link>
+    </button>
   )
 }

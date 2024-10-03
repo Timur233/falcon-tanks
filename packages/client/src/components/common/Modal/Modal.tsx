@@ -1,8 +1,10 @@
 import { Icon } from '@/components/ui/Icon/Icon'
 import './Modal.scss'
+import ReactDOM from 'react-dom'
+import { useEffect } from 'react'
 
 type ModalPropsType = {
-  show?: boolean
+  show: boolean
   onClose: () => void
   width?: number | null
   height?: number | null
@@ -11,8 +13,25 @@ type ModalPropsType = {
 
 export const Modal = (props: ModalPropsType) => {
   const { children, onClose, show = false, width = null, height = null } = props
+  const modalRoot = document.getElementById('modal-root') || document.body
 
-  return (
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      event.preventDefault()
+
+      if (event.key === 'Escape') {
+        onClose()
+      }
+    }
+
+    document.addEventListener('keydown', handleEscape)
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape)
+    }
+  }, [onClose])
+
+  return ReactDOM.createPortal(
     <div className={`modal ${show ? 'modal_show' : ''}`} onClick={onClose}>
       <div
         className="modal__content"
@@ -28,6 +47,7 @@ export const Modal = (props: ModalPropsType) => {
 
         {children}
       </div>
-    </div>
+    </div>,
+    modalRoot
   )
 }
