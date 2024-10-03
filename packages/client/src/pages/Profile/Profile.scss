@@ -65,6 +65,7 @@
         align-items: baseline;
         justify-content: flex-start;
         margin-bottom: 16px;
+        overflow: hidden;
 
         label {
           flex: 0 0 auto;
@@ -85,6 +86,7 @@
           flex: 0 0 auto;
           display: flex;
           justify-content: flex-end;
+          max-width: 65%;
         }
 
         .dynamic-input {
