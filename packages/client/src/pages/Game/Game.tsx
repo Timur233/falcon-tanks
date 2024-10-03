@@ -84,8 +84,12 @@ export const Game = () => {
               <div className="game-wrapper__decor-hr"></div>
               <div className="game-wrapper__decor-vr"></div>
               Воот тут игра
-              <div className="start-screen">
+              <div className="start-screen" style={{ display: 'none' }}>
                 <Button text="Начать игру" useFixWidth />
+              </div>
+              <div className="game-over-screen">
+                <span className="game-over-screen__title">Game Over</span>
+                <Button text="Начать заново" useFixWidth />
               </div>
             </div>
           </div>
