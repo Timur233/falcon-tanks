@@ -1,0 +1,62 @@
+@import '../../../../scss/vars.scss';
+
+$button-top-border-color: #ffffff7d;
+$button-bottom-border-color: #00000074;
+
+@mixin buttonSize($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+.controll-btn {
+  display: block;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+
+  font-family: $f_default-font-family;
+  font-size: 14px;
+  font-weight: 700;
+
+  color: $c_font-default;
+  transition: border-color $animation-base-speed;
+
+  background-color: $c_button;
+  border-top: 1px solid $button-top-border-color;
+  border-bottom: 1px solid $button-bottom-border-color;
+  border-radius: 4px;
+
+  &_active,
+  &:active {
+    border-top-color: $button-bottom-border-color;
+    border-bottom-color: $button-top-border-color;
+  }
+
+  &_blue {
+    background-color: $c_button_blue;
+  }
+
+  &_red {
+    background-color: $c_button_red;
+  }
+
+  &_small {
+    @include buttonSize(28px, 26px);
+    border-width: 3px;
+    border-radius: 6px;
+  }
+
+  &_middle {
+    @include buttonSize(37px, 29px);
+    border-width: 4px;
+    border-radius: 7px;
+  }
+
+  &_big {
+    @include buttonSize(76px, 64px);
+    border-width: 6px;
+    border-radius: 12px;
+  }
+}

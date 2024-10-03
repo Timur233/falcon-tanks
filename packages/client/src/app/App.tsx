@@ -13,6 +13,7 @@ import { Thread } from '@/pages/Thread/Thread'
 import { Leaderboard } from '@/pages/Leaderboard/Leaderboard'
 import { Profile } from '@/pages/Profile/Profile'
 import { ChangePassword } from '@/pages/Profile/ChangePassword'
+import { SvgSprite } from '@/components/ui/SvgSprite/SvgSprite'
 
 const routerConfig = createBrowserRouter([
   {
@@ -75,7 +76,12 @@ const routerConfig = createBrowserRouter([
 ])
 
 function App() {
-  return <RouterProvider router={routerConfig} />
+  return (
+    <>
+      <RouterProvider router={routerConfig} />
+      <SvgSprite url={'/sprite.symbol.svg'} />
+    </>
+  )
 }
 
 export default App

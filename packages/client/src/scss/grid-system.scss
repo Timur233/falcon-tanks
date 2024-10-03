@@ -2,7 +2,7 @@
 @import './vars.scss';
 
 .container-fluid {
-  display: flex;
+  display: block;
   width: 100%;
   max-width: $container_fluid-max-width;
   padding: $container_fluid-padding;

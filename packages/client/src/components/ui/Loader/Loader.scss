@@ -1,0 +1,62 @@
+@import '../../../scss/vars.scss';
+
+$road-color: #2c414c;
+
+.preloader {
+  position: fixed;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  inset: 0;
+  z-index: 10;
+  background-color: $overlay-color;
+
+  &_show {
+    display: flex;
+  }
+
+  &__road {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+
+    background-color: $road-color;
+    background-image: url('@/assets/images/ground.png');
+    background-size: 50px 50px;
+    border-radius: 20px;
+
+    animation: moveRoad 2s linear infinite;
+  }
+
+  &__image {
+    width: 60px;
+  }
+
+  &__close-btn {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, 100px);
+    cursor: pointer;
+
+    background: none;
+    border: none;
+    outline: none;
+
+    color: $text-color;
+    font-size: 14px;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+@keyframes moveRoad {
+  100% {
+    background-position: 0px 50px;
+  }
+}

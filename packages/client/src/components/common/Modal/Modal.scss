@@ -1,0 +1,89 @@
+@import '../../../scss/vars.scss';
+
+$border-radius: 8px;
+$border-color: #70842f;
+$outline-gradient: linear-gradient(to left, #5e5e5e, #414243);
+
+.modal {
+  display: none;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  inset: 0;
+  background: $overlay-color;
+  z-index: 20;
+
+  &_show {
+    display: flex;
+  }
+
+  &__close-btn {
+    background: none;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+
+    position: absolute;
+    right: -24px;
+    top: -24px;
+  }
+
+  &__content {
+    position: relative;
+    padding: 12px;
+    border-radius: $border-radius;
+    min-width: 200px;
+    min-height: 200px;
+    max-width: 500px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: $border-radius;
+      background: $outline-gradient;
+      z-index: -1;
+    }
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 7px;
+      border: 2px solid $border-color;
+      border-radius: 4px;
+      background: $c_black;
+      z-index: -1;
+    }
+  }
+
+  &__decor {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+
+    @mixin borderDecorSettings($top, $bottom) {
+      content: '';
+      position: absolute;
+      top: $top;
+      bottom: $bottom;
+      left: 0;
+      right: 0;
+      height: 8px;
+
+      background: url('@/assets/images/svg/title-decor.svg') no-repeat center
+        center;
+      background-size: contain;
+    }
+
+    &::before {
+      @include borderDecorSettings(0, auto);
+    }
+
+    &::after {
+      @include borderDecorSettings(auto, 0);
+
+      transform: rotate(180deg);
+    }
+  }
+}

@@ -1,3 +1,4 @@
+import './PrivateLayout.scss'
 import { Header } from '@/components/common/Header/Header'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
