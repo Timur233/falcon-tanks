@@ -1,6 +1,6 @@
 @import '../../scss/vars';
 
-@mixin notification-message (
+@mixin notification-message(
   $color: $c_font-success-message,
   $font-size: 16px,
   $line-height: 19px,
@@ -106,7 +106,8 @@
         }
       }
 
-      &__edit-button, &__save-button {
+      &__edit-button,
+      &__save-button {
         margin-bottom: 16px;
         font-size: 16px;
       }

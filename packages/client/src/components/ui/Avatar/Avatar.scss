@@ -7,7 +7,8 @@
   max-height: 100%;
   position: relative;
 
-  &__image, &__image-placeholder {
+  &__image,
+  &__image-placeholder {
     border-radius: 50%;
     border: 5px solid $c_avatar-border-color;
     width: inherit;
