@@ -1,19 +1,19 @@
 import { Enemy, Player } from '@/components/Game/gameTypes'
 import { useNavigate } from 'react-router-dom'
 
-export const initializePlayer = () => ({
+export const PLAYER_DEFAULT_PARAMS = {
   x: 400,
   y: 300,
   width: 30,
   height: 30,
   speed: 0.5,
   direction: { x: 0, y: 0 },
-})
+}
 
 export const resetPlayerPosition = (
   setPlayer: React.Dispatch<React.SetStateAction<Player>>
 ) => {
-  setPlayer(initializePlayer())
+  setPlayer(PLAYER_DEFAULT_PARAMS)
 }
 
 /**

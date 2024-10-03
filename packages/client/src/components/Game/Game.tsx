@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './Game.scss'
 import { initializeEnemies } from '@/components/Game/enemy'
-import { initializePlayer } from '@/components/Game/player'
+import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import {
   handleKeyDown,
@@ -17,7 +17,7 @@ const livesUse = 3
 export const Game: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const [lives, setLives] = useState<number>(livesUse)
-  const [player, setPlayer] = useState(initializePlayer())
+  const [player, setPlayer] = useState(PLAYER_DEFAULT_PARAMS)
   const [enemies, setEnemies] = useState(initializeEnemies(5))
   const [obstacles] = useState<Obstacle[]>(initializeObstacle())
   const [isPaused, setIsPaused] = useState(false)
@@ -38,7 +38,7 @@ export const Game: React.FC = () => {
     setIsPaused(false)
     setIsGameOver(false)
     setLives(livesUse)
-    setPlayer(initializePlayer())
+    setPlayer(PLAYER_DEFAULT_PARAMS)
     setEnemies(initializeEnemies(5))
   }
 
@@ -113,7 +113,7 @@ export const Game: React.FC = () => {
     setIsPaused(false)
     setIsGameOver(false)
     setLives(livesUse)
-    setPlayer(initializePlayer())
+    setPlayer(PLAYER_DEFAULT_PARAMS)
     setEnemies(initializeEnemies(5))
   }
 
