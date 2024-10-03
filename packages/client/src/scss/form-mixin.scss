@@ -1,0 +1,85 @@
+@import 'vars';
+
+@mixin page-background-layout(
+  $background-image: (
+    $img_login-background,
+    $img_page_background_left,
+  ),
+  $background-repeat: (
+    no-repeat,
+    no-repeat,
+  ),
+  $background-size: (
+    contain,
+    auto,
+  ),
+  $background-position: (
+    left bottom,
+    right bottom,
+  )
+) {
+  background-image: $background-image;
+  background-repeat: $background-repeat;
+  background-size: $background-size;
+  background-position: $background-position;
+}
+
+@mixin form-styles {
+  height: 100vh;
+  display: flex;
+  justify-content: flex-end;
+
+  .container {
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 768px;
+
+    .row {
+      justify-content: end;
+
+      .column {
+        .custom-button {
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+
+  &__link {
+    position: absolute;
+    left: 0;
+
+    &__image {
+      margin-left: 25%;
+      width: 150px;
+    }
+  }
+
+  &__title {
+    margin-bottom: 48px;
+  }
+
+  .form-fields {
+    display: flex;
+    flex-direction: column;
+    width: 301px;
+    margin: 0 auto 48px;
+
+    .input-wrapper {
+      margin-bottom: 16px;
+
+      .input-default {
+        width: 100%;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  &__error-message {
+    color: $error-color;
+    text-wrap: wrap;
+  }
+}
