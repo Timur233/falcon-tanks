@@ -11,9 +11,14 @@ export const PLAYER_DEFAULT_PARAMS = {
 }
 
 export const resetPlayerPosition = (
+  player: Player,
   setPlayer: React.Dispatch<React.SetStateAction<Player>>
 ) => {
-  setPlayer(PLAYER_DEFAULT_PARAMS)
+  setPlayer({
+    ...player,
+    x: PLAYER_DEFAULT_PARAMS.x,
+    y: PLAYER_DEFAULT_PARAMS.y,
+  })
 }
 
 /**

@@ -47,7 +47,7 @@ export const gameLoop = (
       handlePlayerHit(
         setPlayer,
         setLives,
-        () => resetPlayerPosition(setPlayer),
+        () => resetPlayerPosition(player, setPlayer),
         respawnEnemies,
         setEnemies
       )
