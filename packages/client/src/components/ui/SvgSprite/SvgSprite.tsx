@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
 
-export const SvgSprite = () => {
+export const SvgSprite = (props: { url: string }) => {
+  const { url } = props
   const [isLoaded, setIsLoaded] = useState(false)
 
   useEffect(() => {
     if (isLoaded === false) {
-      fetch('/sprite.symbol.svg')
+      fetch(url)
         .then(res => res.text())
         .then(svgContent => {
           const sprite = document.querySelector('#svg-sprite')

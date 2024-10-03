@@ -85,7 +85,7 @@ function App() {
   return (
     <>
       <RouterProvider router={routerConfig} />
-      <SvgSprite />
+      <SvgSprite url={'/sprite.symbol.svg'} />
     </>
   )
 }

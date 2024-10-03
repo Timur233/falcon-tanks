@@ -2,6 +2,7 @@
 
 $border-radius: 8px;
 $border-color: #70842f;
+$outline-gradient: linear-gradient(to left, #5e5e5e, #414243);
 
 .modal {
   display: none;
@@ -41,7 +42,7 @@ $border-color: #70842f;
       position: absolute;
       inset: 0;
       border-radius: $border-radius;
-      background: linear-gradient(to left, #5e5e5e, #414243);
+      background: $outline-gradient;
       z-index: -1;
     }
 

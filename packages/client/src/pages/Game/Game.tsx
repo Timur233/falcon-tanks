@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react'
 import { Modal } from '@/components/common/Modal/Modal'
 import GameInfo from '@/assets/images/game-info.jpg'
 import { Button } from '@/components/ui/Button/Button'
-import { Loader } from '@/components/ui/Loader/Loader'
 
 export const Game = () => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
@@ -78,7 +77,6 @@ export const Game = () => {
       <Modal show={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
         <img src={GameInfo} alt="Инструкция к игре" />
       </Modal>
-
       <div className="container-fluid game-page__container">
         <div className="row">
           <div className="column col-8">
