@@ -27,10 +27,5 @@
     "husky": "^6.0.0",
     "lefthook": "^1.7.15",
     "lerna": "^5.4.3"
-  },
-  "dependencies": {
-    "normalize": "^0.3.1",
-    "react-router-dom": "^6.26.2",
-    "sass": "^1.79.1"
   }
 }

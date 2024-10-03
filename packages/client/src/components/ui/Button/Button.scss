@@ -9,6 +9,7 @@
   transition: border-color $animation-base-speed;
 
   padding: 16px 12px;
+  padding: 16px 12px;
   display: block;
 
   border-top: 5px solid $c_button-top;
@@ -45,5 +46,26 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     text-shadow: $main-text-shadow;
+  }
+}
+
+.link-button {
+  background: none;
+  border-color: transparent;
+  font-size: $nav_link-font-size;
+  font-weight: $nav_link-font-weight;
+  letter-spacing: 1px;
+
+  text-shadow: $main-text-shadow;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  color: $text-color;
+  transition: color $animation-base-speed;
+
+  &:hover,
+  &_active {
+    border-color: transparent;
+    color: $primary-color;
   }
 }
