@@ -1,4 +1,4 @@
-import { handlePlayerHit, resetPlayerPosition } from './player'
+import { HandlePlayerHit, resetPlayerPosition } from './player'
 import { updateEnemyPositions, respawnEnemies } from './enemy'
 import { clearCanvas, drawPlayer, drawEnemies, drawObstacles } from './utils'
 import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
@@ -15,8 +15,6 @@ import { detectEnemyCollision } from '@/components/Game/collision'
  * @param lives - Текущее количество жизней игрока.
  * @param setLives - Функция для изменения количества жизней игрока.
  * @param handleGameOver - Обработчик события окончания игры.
- * @param isPaused - Флаг паузы.
- * @param isGameOver - Флаг окончания игры.
  */
 export const gameLoop = (
   context: CanvasRenderingContext2D,
@@ -27,9 +25,7 @@ export const gameLoop = (
   obstacles: Obstacle[],
   lives: number,
   setLives: React.Dispatch<React.SetStateAction<number>>,
-  handleGameOver: () => void,
-  isPaused: boolean,
-  isGameOver: boolean
+  handleGameOver: () => void
 ) => {
   clearCanvas(context)
 
@@ -44,7 +40,7 @@ export const gameLoop = (
   enemies.forEach(enemy => {
     if (detectEnemyCollision(player, enemy)) {
       // Обработка столкновения: уменьшаем жизни
-      handlePlayerHit(
+      HandlePlayerHit(
         setPlayer,
         setLives,
         () => resetPlayerPosition(player, setPlayer),
@@ -58,23 +54,4 @@ export const gameLoop = (
       }
     }
   })
-
-  // Запуск следующего кадра (будет работать только если игра не на паузе)
-  if (!isPaused && !isGameOver) {
-    requestAnimationFrame(() =>
-      gameLoop(
-        context,
-        player,
-        setPlayer,
-        enemies,
-        setEnemies,
-        obstacles,
-        lives,
-        setLives,
-        handleGameOver,
-        isPaused,
-        isGameOver
-      )
-    )
-  }
 }

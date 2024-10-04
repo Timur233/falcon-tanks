@@ -44,38 +44,36 @@ export const Game: React.FC = () => {
 
   const loop = useCallback(
     (timestamp: number) => {
-      if (!isPaused && !isGameOver && canvasRef.current) {
-        const deltaTime = timestamp - lastTimestamp
+      if (isPaused || isGameOver || !canvasRef.current) return
 
-        if (deltaTime >= 1000 / maxFPS) {
-          setLastTimestamp(timestamp)
-          const context = canvasRef.current.getContext('2d')
-          if (context) {
-            const moveProps: ControlsProps = {
-              player,
-              setPlayer,
-              obstacles,
-              canvasWidth: canvasRef.current.width,
-              canvasHeight: canvasRef.current.height,
-            }
-            updatePlayerMovement(moveProps)
-            gameLoop(
-              context,
-              player,
-              setPlayer,
-              enemies,
-              setEnemies,
-              obstacles,
-              lives,
-              setLives,
-              handleGameOver,
-              isPaused,
-              isGameOver
-            )
+      const deltaTime = timestamp - lastTimestamp
+      if (deltaTime >= 1000 / maxFPS) {
+        setLastTimestamp(timestamp)
+        const context = canvasRef.current.getContext('2d')
+        if (context) {
+          const moveProps: ControlsProps = {
+            player,
+            setPlayer,
+            obstacles,
+            canvasWidth: canvasRef.current.width,
+            canvasHeight: canvasRef.current.height,
           }
+          updatePlayerMovement(moveProps)
+          gameLoop(
+            context,
+            player,
+            setPlayer,
+            enemies,
+            setEnemies,
+            obstacles,
+            lives,
+            setLives,
+            handleGameOver
+          )
         }
-        requestAnimationFrame(loop)
       }
+
+      requestAnimationFrame(loop)
     },
     [
       isPaused,
@@ -83,6 +81,7 @@ export const Game: React.FC = () => {
       lastTimestamp,
       player,
       enemies,
+      obstacles,
       lives,
       handleGameOver,
     ]

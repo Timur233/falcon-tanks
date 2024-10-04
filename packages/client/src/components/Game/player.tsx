@@ -6,7 +6,7 @@ export const PLAYER_DEFAULT_PARAMS = {
   y: 300,
   width: 30,
   height: 30,
-  speed: 0.5,
+  speed: 0.1,
   direction: { x: 0, y: 0 },
 }
 
@@ -29,7 +29,7 @@ export const resetPlayerPosition = (
  * @param respawnEnemies - Функция для респауна врагов.
  * @param setEnemies - Функция для обновления состояния врагов.
  */
-export const handlePlayerHit = (
+export const HandlePlayerHit = (
   setPlayer: React.Dispatch<React.SetStateAction<Player>>,
   setLives: React.Dispatch<React.SetStateAction<number>>,
   resetPlayerPosition: (
