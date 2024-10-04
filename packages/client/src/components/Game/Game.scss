@@ -27,14 +27,14 @@ button {
   margin-top: 10px;
   padding: 10px 20px;
   border: none;
-  background-color: #839d22;
+  background-color: $c_button;
   color: white;
   border-radius: 8px;
   cursor: pointer;
 }
 
 button:hover {
-  background-color: #53650b;
+  background-color: $c_button-bottom;
 }
 canvas {
   border-radius: $border-radius--default;
