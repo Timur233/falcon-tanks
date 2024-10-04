@@ -28,8 +28,7 @@ export interface KeyMap {
 }
 
 export interface ControlsProps {
-  player: Player
-  setPlayer: React.Dispatch<React.SetStateAction<Player>>
+  playerRef: React.MutableRefObject<Player>
   obstacles: Obstacle[]
   canvasWidth: number
   canvasHeight: number

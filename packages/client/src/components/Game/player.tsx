@@ -1,54 +1,43 @@
-import { Enemy, Player } from '@/components/Game/gameTypes'
-import { useNavigate } from 'react-router-dom'
+import { Player } from '@/components/Game/gameTypes'
 
 export const PLAYER_DEFAULT_PARAMS = {
   x: 400,
   y: 300,
   width: 30,
   height: 30,
-  speed: 0.1,
+  speed: 1,
   direction: { x: 0, y: 0 },
 }
 
 export const resetPlayerPosition = (
-  player: Player,
-  setPlayer: React.Dispatch<React.SetStateAction<Player>>
+  playerRef: React.MutableRefObject<Player>
 ) => {
-  setPlayer({
-    ...player,
+  playerRef.current = {
+    ...playerRef.current,
     x: PLAYER_DEFAULT_PARAMS.x,
     y: PLAYER_DEFAULT_PARAMS.y,
-  })
+  }
 }
-
 /**
  * Функция для обработки столкновения игрока с врагом.
- * @param setPlayer - Функция для обновления состояния игрока.
- * @param setLives - Функция для изменения количества жизней игрока.
+ * @param livesRef - Ссылка на текущее количество жизней игрока.
+ * @param handleGameOver - Обработчик события окончания игры.
  * @param resetPlayerPosition - Функция для сброса позиции игрока.
  * @param respawnEnemies - Функция для респауна врагов.
- * @param setEnemies - Функция для обновления состояния врагов.
  */
 export const HandlePlayerHit = (
-  setPlayer: React.Dispatch<React.SetStateAction<Player>>,
-  setLives: React.Dispatch<React.SetStateAction<number>>,
-  resetPlayerPosition: (
-    setPlayer: React.Dispatch<React.SetStateAction<Player>>
-  ) => void,
-  respawnEnemies: (
-    setEnemies: React.Dispatch<React.SetStateAction<Enemy[]>>
-  ) => void,
-  setEnemies: React.Dispatch<React.SetStateAction<Enemy[]>>
+  livesRef: React.MutableRefObject<number>,
+  handleGameOver: () => void,
+  resetPlayerPosition: () => void,
+  respawnEnemies: () => void
 ) => {
-  const navigate = useNavigate()
-  setLives(prevLives => {
-    const newLives = prevLives - 1
-    if (newLives <= 0) {
-      navigate('/game-over')
-    } else {
-      resetPlayerPosition(setPlayer)
-      respawnEnemies(setEnemies)
-    }
-    return newLives
-  })
+  const newLives = livesRef.current - 1
+
+  if (newLives <= 0) {
+    handleGameOver()
+  } else {
+    livesRef.current = newLives
+    resetPlayerPosition() // Сбрасываем позицию игрока
+    respawnEnemies() // Респавн врагов
+  }
 }

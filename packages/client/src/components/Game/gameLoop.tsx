@@ -7,51 +7,40 @@ import { detectEnemyCollision } from '@/components/Game/collision'
 /**
  * Основной игровой цикл, который обновляет состояние игры и перерисовывает экран каждый кадр.
  * @param context - Контекст рисования для Canvas.
- * @param player - Объект игрока.
- * @param setPlayer - Функция для обновления состояния игрока.
- * @param enemies - Массив врагов.
- * @param setEnemies - Функция для обновления состояния врагов.
+ * @param playerRef - Ссылка на текущего игрока.
+ * @param enemiesRef - Ссылка на массив врагов.
  * @param obstacles - Массив препятствий.
- * @param lives - Текущее количество жизней игрока.
- * @param setLives - Функция для изменения количества жизней игрока.
+ * @param livesRef - Ссылка на текущее количество жизней игрока.
  * @param handleGameOver - Обработчик события окончания игры.
  */
 export const gameLoop = (
   context: CanvasRenderingContext2D,
-  player: Player,
-  setPlayer: React.Dispatch<React.SetStateAction<Player>>,
-  enemies: Enemy[],
-  setEnemies: React.Dispatch<React.SetStateAction<Enemy[]>>,
+  playerRef: React.MutableRefObject<Player>,
+  enemiesRef: React.MutableRefObject<Enemy[]>,
   obstacles: Obstacle[],
-  lives: number,
-  setLives: React.Dispatch<React.SetStateAction<number>>,
+  livesRef: React.MutableRefObject<number>,
   handleGameOver: () => void
 ) => {
   clearCanvas(context)
 
   // Обновление позиций врагов
-  updateEnemyPositions(player, enemies, setEnemies)
+  updateEnemyPositions(playerRef.current, enemiesRef)
+
   // Отрисовка всех игровых объектов
   drawObstacles(context, obstacles)
-  drawPlayer(context, player)
-  drawEnemies(context, enemies)
+  drawPlayer(context, playerRef.current)
+  drawEnemies(context, enemiesRef.current)
 
   // Проверка на столкновения между игроком и врагами
-  enemies.forEach(enemy => {
-    if (detectEnemyCollision(player, enemy)) {
+  enemiesRef.current.forEach(enemy => {
+    if (detectEnemyCollision(playerRef.current, enemy)) {
       // Обработка столкновения: уменьшаем жизни
       HandlePlayerHit(
-        setPlayer,
-        setLives,
-        () => resetPlayerPosition(player, setPlayer),
-        respawnEnemies,
-        setEnemies
+        livesRef,
+        handleGameOver,
+        () => resetPlayerPosition(playerRef),
+        () => respawnEnemies(enemiesRef)
       )
-
-      // Проверка на конец игры
-      if (lives - 1 <= 0) {
-        handleGameOver() // Вызываем окончание игры, если жизни закончились
-      }
     }
   })
 }

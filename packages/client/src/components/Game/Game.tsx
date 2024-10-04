@@ -11,81 +11,54 @@ import {
 import { ControlsProps, Obstacle } from '@/components/Game/gameTypes'
 import { initializeObstacle } from '@/components/Game/obstacle'
 
-const maxFPS = 60
 const livesUse = 3
 
 export const Game: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const [lives, setLives] = useState<number>(livesUse)
-  const [player, setPlayer] = useState(PLAYER_DEFAULT_PARAMS)
-  const [enemies, setEnemies] = useState(initializeEnemies(5))
-  const [obstacles] = useState<Obstacle[]>(initializeObstacle())
-  const [isPaused, setIsPaused] = useState(false)
-  const [isGameOver, setIsGameOver] = useState(false)
+  const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
+  const enemiesRef = useRef(initializeEnemies(5))
+  const obstaclesRef = useRef<Obstacle[]>(initializeObstacle())
+  const livesRef = useRef(livesUse)
   const [gameStarted, setGameStarted] = useState(false)
-  const [lastTimestamp, setLastTimestamp] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
+  const isPausedRef = useRef(false)
+  const [isGameOver, setIsGameOver] = useState(false)
 
-  const togglePause = () => {
+  const togglePause = useCallback(() => {
     setIsPaused(prev => !prev)
-  }
+    isPausedRef.current = !isPausedRef.current // Обновляем ref для паузы
+  }, [])
 
   const handleGameOver = useCallback(() => {
     setIsGameOver(true)
     setIsPaused(true)
+    isPausedRef.current = true
   }, [])
 
-  const handleContinue = () => {
-    setIsPaused(false)
-    setIsGameOver(false)
-    setLives(livesUse)
-    setPlayer(PLAYER_DEFAULT_PARAMS)
-    setEnemies(initializeEnemies(5))
-  }
-
-  const loop = useCallback(
-    (timestamp: number) => {
-      if (isPaused || isGameOver || !canvasRef.current) return
-
-      const deltaTime = timestamp - lastTimestamp
-      if (deltaTime >= 1000 / maxFPS) {
-        setLastTimestamp(timestamp)
-        const context = canvasRef.current.getContext('2d')
-        if (context) {
-          const moveProps: ControlsProps = {
-            player,
-            setPlayer,
-            obstacles,
-            canvasWidth: canvasRef.current.width,
-            canvasHeight: canvasRef.current.height,
-          }
-          updatePlayerMovement(moveProps)
-          gameLoop(
-            context,
-            player,
-            setPlayer,
-            enemies,
-            setEnemies,
-            obstacles,
-            lives,
-            setLives,
-            handleGameOver
-          )
+  const loop = useCallback(() => {
+    if (!isPausedRef.current && !isGameOver && canvasRef.current) {
+      const context = canvasRef.current.getContext('2d')
+      if (context) {
+        const moveProps: ControlsProps = {
+          playerRef,
+          obstacles: obstaclesRef.current,
+          canvasWidth: canvasRef.current.width,
+          canvasHeight: canvasRef.current.height,
         }
-      }
+        updatePlayerMovement(moveProps)
 
+        gameLoop(
+          context,
+          playerRef,
+          enemiesRef,
+          obstaclesRef.current,
+          livesRef,
+          handleGameOver
+        )
+      }
       requestAnimationFrame(loop)
-    },
-    [
-      isPaused,
-      isGameOver,
-      lastTimestamp,
-      player,
-      enemies,
-      obstacles,
-      lives,
-      handleGameOver,
-    ]
-  )
+    }
+  }, [isGameOver, handleGameOver, livesRef])
 
   useEffect(() => {
     const handleKeyDownWrapper = (event: KeyboardEvent) =>
@@ -110,15 +83,16 @@ export const Game: React.FC = () => {
   const startGame = () => {
     setGameStarted(true)
     setIsPaused(false)
+    isPausedRef.current = false
     setIsGameOver(false)
-    setLives(livesUse)
-    setPlayer(PLAYER_DEFAULT_PARAMS)
-    setEnemies(initializeEnemies(5))
+    livesRef.current = livesUse
+    playerRef.current = PLAYER_DEFAULT_PARAMS
+    enemiesRef.current = initializeEnemies(5)
   }
 
   return (
     <div className="game-container">
-      <div className="lives">{`Жизни: ${lives}`}</div>
+      <div className="lives">{`Жизни: ${livesRef.current.toString()}`}</div>
       <canvas ref={canvasRef} width={800} height={600}></canvas>
 
       {!gameStarted ? (
@@ -133,7 +107,7 @@ export const Game: React.FC = () => {
       {isGameOver && (
         <div className="modal">
           <h2>Игра окончена</h2>
-          <button onClick={handleContinue}>Продолжить</button>
+          <button onClick={startGame}>Заново</button>
         </div>
       )}
     </div>
