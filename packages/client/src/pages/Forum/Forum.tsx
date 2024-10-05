@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/Button/Button'
 import { Card } from '@/components/ui/Card/Card'
 import { PageTitle } from '@/components/ui/PageTitle/PageTitle'
 import { Pagination } from '@/components/ui/Pagination/Pagination'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import './Forum.scss'
 const THREADS_COUNT = 3
 
@@ -25,41 +25,47 @@ export const Forum = () => {
         />
       </div>
       <div className="forum-page__threads threads">
-        <Card className="threads__item thread">
-          <div className="thread__title">Новые игры</div>
-          <div className="thread__views views">
-            <span className="views__title">Просмотры:</span>
-            <span className="views__count">222</span>
-          </div>
-          <div className="thread__answers answers">
-            <span className="answers__title">Ответы:</span>
-            <span className="answers__count">222</span>
-          </div>
-        </Card>
+        <Link to="/forum/2">
+          <Card className="threads__item thread">
+            <div className="thread__title">Новые игры</div>
+            <div className="thread__views views">
+              <span className="views__title">Просмотры:</span>
+              <span className="views__count">222</span>
+            </div>
+            <div className="thread__answers answers">
+              <span className="answers__title">Ответы:</span>
+              <span className="answers__count">222</span>
+            </div>
+          </Card>
+        </Link>
 
-        <Card className="threads__item thread">
-          <div className="thread__title">Новые игры</div>
-          <div className="thread__views views">
-            <span className="views__title">Просмотры:</span>
-            <span className="views__count">222</span>
-          </div>
-          <div className="thread__answers answers">
-            <span className="answers__title">Ответы:</span>
-            <span className="answers__count">222</span>
-          </div>
-        </Card>
+        <Link to="/forum/2">
+          <Card className="threads__item thread">
+            <div className="thread__title">Новые игры</div>
+            <div className="thread__views views">
+              <span className="views__title">Просмотры:</span>
+              <span className="views__count">222</span>
+            </div>
+            <div className="thread__answers answers">
+              <span className="answers__title">Ответы:</span>
+              <span className="answers__count">222</span>
+            </div>
+          </Card>
+        </Link>
 
-        <Card className="threads__item thread">
-          <div className="thread__title">Новые игры</div>
-          <div className="thread__views views">
-            <span className="views__title">Просмотры:</span>
-            <span className="views__count">222</span>
-          </div>
-          <div className="thread__answers answers">
-            <span className="answers__title">Ответы:</span>
-            <span className="answers__count">222</span>
-          </div>
-        </Card>
+        <Link to="/forum/2">
+          <Card className="threads__item thread">
+            <div className="thread__title">Новые игры</div>
+            <div className="thread__views views">
+              <span className="views__title">Просмотры:</span>
+              <span className="views__count">222</span>
+            </div>
+            <div className="thread__answers answers">
+              <span className="answers__title">Ответы:</span>
+              <span className="answers__count">222</span>
+            </div>
+          </Card>
+        </Link>
       </div>
       <Pagination total={6}></Pagination>
     </div>
