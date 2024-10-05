@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { Button } from '../Button/Button'
 import './Pagination.scss'
 
@@ -8,6 +9,8 @@ interface PaginationProps {
 
 export const Pagination = (props: PaginationProps) => {
   const { total, className = '' } = props
+
+  const navigate = useNavigate()
 
   const getClassName = (index: number) => {
     return `pagination__item compact-button${
@@ -22,14 +25,14 @@ export const Pagination = (props: PaginationProps) => {
           <Button
             key={index}
             className={getClassName(index)}
-            href={`/forum/${index + 1}`}
+            onClick={() => navigate(`/forum/${index + 1}`)}
             text={(++index).toString()}
             useFixWidth={false}></Button>
         )
       })}
       <Button
         className="compact-button compact-button_white"
-        href={'/forum'}
+        onClick={() => navigate('/forum')}
         text="Вперед"
         useFixWidth={false}></Button>
     </div>

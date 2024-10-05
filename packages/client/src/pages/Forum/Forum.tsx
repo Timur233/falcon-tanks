@@ -3,11 +3,13 @@ import { Button } from '@/components/ui/Button/Button'
 import { Card } from '@/components/ui/Card/Card'
 import { PageTitle } from '@/components/ui/PageTitle/PageTitle'
 import { Pagination } from '@/components/ui/Pagination/Pagination'
+import { useNavigate } from 'react-router-dom'
 import './Forum.scss'
-
 const THREADS_COUNT = 3
 
 export const Forum = () => {
+  const navigate = useNavigate()
+
   return (
     <div className="container forum-page">
       <img className="forum-page__logo" src={PromoLogo} alt="Tank wars" />
@@ -16,7 +18,11 @@ export const Forum = () => {
           text={'Форумы'}
           tagName="h1"
           className="header__title"></PageTitle>
-        <Button text="Создать" href="/forum/new" className="compact-button" />
+        <Button
+          text="Создать"
+          onClick={() => navigate('/forum/new')}
+          className="compact-button"
+        />
       </div>
       <div className="forum-page__threads threads">
         <Card className="threads__item thread">
