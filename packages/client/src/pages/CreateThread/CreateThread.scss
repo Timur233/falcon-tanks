@@ -25,16 +25,15 @@
 
   margin-top: 100px;
 
+  .thread-name {
+    width: 50%;
+    text-align: start;
+  }
+
   .form {
     display: flex;
     flex-direction: column;
     gap: 16px;
-
-    &__input {
-      @include input();
-
-      max-width: 50%;
-    }
 
     &__textarea {
       @include input();
