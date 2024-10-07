@@ -1,0 +1,19 @@
+@import '../../../../scss/vars.scss';
+
+.fire-controll {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 82px;
+  height: 77px;
+
+  background: url('@/assets/images/svg/fire-controll-bg.svg') no-repeat center
+    center;
+  background-size: contain;
+
+  &__button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

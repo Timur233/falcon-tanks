@@ -1,6 +1,9 @@
 @import '../../../scss/vars';
 
 .main-header {
+  z-index: 100;
+  position: relative;
+
   &__container {
     display: flex;
     justify-content: space-between;
