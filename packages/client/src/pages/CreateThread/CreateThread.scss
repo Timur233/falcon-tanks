@@ -39,6 +39,8 @@
     &__textarea {
       @include input();
 
+      max-width: 100%;
+      min-width: 300px;
       min-height: 130px;
     }
 

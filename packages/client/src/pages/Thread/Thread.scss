@@ -123,6 +123,8 @@
         color: $c_white;
         padding: 12px 16px;
         min-height: 130px;
+        max-width: 100%;
+        min-width: 300px;
 
         &::placeholder {
           color: #797979;
