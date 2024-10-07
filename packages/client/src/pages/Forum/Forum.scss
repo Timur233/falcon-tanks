@@ -58,11 +58,11 @@ $title-color: #bebebe;
     height: 124px;
   }
 
-  .threads {
+  &__threads {
     display: flex;
     flex-direction: column;
     gap: 24px;
-    margin-bottom: 24px;
+    margin-bottom: 32px;
 
     a {
       text-decoration: none;
