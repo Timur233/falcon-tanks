@@ -2,8 +2,9 @@
 
 $decor-width: 90px;
 $decor-height: 7px;
-$c_card-background: #101010;
+$c_card-background: $c_almost-black;
 $c_card-border: #9baf5d;
+$c_card-padding: $c_gray;
 
 @mixin decor($top, $bottom) {
   content: '';
@@ -23,7 +24,7 @@ $c_card-border: #9baf5d;
 
 .card {
   border: 2px solid $c_card-border;
-  background-color: #5e5e5e;
+  background-color: $c_card-padding;
   border-radius: 16px;
   padding: 8px;
   position: relative;

@@ -3,8 +3,8 @@
 $decor-width: 90px;
 $decor-height: 7px;
 
-$padding-color: #5e5e5e;
-$row-background: #101010;
+$padding-color: $c_gray;
+$row-background: $c_almost-black;
 $title-color: #bebebe;
 
 @mixin decor($top, $bottom) {

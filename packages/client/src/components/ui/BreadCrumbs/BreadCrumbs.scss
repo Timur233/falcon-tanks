@@ -1,8 +1,10 @@
 @import '../../../scss/vars';
 
+$breadcrumbs-text-color: $c_white;
+
 .breadcrumbs {
   &__item {
-    color: $c_white;
+    color: $breadcrumbs-text-color;
 
     &:not(:last-child)::after {
       content: '>';

@@ -1,6 +1,9 @@
 @import '../../../scss/vars';
 
-$c_compact-button-border: #999999;
+$c_compact-button-border-top: $c_white;
+$c_compact-button-border-bottom: #999999;
+$c_compact-button-background-color: #d2d2d2;
+$c_compact-button-text-color: #242424;
 
 .compact-button {
   border-width: 2px;
@@ -16,19 +19,19 @@ $c_compact-button-border: #999999;
   }
 
   &_white {
-    background-color: #d2d2d2;
-    border-top: 2px solid $c_white;
-    border-bottom: 2px solid $c_compact-button-border;
+    background-color: $c_compact-button-background-color;
+    border-top: 2px solid $c_compact-button-border-top;
+    border-bottom: 2px solid $c_compact-button-border-bottom;
     padding: 10px;
 
     &:hover {
-      border-top: 2x solid $c_compact-button-border;
-      border-bottom: 2px solid $c_white;
+      border-top: 2x solid $c_compact-button-border-bottom;
+      border-bottom: 2px solid $c_compact-button-border-top;
     }
 
     span {
       text-shadow: none;
-      color: #242424;
+      color: $c_compact-button-text-color;
       text-transform: none;
       letter-spacing: 1px;
     }
