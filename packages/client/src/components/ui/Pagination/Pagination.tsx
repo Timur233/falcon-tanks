@@ -13,6 +13,8 @@ export const Pagination = (props: PaginationProps) => {
   const navigate = useNavigate()
 
   const getClassName = (index: number) => {
+    // TODO: Реализовать эту логику основываясь на query в URL`е.
+    // Какая страница активна, такая кнопка и подсвечивается.
     return `pagination__item compact-button${
       index !== 0 ? ' compact-button_white' : ''
     }`
