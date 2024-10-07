@@ -25,7 +25,7 @@ export const Pagination = (props: PaginationProps) => {
           <Button
             key={index}
             className={getClassName(index)}
-            onClick={() => navigate(`/forum/${index + 1}`)}
+            onClick={() => navigate(`/forum/${index}`)}
             text={(++index).toString()}
             useFixWidth={false}></Button>
         )
