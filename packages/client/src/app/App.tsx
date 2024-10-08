@@ -3,19 +3,14 @@ import RootLayout from '@/layouts/RootLayout/RootLayout'
 import PrivateLayout from '@/layouts/PrivateLayout/PrivateLayout'
 import AuthLayout from '@/layouts/AuthLayout/AuthLayout'
 import PublicLayout from '@/layouts/PublicLayout/PublicLayout'
-import RootLayout from '@/layouts/RootLayout/RootLayout'
 import { Error } from '@/pages/Error/Error'
 import { Forum } from '@/pages/Forum/Forum'
-import { GamePage } from '@/pages/Game/Game'
 import { Leaderboard } from '@/pages/Leaderboard/Leaderboard'
 import { Main } from '@/pages/Main/Main'
 import { SignIn } from '@/pages/SignIn/SignIn'
 import { SignUp } from '@/pages/SignUp/SignUp'
 import { Game } from '@/pages/Game/Game'
-import { Forum } from '@/pages/Forum/Forum'
-import { Error } from '@/pages/Error/Error'
 import { Thread } from '@/pages/Thread/Thread'
-import { Leaderboard } from '@/pages/Leaderboard/Leaderboard'
 import { Profile } from '@/pages/Profile/Profile'
 import { ChangePassword } from '@/pages/Profile/ChangePassword'
 import { SvgSprite } from '@/components/ui/SvgSprite/SvgSprite'
@@ -39,7 +34,7 @@ const routerConfig = createBrowserRouter([
         children: [
           {
             path: '/game',
-            element: <GamePage />,
+            element: <Game />,
           },
           {
             path: '/forum',

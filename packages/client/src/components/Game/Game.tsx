@@ -10,6 +10,7 @@ import {
 } from '@/components/Game/controls'
 import { ControlsProps, Obstacle } from '@/components/Game/gameTypes'
 import { initializeObstacle } from '@/components/Game/obstacle'
+import { Modal } from '../common/Modal/Modal'
 
 const livesUse = 3
 
@@ -103,13 +104,10 @@ export const Game: React.FC = () => {
         </button>
       )}
 
-      {/* Модальное окно при проигрыше */}
-      {isGameOver && (
-        <div className="modal">
-          <h2>Игра окончена</h2>
-          <button onClick={startGame}>Заново</button>
-        </div>
-      )}
+      <Modal show={isGameOver} onClose={() => setIsGameOver(false)}>
+        <h2>Игра окончена</h2>
+        <button onClick={startGame}>Заново</button>
+      </Modal>
     </div>
   )
 }

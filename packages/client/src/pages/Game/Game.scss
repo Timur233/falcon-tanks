@@ -19,7 +19,7 @@ $border-color: #70842f;
 .game-wrapper {
   position: relative;
   width: 800px;
-  height: 600px;
+  height: auto;
   background-color: $c_black;
   border-radius: 8px;
   overflow: hidden;
@@ -150,6 +150,10 @@ $border-color: #70842f;
   position: absolute;
   inset: 12px;
   background-color: $overlay-color;
+
+  &_hide {
+    display: none;
+  }
 }
 
 .game-over-screen {

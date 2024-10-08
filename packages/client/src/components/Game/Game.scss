@@ -11,31 +11,6 @@
   position: relative;
 }
 
-.modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-button {
-  margin-top: 10px;
-  padding: 10px 20px;
-  border: none;
-  background-color: $c_button;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: $c_button-bottom;
-}
 canvas {
   border-radius: $border-radius--default;
   box-shadow: 0 4px 8px rgba($c_black, 0.5);

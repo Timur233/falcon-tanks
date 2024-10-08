@@ -1,13 +1,14 @@
+import './Game.scss'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { Arrows } from './components/Arrows/Arrows'
 import { KillsCounter } from './components/KillsCounter/KillsCounter'
-import './Game.scss'
 import { PauseHelp } from './components/PauseHelp/PauseHelp'
 import { FireControll } from './components/FireControll/FireControll'
 import { useEffect, useState } from 'react'
 import { Modal } from '@/components/common/Modal/Modal'
 import GameInfo from '@/assets/images/game-info.jpg'
 import { Button } from '@/components/ui/Button/Button'
+import { Game as GamePrototype } from '@/components/Game/Game'
 
 export const Game = () => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
@@ -18,6 +19,7 @@ export const Game = () => {
     rightButton: false,
     fireButton: false,
   })
+  const [isStartedGame, setIsStartedGame] = useState(false)
 
   const pauseHandler = () => {
     console.log('pauseHandler')
@@ -83,11 +85,19 @@ export const Game = () => {
             <div className="game-page__wrapper game-wrapper">
               <div className="game-wrapper__decor-hr"></div>
               <div className="game-wrapper__decor-vr"></div>
-              Воот тут игра
-              <div className="start-screen" style={{ display: 'none' }}>
-                <Button text="Начать игру" useFixWidth />
+              <GamePrototype />
+              <div
+                style={{ display: 'none' }}
+                className={`start-screen${
+                  isStartedGame ? ' start-screen_hide' : ''
+                }`}>
+                <Button
+                  text="Начать игру"
+                  onClick={() => setIsStartedGame(true)}
+                  useFixWidth
+                />
               </div>
-              <div className="game-over-screen">
+              <div className="game-over-screen" style={{ display: 'none' }}>
                 <span className="game-over-screen__title">Game Over</span>
                 <Button text="Начать заново" useFixWidth />
               </div>
