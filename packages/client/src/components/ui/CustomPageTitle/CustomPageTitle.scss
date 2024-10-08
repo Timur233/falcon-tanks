@@ -16,7 +16,7 @@ $border-gradient: linear-gradient(45deg, #414243, #7f7f7f) top left,
   linear-gradient(315deg, #414042, #414243) bottom left;
 $border-radius: 24px;
 $block-width: 350px;
-$outline-color: #101010;
+$outline-color: $c_almost-black;
 
 .custom-page-title {
   position: relative;

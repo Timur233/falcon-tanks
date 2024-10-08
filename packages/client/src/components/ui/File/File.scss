@@ -1,0 +1,13 @@
+@import '../../../scss/vars';
+
+.file {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background-color: transparent;
+  border: none;
+  color: $c_white;
+  text-decoration: underline;
+  align-self: flex-start;
+  cursor: pointer;
+}

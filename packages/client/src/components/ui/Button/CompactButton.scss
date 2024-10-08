@@ -1,0 +1,39 @@
+@import '../../../scss/vars';
+
+$c_compact-button-border-top: $c_white;
+$c_compact-button-border-bottom: #999999;
+$c_compact-button-background-color: #d2d2d2;
+$c_compact-button-text-color: #242424;
+
+.compact-button {
+  border-width: 2px;
+  border-radius: 8px;
+  padding: 10px;
+
+  span {
+    text-transform: none;
+    text-shadow: none;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1px;
+  }
+
+  &_white {
+    background-color: $c_compact-button-background-color;
+    border-top: 2px solid $c_compact-button-border-top;
+    border-bottom: 2px solid $c_compact-button-border-bottom;
+    padding: 10px;
+
+    &:hover {
+      border-top: 2x solid $c_compact-button-border-bottom;
+      border-bottom: 2px solid $c_compact-button-border-top;
+    }
+
+    span {
+      text-shadow: none;
+      color: $c_compact-button-text-color;
+      text-transform: none;
+      letter-spacing: 1px;
+    }
+  }
+}
