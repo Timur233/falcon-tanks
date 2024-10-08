@@ -14,4 +14,8 @@
     outline: none;
     border-color: $c_input-default-border-hover;
   }
+
+  &::placeholder {
+    color: $c_input-default-placeholder;
+  }
 }
