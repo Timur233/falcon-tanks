@@ -22,15 +22,19 @@ export const updatePlayerMovement = (props: ControlsProps) => {
 
   // Определение направления движения
   if (keyMap['ArrowUp'] || keyMap['w'] || keyMap['ц']) {
+    props.playerRef.current.direction = { x: 0, y: 1 }
     newY -= speed
   }
   if (keyMap['ArrowDown'] || keyMap['s'] || keyMap['ы']) {
+    props.playerRef.current.direction = { x: 0, y: -1 }
     newY += speed
   }
   if (keyMap['ArrowLeft'] || keyMap['a'] || keyMap['ф']) {
+    props.playerRef.current.direction = { x: -1, y: 0 }
     newX -= speed
   }
   if (keyMap['ArrowRight'] || keyMap['d'] || keyMap['в']) {
+    props.playerRef.current.direction = { x: 1, y: 0 }
     newX += speed
   }
 

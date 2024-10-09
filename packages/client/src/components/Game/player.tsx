@@ -3,9 +3,9 @@ import { Player } from '@/components/Game/gameTypes'
 export const PLAYER_DEFAULT_PARAMS = {
   x: 400,
   y: 300,
-  width: 30,
-  height: 30,
-  speed: 1,
+  width: 70,
+  height: 70,
+  speed: 2,
   direction: { x: 0, y: 0 },
 }
 

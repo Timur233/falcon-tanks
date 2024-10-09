@@ -1,3 +1,6 @@
+import enemiesSpritePath from '@/assets/images/sprites/enemy.svg'
+import tankSpritePath from '@/assets/images/sprites/tank.svg'
+import wallSpritePath from '@/assets/images/sprites/wall.svg'
 import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
 
 export const getRandomEdgePosition = (
@@ -22,30 +25,59 @@ export const clearCanvas = (context: CanvasRenderingContext2D) => {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height)
 }
 
+const tankSprite = new Image()
+tankSprite.src = tankSpritePath
+
 export const drawPlayer = (
   context: CanvasRenderingContext2D,
   player: Player
 ) => {
-  context.fillStyle = 'gray'
-  context.fillRect(player.x, player.y, player.width, player.height)
+  context.save() // сохраняем текущую матрицу трансформации
+
+  // Перемещаем контекст на позицию танка
+  context.translate(player.x + player.width / 2, player.y + player.height / 2)
+
+  if (player.direction.x === 1 && player.direction.y === 0) {
+    context.rotate(Math.PI / 2)
+  } else if (player.direction.x === -1 && player.direction.y === 0) {
+    context.rotate(-Math.PI / 2)
+  } else if (player.direction.x === 0 && player.direction.y === 1) {
+    context.rotate(0)
+  } else if (player.direction.x === 0 && player.direction.y === -1) {
+    context.rotate(Math.PI)
+  }
+
+  context.drawImage(
+    tankSprite,
+    -player.width / 2,
+    -player.height / 2,
+    player.width,
+    player.height
+  )
+
+  context.restore() // восстанавливаем матрицу трансформации
 }
+
+const enemiesSprite = new Image()
+enemiesSprite.src = enemiesSpritePath
 
 export const drawEnemies = (
   context: CanvasRenderingContext2D,
   enemies: Enemy[]
 ) => {
-  context.fillStyle = 'red'
   enemies.forEach(enemy => {
-    context.fillRect(enemy.x, enemy.y, enemy.width, enemy.height)
+    context.drawImage(enemiesSprite, enemy.x, enemy.y)
   })
 }
+
+const wallSprite = new Image()
+wallSprite.src = wallSpritePath
 
 export const drawObstacles = (
   context: CanvasRenderingContext2D,
   obstacles: Obstacle[]
 ) => {
-  context.fillStyle = 'black'
   obstacles.forEach(obstacle => {
-    context.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height)
+    context.drawImage(wallSprite, obstacle.x, obstacle.y)
   })
 }
