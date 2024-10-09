@@ -5,8 +5,13 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { RootState, useAppDispatch } from '@/store'
 import { useSelector } from 'react-redux'
 
+type WithAuthUserProps = {
+  userIsLogged: boolean
+  user: UserType | null
+}
+
 export default function withAuthUser<P extends object>(
-  Component: ComponentType<P>,
+  Component: ComponentType<P & WithAuthUserProps>,
   redirectTo?: string
 ) {
   return function WrappedWithAuthUser(props: P) {
