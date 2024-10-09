@@ -4,8 +4,7 @@ const urlsToCache = [
   '/',
   '/manifest.json',
   '/index.html',
-  '/favicon.png',
-  '/main.tsx'
+  '/favicon.png'
 ]
 
 const networkFirst = async (request) => {
@@ -26,18 +25,6 @@ const networkFirst = async (request) => {
       status: 408,
       headers: { 'Content-Type': 'text/plain' },
     })
-  }
-}
-
-const update = async (request) => {
-  const cache = await caches.open(DYNAMIC_CACHE_NAME)
-  try {
-    const response = await fetch(request)
-    if (response && response.status === 200 && response.type === 'basic') {
-      await cache.put(request, response)
-    }
-  } catch (error) {
-    console.error('Update failed', error)
   }
 }
 
@@ -68,5 +55,4 @@ self.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(networkFirst(request))
-  event.waitUntil(update(request))
 })
