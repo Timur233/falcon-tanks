@@ -37,15 +37,8 @@ export const drawPlayer = (
   // Перемещаем контекст на позицию танка
   context.translate(player.x + player.width / 2, player.y + player.height / 2)
 
-  if (player.direction.x === 1 && player.direction.y === 0) {
-    context.rotate(Math.PI / 2)
-  } else if (player.direction.x === -1 && player.direction.y === 0) {
-    context.rotate(-Math.PI / 2)
-  } else if (player.direction.x === 0 && player.direction.y === 1) {
-    context.rotate(0)
-  } else if (player.direction.x === 0 && player.direction.y === -1) {
-    context.rotate(Math.PI)
-  }
+  const angle = Math.atan2(player.direction.x, player.direction.y)
+  context.rotate(angle)
 
   context.drawImage(
     tankSprite,
