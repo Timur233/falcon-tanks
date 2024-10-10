@@ -23,4 +23,13 @@ export default defineConfig({
   },
   plugins: [react()],
   envDir: '../../',
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        serviceWorker: path.resolve(__dirname, 'public/serviceWorker.js'),
+      },
+    },
+  },
 })
