@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useAppDispatch } from '@/store'
 import { signInUser } from '@/store/reducers/auth-reducer'
 import { Button } from '@/components/ui/Button/Button'
-import { Link, useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 import { Form } from '@/components/ui/Form/Form'
 import { Input } from '@/components/ui/Input/Input'
@@ -13,8 +13,6 @@ import SiteLogo from '@/assets/images/site-logo.svg'
 export const SignIn = () => {
   const [userData, setUserData] = useState({ login: '', password: '' })
   const [error, setError] = useState<string | null>(null)
-  const [searchParams] = useSearchParams()
-  const [query] = useState(searchParams.get('redirectUrl'))
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
@@ -27,13 +25,13 @@ export const SignIn = () => {
     }
 
   const handleSubmit = () => {
-    dispatch(signInUser({ form: userData, query: query }))
+    dispatch(signInUser({ form: userData }))
       .unwrap()
       .then(() => {
         navigate('/game')
       })
-      .catch((error?: any, code?: any) => {
-        setError('Ошибка! Не правильный логин или пароль.')
+      .catch((_error?: any, _code?: any) => {
+        setError('Ошибка входа в аккаунт!')
       })
   }
 
