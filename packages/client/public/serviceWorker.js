@@ -1,10 +1,7 @@
 const STATIC_CACHE_NAME = 'static-data-v1'
 const DYNAMIC_CACHE_NAME = 'dynamic-data-v1'
 const urlsToCache = [
-  '/',
-  '/manifest.json',
-  '/index.html',
-  '/favicon.png'
+  '/'
 ]
 
 const networkFirst = async (request) => {
