@@ -1,5 +1,7 @@
 @import '../../scss/vars';
 
+$img_default-canvas-background: '@/assets/images/ground.png';
+
 .game-container {
   display: flex;
   justify-content: center;
@@ -14,8 +16,8 @@
 canvas {
   border-radius: $border-radius--default;
   box-shadow: 0 4px 8px rgba($c_black, 0.5);
-  background-image: $img_default-background;
-  background-size: cover;
+  background-image: url($img_default-canvas-background);
+  background-repeat: repeat;
 }
 
 .player {
