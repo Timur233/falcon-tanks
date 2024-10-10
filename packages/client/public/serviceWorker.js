@@ -1,14 +1,14 @@
-const STATIC_CACHE_NAME = 'static-data-v1'
-const DYNAMIC_CACHE_NAME = 'dynamic-data-v1'
+const CACHE_NAME = 'cache-data-v1'
 const urlsToCache = [
   '/'
 ]
 
 const networkFirst = async (request) => {
-  const cache = await caches.open(DYNAMIC_CACHE_NAME)
+  const cache = await caches.open(CACHE_NAME)
   try {
     const response = await fetch(request)
-    if (response && response.status === 200 && response.type === 'basic') {
+    const cachePutCondition = response && response.status === 200 && response.type === 'basic'
+    if (cachePutCondition) {
       await cache.put(request, response.clone())
     }
     return response
@@ -19,7 +19,7 @@ const networkFirst = async (request) => {
       return cachedResponse
     }
     return new Response('Network error happened', {
-      status: 408,
+      status: 503,
       headers: { 'Content-Type': 'text/plain' },
     })
   }
@@ -28,7 +28,7 @@ const networkFirst = async (request) => {
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
-      .open(STATIC_CACHE_NAME)
+      .open(CACHE_NAME)
       .then((cache) => {
         return cache.addAll(urlsToCache)
       })
@@ -47,7 +47,7 @@ self.addEventListener('fetch', (event) => {
     return
   }
 
-  if (!(url.indexOf('http') === 0)) {
+  if (!url.startsWith('http')) {
     return
   }
 
