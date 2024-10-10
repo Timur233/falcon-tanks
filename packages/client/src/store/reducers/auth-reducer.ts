@@ -77,7 +77,7 @@ type TypeSignInForm = {
 
 export const signInUser = createAsyncThunk(
   'AuthUser/signInUser',
-  async (data: { form: TypeSignInForm; query?: string | null }, thunkAPI) => {
+  async (data: { form: TypeSignInForm }, thunkAPI) => {
     try {
       const response = await backendApi({
         method: 'post',
