@@ -25,12 +25,8 @@ export default function withAuthUser<P extends object>(
     const { pathname } = location
 
     const successAuth = (redirectTo: string) => {
-      toast.success('Вы уже авторизованы', {
-        autoClose: 1500,
-        onClose: () => {
-          navigate(redirectTo)
-        },
-      })
+      toast.success('Вы уже авторизованы')
+      navigate(redirectTo)
     }
 
     useEffect(() => {
@@ -49,12 +45,8 @@ export default function withAuthUser<P extends object>(
             window.sessionStorage.setItem('userIsLogged', '0') // 1
 
             if (!['/sign-in', '/sign-up'].includes(pathname)) {
-              toast.error('Необходимо авторизоваться', {
-                autoClose: 1500,
-                onClose: () => {
-                  navigate('/sign-in')
-                },
-              })
+              toast.error('Необходимо авторизоваться')
+              navigate('/sign-in')
             }
           })
       } else if (redirectTo) {
