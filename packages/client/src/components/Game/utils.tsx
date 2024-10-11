@@ -1,7 +1,7 @@
 import enemiesSpritePath from '@/assets/images/sprites/enemy.svg'
 import tankSpritePath from '@/assets/images/sprites/tank.svg'
 import wallSpritePath from '@/assets/images/sprites/wall.svg'
-import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
+import { AbstractEntity, Obstacle } from '@/components/Game/gameTypes'
 
 export const getRandomEdgePosition = (
   canvasWidth: number,
@@ -32,7 +32,7 @@ let lastPlayerDirection = { x: 0, y: 0 }
 
 export const drawPlayer = (
   context: CanvasRenderingContext2D,
-  player: Player
+  player: AbstractEntity
 ) => {
   let direction = { ...player.direction }
 
@@ -67,7 +67,7 @@ enemiesSprite.src = enemiesSpritePath
 
 export const drawEnemies = (
   context: CanvasRenderingContext2D,
-  enemies: Enemy[]
+  enemies: AbstractEntity[]
 ) => {
   enemies.forEach(enemy => {
     context.drawImage(enemiesSprite, enemy.x, enemy.y)

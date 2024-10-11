@@ -1,12 +1,12 @@
 import { getRandomEdgePosition } from './utils'
-import { Enemy, Player } from '@/components/Game/gameTypes'
+import { AbstractEntity } from '@/components/Game/gameTypes'
 
 export const initializeEnemies = (numberOfEnemies: number) => {
-  const initialEnemies: Enemy[] = []
+  const initialEnemies: AbstractEntity[] = []
   for (let i = 0; i < numberOfEnemies; i++) {
     // количество врагов
     const { x, y } = getRandomEdgePosition(800, 600)
-    const enemy: Enemy = {
+    const enemy: AbstractEntity = {
       x,
       y,
       width: 30,
@@ -16,12 +16,12 @@ export const initializeEnemies = (numberOfEnemies: number) => {
     }
     initialEnemies.push(enemy)
   }
-  return initialEnemies as Enemy[]
+  return initialEnemies as AbstractEntity[]
 }
 
 export const updateEnemyPositions = (
-  player: Player,
-  enemiesRef: React.MutableRefObject<Enemy[]>
+  player: AbstractEntity,
+  enemiesRef: React.MutableRefObject<AbstractEntity[]>
 ) => {
   enemiesRef.current = enemiesRef.current.map(enemy => {
     const directionX = player.x - enemy.x
@@ -38,6 +38,8 @@ export const updateEnemyPositions = (
   })
 }
 
-export const respawnEnemies = (enemiesRef: React.MutableRefObject<Enemy[]>) => {
+export const respawnEnemies = (
+  enemiesRef: React.MutableRefObject<AbstractEntity[]>
+) => {
   enemiesRef.current = initializeEnemies(5)
 }

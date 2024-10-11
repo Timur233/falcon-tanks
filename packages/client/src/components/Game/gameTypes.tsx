@@ -1,13 +1,4 @@
-export interface Player {
-  x: number
-  y: number
-  width: number
-  height: number
-  speed: number
-  direction: { x: number; y: number }
-}
-
-export interface Enemy {
+export interface AbstractEntity {
   x: number
   y: number
   width: number
@@ -24,7 +15,7 @@ export interface Obstacle {
 }
 
 export interface ControlsProps {
-  playerRef: React.MutableRefObject<Player>
+  playerRef: React.MutableRefObject<AbstractEntity>
   obstacles: Obstacle[]
   canvasWidth: number
   canvasHeight: number

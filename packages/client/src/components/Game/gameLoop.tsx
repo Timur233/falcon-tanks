@@ -3,9 +3,8 @@ import { updateEnemyPositions, respawnEnemies } from './enemy'
 import { clearCanvas, drawPlayer, drawEnemies, drawObstacles } from './utils'
 import {
   ControlsProps,
-  Enemy,
+  AbstractEntity,
   Obstacle,
-  Player,
 } from '@/components/Game/gameTypes'
 import { detectEnemyCollision } from '@/components/Game/collision'
 import { updatePlayerMovement } from '@/components/Game/controls'
@@ -23,8 +22,8 @@ import { updatePlayerMovement } from '@/components/Game/controls'
 export const gameLoop = (
   context: CanvasRenderingContext2D,
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>,
-  playerRef: React.MutableRefObject<Player>,
-  enemiesRef: React.MutableRefObject<Enemy[]>,
+  playerRef: React.MutableRefObject<AbstractEntity>,
+  enemiesRef: React.MutableRefObject<AbstractEntity[]>,
   obstaclesRef: React.MutableRefObject<Obstacle[]>,
   livesRef: React.MutableRefObject<number>,
   handleGameOver: () => void

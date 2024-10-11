@@ -1,4 +1,4 @@
-import { Player } from '@/components/Game/gameTypes'
+import { AbstractEntity } from '@/components/Game/gameTypes'
 
 export const PLAYER_DEFAULT_PARAMS = {
   x: 400,
@@ -10,7 +10,7 @@ export const PLAYER_DEFAULT_PARAMS = {
 }
 
 export const resetPlayerPosition = (
-  playerRef: React.MutableRefObject<Player>
+  playerRef: React.MutableRefObject<AbstractEntity>
 ) => {
   playerRef.current = {
     ...playerRef.current,
