@@ -1,5 +1,5 @@
 import { getRandomEdgePosition } from './utils'
-import { AbstractEntity, Enemy } from '@/components/Game/gameTypes'
+import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
 import { createBullet } from '@/components/Game/bullet'
 import { detectCollision } from '@/components/Game/collision'
 
@@ -24,7 +24,8 @@ export const initializeEnemies = (numberOfEnemies: number) => {
 
 export const updateEnemyPositions = (
   player: AbstractEntity,
-  enemiesRef: React.MutableRefObject<Enemy[]>
+  enemiesRef: React.MutableRefObject<Enemy[]>,
+  obstacles: Obstacle[]
 ) => {
   enemiesRef.current = enemiesRef.current.map(enemy => {
     // Определяем разницу по X и Y
@@ -65,14 +66,19 @@ export const updateEnemyPositions = (
     const newY = enemy.y + stepY
 
     // Проверка столкновений с другими врагами
-    const hasCollision = enemiesRef.current.some(otherEnemy => {
-      if (otherEnemy === enemy) return false // Пропускаем сравнение с самим собой
+    const hasEnemyCollision = enemiesRef.current.some(otherEnemy => {
+      if (otherEnemy === enemy) return false
       return detectCollision({ ...enemy, x: newX, y: newY }, otherEnemy)
     })
 
+    // Проверка коллизий с препятствиями
+    const hasObstacleCollision = obstacles.some(obstacle => {
+      return detectCollision({ ...enemy, x: newX, y: newY }, obstacle)
+    })
+
     // Если нет коллизии, обновляем позицию врага
-    if (!hasCollision) {
-      enemy.direction = newDirection // Обновляем направление врага
+    if (!hasEnemyCollision && !hasObstacleCollision) {
+      enemy.direction = newDirection
       return { ...enemy, x: newX, y: newY, direction: newDirection }
     }
 
@@ -123,7 +129,7 @@ export const respawnEnemies = (
 }
 
 export const killEnemy = (
-  enemiesRef: React.MutableRefObject<Enemy[]>,
+  enemiesRef: React.MutableRefObject<AbstractEntity[]>,
   enemy: AbstractEntity
 ) => {
   enemiesRef.current = enemiesRef.current.filter(e => e !== enemy)

@@ -24,6 +24,7 @@ import {
 } from '@/components/Game/collision'
 import { updatePlayerAction } from '@/components/Game/controls'
 import { updateBullets } from '@/components/Game/bullet'
+import { handleBulletObstacleCollisions } from '@/components/Game/obstacle'
 
 /**
  * Основной игровой цикл, который обновляет состояние игры и перерисовывает экран каждый кадр.
@@ -49,7 +50,7 @@ export const gameLoop = (
   clearCanvas(context)
 
   // Обновление позиций врагов
-  updateEnemyPositions(playerRef.current, enemiesRef)
+  updateEnemyPositions(playerRef.current, enemiesRef, obstaclesRef.current)
   if (!canvasRef.current) return
   const moveProps: ControlsProps = {
     playerRef,
@@ -62,6 +63,9 @@ export const gameLoop = (
 
   // Стрельба врагов каждые 2 секунды
   handleEnemyShooting(enemiesRef.current, bulletsRef)
+
+  // Обработка столкновений с препятствиями
+  handleBulletObstacleCollisions(bulletsRef.current, obstaclesRef.current)
 
   bulletsRef.current = updateBullets(
     bulletsRef.current,

@@ -35,3 +35,15 @@ export const detectBulletCollision = (
     bullet.y + bullet.height > entity.y
   )
 }
+
+export const detectObstacleCollision = (
+  obstacle1: Obstacle,
+  obstacle2: Obstacle
+): boolean => {
+  return (
+    obstacle1.x < obstacle2.x + obstacle2.width &&
+    obstacle1.x + obstacle1.width > obstacle2.x &&
+    obstacle1.y < obstacle2.y + obstacle2.height &&
+    obstacle1.y + obstacle1.height > obstacle2.y
+  )
+}

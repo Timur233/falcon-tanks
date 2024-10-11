@@ -21,6 +21,17 @@ export const getRandomEdgePosition = (
   }
 }
 
+export const getRandomPosition = (
+  canvasWidth: number,
+  canvasHeight: number,
+  obstacleWidth = 50, // Ширина препятствия
+  obstacleHeight = 50 // Высота препятствия
+): { x: number; y: number } => {
+  const x = Math.random() * (canvasWidth - obstacleWidth) // Генерируем случайное X
+  const y = Math.random() * (canvasHeight - obstacleHeight) // Генерируем случайное Y
+  return { x, y }
+}
+
 export const clearCanvas = (context: CanvasRenderingContext2D) => {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height)
 }
