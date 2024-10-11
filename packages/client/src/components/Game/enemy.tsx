@@ -1,5 +1,6 @@
 import { getRandomEdgePosition } from './utils'
 import { AbstractEntity, Enemy } from '@/components/Game/gameTypes'
+import { createBullet } from '@/components/Game/bullet'
 
 export const initializeEnemies = (numberOfEnemies: number) => {
   const initialEnemies: Enemy[] = []
@@ -78,4 +79,21 @@ export const killEnemy = (
   enemy: AbstractEntity
 ) => {
   enemiesRef.current = enemiesRef.current.filter(e => e !== enemy)
+}
+
+export const handleEnemyShooting = (
+  enemies: Enemy[],
+  bulletsRef: React.MutableRefObject<AbstractEntity[]>
+) => {
+  const currentTime = Date.now() // Текущее время в миллисекундах
+
+  enemies.forEach(enemy => {
+    // Проверяем, если прошло больше 2 секунд (2000 миллисекунд) с последнего выстрела
+    if (!enemy.lastShotTime || currentTime - enemy.lastShotTime >= 2000) {
+      bulletsRef.current.push(createBullet(enemy)) // Создаём новую пулю для врага
+
+      // Обновляем время последнего выстрела
+      enemy.lastShotTime = currentTime
+    }
+  })
 }

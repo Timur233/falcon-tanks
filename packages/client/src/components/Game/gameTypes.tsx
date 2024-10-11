@@ -9,6 +9,7 @@ export interface AbstractEntity {
 
 export interface Enemy extends AbstractEntity {
   id: number
+  lastShotTime?: number
 }
 
 export interface Obstacle {

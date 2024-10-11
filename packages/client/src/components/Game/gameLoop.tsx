@@ -1,5 +1,10 @@
 import { HandlePlayerHit, resetPlayerPosition } from './player'
-import { updateEnemyPositions, respawnEnemies, killEnemy } from './enemy'
+import {
+  updateEnemyPositions,
+  respawnEnemies,
+  killEnemy,
+  handleEnemyShooting,
+} from './enemy'
 import {
   clearCanvas,
   drawPlayer,
@@ -55,6 +60,9 @@ export const gameLoop = (
   }
   updatePlayerAction(moveProps)
 
+  // Стрельба врагов каждые 2 секунды
+  handleEnemyShooting(enemiesRef.current, bulletsRef)
+
   bulletsRef.current = updateBullets(
     bulletsRef.current,
     canvasRef.current.width,
@@ -80,6 +88,16 @@ export const gameLoop = (
       }
       return true
     })
+    if (detectBulletCollision(bullet, playerRef.current)) {
+      // Уменьшаем жизни игрока
+      livesRef.current -= 1
+      // Удаляем пулю после попадания
+      bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
+      // Проверка на окончание игры
+      if (livesRef.current <= 0) {
+        handleGameOver()
+      }
+    }
   })
 
   // Проверка на столкновения между игроком и врагами
