@@ -5,7 +5,7 @@ export const PLAYER_DEFAULT_PARAMS = {
   y: 300,
   width: 70,
   height: 70,
-  speed: 2,
+  speed: 3,
   direction: { x: 0, y: 0 },
 }
 
