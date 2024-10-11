@@ -14,10 +14,9 @@ import { initializeObstacle } from '@/components/Game/obstacle'
 type GamePropsType = {
   lives: number
   isGameStarted: boolean
-  isGamePused: boolean
+  isGamePaused: boolean
   onDeath: (lives: number) => void
-  onGameOver: () => void
-  onGameWining: () => void
+  onGameOver: (isVictory: boolean) => void
   onKeyDownUp: (btnStates: BtnStates) => void
 }
 
@@ -25,10 +24,9 @@ export const Game = (props: GamePropsType) => {
   const {
     lives,
     isGameStarted,
-    isGamePused,
+    isGamePaused,
     onDeath,
     onGameOver,
-    onGameWining,
     onKeyDownUp,
   } = props
 
@@ -46,7 +44,7 @@ export const Game = (props: GamePropsType) => {
   const [isGameOver, setIsGameOver] = useState(false)
 
   const handleGameOver = useCallback(() => {
-    onGameOver()
+    onGameOver(false)
     setIsGameOver(true)
     setIsGameRunning(false)
 
@@ -109,23 +107,23 @@ export const Game = (props: GamePropsType) => {
   }, [onKeyDownUp])
 
   useEffect(() => {
-    if (isGameRunning && !isGamePused && !isStartedLoopRef.current) {
+    if (isGameRunning && !isGamePaused && !isStartedLoopRef.current) {
       isStartedLoopRef.current = true
 
       requestAnimationFrame(loop)
     }
-  }, [isGameRunning, isGamePused, loop])
+  }, [isGameRunning, isGamePaused, loop])
 
   useEffect(() => {
     livesRef.current = lives
-    isPausedRef.current = isGamePused
+    isPausedRef.current = isGamePaused
 
-    if (!isGamePused) {
+    if (!isGamePaused) {
       isStartedLoopRef.current = false
     }
 
     if (isGameStarted && isGameRunning === false) startGame()
-  }, [lives, isGameStarted, isGamePused, isGameRunning, startGame])
+  }, [lives, isGameStarted, isGamePaused, isGameRunning, startGame])
 
   return <canvas ref={canvasRef} width={800} height={600}></canvas>
 }

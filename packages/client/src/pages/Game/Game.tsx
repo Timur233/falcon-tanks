@@ -1,7 +1,6 @@
 import GameInfo from '@/assets/images/game-info.jpg'
 import { Game as GamePrototype } from '@/components/Game/Game'
 import { Modal } from '@/components/common/Modal/Modal'
-import { Button } from '@/components/ui/Button/Button'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { useCallback, useEffect, useState } from 'react'
 import { Arrows } from './components/Arrows/Arrows'
@@ -10,22 +9,32 @@ import { KillsCounter } from './components/KillsCounter/KillsCounter'
 import { PauseHelp } from './components/PauseHelp/PauseHelp'
 import './Game.scss'
 import { Icon } from '@/components/ui/Icon/Icon'
+import { BtnStates } from '@/components/Game/gameTypes'
+import { StatusScreen } from './components/StatusScreen/StatusScreen'
+
+interface GameState {
+  lives: number
+  isGameStarted: boolean
+  isGamePaused: boolean
+  isGameOver: boolean
+  isGameWinning: boolean
+}
 
 const DEFAULT_LIVES_COUNT = 3
 
 export const Game = () => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
-  const [buttonsState, setButtonsState] = useState({
+  const [buttonsState, setButtonsState] = useState<BtnStates>({
     up: false,
     down: false,
     left: false,
     right: false,
     fire: false,
   })
-  const [gameState, setGameState] = useState({
+  const [gameState, setGameState] = useState<GameState>({
     lives: DEFAULT_LIVES_COUNT,
     isGameStarted: false,
-    isGamePused: false,
+    isGamePaused: false,
     isGameOver: false,
     isGameWinning: false,
   })
@@ -34,7 +43,7 @@ export const Game = () => {
     setGameState({
       lives: DEFAULT_LIVES_COUNT,
       isGameStarted: true,
-      isGamePused: false,
+      isGamePaused: false,
       isGameOver: false,
       isGameWinning: false,
     })
@@ -43,7 +52,7 @@ export const Game = () => {
   const pauseHandler = useCallback(() => {
     setGameState(state => ({
       ...state,
-      isGamePused: !state.isGamePused,
+      isGamePaused: !state.isGamePaused,
     }))
   }, [])
 
@@ -54,29 +63,15 @@ export const Game = () => {
     }))
   }, [])
 
-  const gameOverHandler = useCallback(() => {
+  const gameOverHandler = useCallback((isVictory: boolean) => {
     setGameState({
       lives: 0,
-      isGameOver: true,
-      isGameWinning: false,
+      isGameOver: !isVictory,
+      isGameWinning: isVictory,
       isGameStarted: false,
-      isGamePused: true,
+      isGamePaused: true,
     })
   }, [])
-
-  const gameWiningHandler = useCallback(() => {
-    setGameState({
-      lives: 0,
-      isGameOver: false,
-      isGameWinning: true,
-      isGameStarted: false,
-      isGamePused: true,
-    })
-  }, [])
-
-  const helpHandler = () => {
-    setIsInfoModalOpen(true)
-  }
 
   const arrowClickHandler = (
     eventName: string,
@@ -130,51 +125,37 @@ export const Game = () => {
               <GamePrototype
                 lives={gameState.lives}
                 isGameStarted={gameState.isGameStarted}
-                isGamePused={gameState.isGamePused}
+                isGamePaused={gameState.isGamePaused}
                 onDeath={deathHandler}
                 onGameOver={gameOverHandler}
-                onGameWining={gameWiningHandler}
                 onKeyDownUp={changeButtonsState}
               />
 
-              <div
-                className={`start-screen${
+              <StatusScreen
+                isVisible={
                   !gameState.isGameStarted &&
                   !gameState.isGameOver &&
                   !gameState.isGameWinning
-                    ? ' start-screen_show'
-                    : ''
-                }`}>
-                <Button
-                  text="Начать игру"
-                  onClick={startGameHandler}
-                  useFixWidth
-                />
-              </div>
+                }
+                buttonTitle="Начать игру"
+                onButtonClick={startGameHandler}
+              />
 
-              <div
-                className={`game-over-screen${
-                  gameState.isGameOver ? ' game-over-screen_show' : ''
-                }`}>
-                <span className="game-over-screen__title">Game Over</span>
-                <Button
-                  text="Начать заново"
-                  onClick={startGameHandler}
-                  useFixWidth
-                />
-              </div>
+              <StatusScreen
+                isVisible={gameState.isGameOver}
+                buttonTitle="Начать заново"
+                onButtonClick={startGameHandler}
+                title="Game Over"
+                type="game-over"
+              />
 
-              <div
-                className={`win-screen${
-                  gameState.isGameWinning ? ' win-screen_show' : ''
-                }`}>
-                <span className="win-screen__title">Победа!</span>
-                <Button
-                  text="Начать заново"
-                  onClick={startGameHandler}
-                  useFixWidth
-                />
-              </div>
+              <StatusScreen
+                isVisible={gameState.isGameWinning}
+                buttonTitle="Начать заново"
+                onButtonClick={startGameHandler}
+                title="Победа!"
+                type="victory"
+              />
             </div>
           </div>
           <div className="column col-4">
@@ -190,7 +171,7 @@ export const Game = () => {
               <PauseHelp
                 className="game-controll__pause-help-buttons"
                 pauseIcon={
-                  gameState.isGamePused &&
+                  gameState.isGamePaused &&
                   gameState.isGameStarted &&
                   !gameState.isGameOver &&
                   !gameState.isGameWinning ? (
@@ -200,7 +181,7 @@ export const Game = () => {
                   )
                 }
                 pauseHandler={pauseHandler}
-                helpHandler={helpHandler}
+                helpHandler={() => setIsInfoModalOpen(true)}
               />
 
               <Arrows
