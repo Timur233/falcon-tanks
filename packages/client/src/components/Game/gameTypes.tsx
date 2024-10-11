@@ -24,6 +24,7 @@ export interface Obstacle {
 }
 
 export interface BtnStates {
+  [key: string]: boolean
   up: boolean
   down: boolean
   left: boolean

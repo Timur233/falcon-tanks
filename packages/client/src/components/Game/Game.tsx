@@ -5,6 +5,7 @@ import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import {
   handleKeyDownUp,
+  resetButtonsStates,
   updatePlayerMovement,
 } from '@/components/Game/controls'
 import { BtnStates, ControlsProps, Obstacle } from '@/components/Game/gameTypes'
@@ -94,10 +95,12 @@ export const Game = (props: GamePropsType) => {
 
     window.addEventListener('keydown', handleKeyDownUpWrapper)
     window.addEventListener('keyup', handleKeyDownUpWrapper)
+    window.addEventListener('blur', resetButtonsStates)
 
     return () => {
       window.removeEventListener('keydown', handleKeyDownUpWrapper)
       window.removeEventListener('keyup', handleKeyDownUpWrapper)
+      window.removeEventListener('blur', resetButtonsStates)
     }
   }, [onKeyDownUp])
 

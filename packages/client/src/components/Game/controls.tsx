@@ -39,6 +39,10 @@ export const handleKeyDownUp = (
   onKeyDownUp(btnStates)
 }
 
+export const resetButtonsStates = () => {
+  Object.keys(btnStates).forEach((key: string) => (btnStates[key] = false))
+}
+
 // Функция для обновления позиции игрока на основе нажатых клавиш
 export const updatePlayerMovement = (props: ControlsProps) => {
   const speed = props.playerRef.current.speed
