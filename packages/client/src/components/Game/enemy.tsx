@@ -1,12 +1,13 @@
 import { getRandomEdgePosition } from './utils'
-import { AbstractEntity } from '@/components/Game/gameTypes'
+import { AbstractEntity, Enemy } from '@/components/Game/gameTypes'
 
 export const initializeEnemies = (numberOfEnemies: number) => {
-  const initialEnemies: AbstractEntity[] = []
+  const initialEnemies: Enemy[] = []
   for (let i = 0; i < numberOfEnemies; i++) {
     // количество врагов
     const { x, y } = getRandomEdgePosition(800, 600)
-    const enemy: AbstractEntity = {
+    const enemy: Enemy = {
+      id: i,
       x,
       y,
       width: 70,
@@ -16,36 +17,64 @@ export const initializeEnemies = (numberOfEnemies: number) => {
     }
     initialEnemies.push(enemy)
   }
-  return initialEnemies as AbstractEntity[]
+  return initialEnemies as Enemy[]
 }
 
 export const updateEnemyPositions = (
   player: AbstractEntity,
-  enemiesRef: React.MutableRefObject<AbstractEntity[]>
+  enemiesRef: React.MutableRefObject<Enemy[]>
 ) => {
   enemiesRef.current = enemiesRef.current.map(enemy => {
+    // Определяем разницу по X и Y
     const directionX = player.x - enemy.x
     const directionY = player.y - enemy.y
 
-    const magnitude = Math.sqrt(directionX ** 2 + directionY ** 2)
-    const normalizedX = directionX / magnitude
-    const normalizedY = directionY / magnitude
+    // Выбираем ближайшую ось для начала движения
+    const moveAlongX = Math.abs(directionX) > Math.abs(directionY)
 
-    const newX = enemy.x + normalizedX * enemy.speed
-    const newY = enemy.y + normalizedY * enemy.speed
+    let stepX = 0
+    let stepY = 0
 
-    return { ...enemy, x: newX, y: newY }
+    let newDirection: { x: number; y: number }
+
+    if (moveAlongX) {
+      // Если разница по X больше, двигаемся по X
+      if (Math.abs(directionX) > enemy.speed) {
+        stepX = Math.sign(directionX) * enemy.speed
+        newDirection = { x: Math.sign(directionX), y: 0 } // направление по X
+      } else {
+        // Если по оси X выровнялись, двигаемся по Y
+        stepY = Math.sign(directionY) * enemy.speed
+        newDirection = { x: 0, y: Math.sign(directionY) } // направление по Y
+      }
+    } else {
+      // Если разница по Y больше, двигаемся по Y
+      if (Math.abs(directionY) > enemy.speed) {
+        stepY = Math.sign(directionY) * enemy.speed
+        newDirection = { x: 0, y: Math.sign(directionY) } // направление по Y
+      } else {
+        // Если по оси Y выровнялись, двигаемся по X
+        stepX = Math.sign(directionX) * enemy.speed
+        newDirection = { x: Math.sign(directionX), y: 0 } // направление по X
+      }
+    }
+
+    const newX = enemy.x + stepX
+    const newY = enemy.y + stepY
+
+    // Обновляем направление врага
+    enemy.direction = newDirection
+
+    return { ...enemy, x: newX, y: newY, direction: newDirection }
   })
 }
 
-export const respawnEnemies = (
-  enemiesRef: React.MutableRefObject<AbstractEntity[]>
-) => {
+export const respawnEnemies = (enemiesRef: React.MutableRefObject<Enemy[]>) => {
   enemiesRef.current = initializeEnemies(5)
 }
 
 export const killEnemy = (
-  enemiesRef: React.MutableRefObject<AbstractEntity[]>,
+  enemiesRef: React.MutableRefObject<Enemy[]>,
   enemy: AbstractEntity
 ) => {
   enemiesRef.current = enemiesRef.current.filter(e => e !== enemy)

@@ -1,7 +1,7 @@
 import enemiesSpritePath from '@/assets/images/sprites/enemy.svg'
 import tankSpritePath from '@/assets/images/sprites/tank.svg'
 import wallSpritePath from '@/assets/images/sprites/wall.svg'
-import { AbstractEntity, Obstacle } from '@/components/Game/gameTypes'
+import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
 
 export const getRandomEdgePosition = (
   canvasWidth: number,
@@ -65,12 +65,42 @@ export const drawPlayer = (
 const enemiesSprite = new Image()
 enemiesSprite.src = enemiesSpritePath
 
+const lastEnemyDirection: Record<number, { x: number; y: number }> = {}
+
 export const drawEnemies = (
   context: CanvasRenderingContext2D,
-  enemies: AbstractEntity[]
+  enemies: Enemy[]
 ) => {
   enemies.forEach(enemy => {
-    context.drawImage(enemiesSprite, enemy.x, enemy.y)
+    let direction = { ...enemy.direction }
+
+    // Если враг не двигается, используем последнее направление
+    const isEnemyIdle = direction.x === 0 && direction.y === 0
+    if (isEnemyIdle) {
+      direction = lastEnemyDirection[enemy.id] || { x: 1, y: 0 } // по умолчанию вправо
+    } else {
+      lastEnemyDirection[enemy.id] = direction // сохраняем последнее направление для врага
+    }
+
+    context.save()
+
+    // Перемещаем контекст на позицию врага
+    context.translate(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2)
+
+    // Вычисляем угол поворота на основе направления
+    const angle = Math.atan2(direction.x, -direction.y)
+    context.rotate(angle)
+
+    // Отрисовываем спрайт врага с учётом его ширины и высоты
+    context.drawImage(
+      enemiesSprite,
+      -enemy.width / 2,
+      -enemy.height / 2,
+      enemy.width,
+      enemy.height
+    )
+
+    context.restore()
   })
 }
 

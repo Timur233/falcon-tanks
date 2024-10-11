@@ -7,6 +7,10 @@ export interface AbstractEntity {
   direction: { x: number; y: number }
 }
 
+export interface Enemy extends AbstractEntity {
+  id: number
+}
+
 export interface Obstacle {
   x: number
   y: number

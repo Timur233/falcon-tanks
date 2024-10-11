@@ -11,6 +11,7 @@ import {
   ControlsProps,
   AbstractEntity,
   Obstacle,
+  Enemy,
 } from '@/components/Game/gameTypes'
 import {
   detectBulletCollision,
@@ -34,7 +35,7 @@ export const gameLoop = (
   context: CanvasRenderingContext2D,
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>,
   playerRef: React.MutableRefObject<AbstractEntity>,
-  enemiesRef: React.MutableRefObject<AbstractEntity[]>,
+  enemiesRef: React.MutableRefObject<Enemy[]>,
   bulletsRef: React.MutableRefObject<AbstractEntity[]>,
   obstaclesRef: React.MutableRefObject<Obstacle[]>,
   livesRef: React.MutableRefObject<number>,
