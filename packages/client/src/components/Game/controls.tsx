@@ -51,15 +51,19 @@ export const updatePlayerMovement = (props: ControlsProps) => {
 
   // Определение направления движения
   if (btnStates.up) {
+    props.playerRef.current.direction = { x: 0, y: 1 }
     newY -= speed
   }
   if (btnStates.down) {
+    props.playerRef.current.direction = { x: 0, y: -1 }
     newY += speed
   }
   if (btnStates.left) {
+    props.playerRef.current.direction = { x: -1, y: 0 }
     newX -= speed
   }
   if (btnStates.right) {
+    props.playerRef.current.direction = { x: 1, y: 0 }
     newX += speed
   }
 

@@ -6,6 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import App from './app/App'
 import '@/scss/styles.scss'
+import { registerServiceWorker } from './registerServiceWorker'
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
@@ -15,3 +16,5 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     </Provider>
   </React.StrictMode>
 )
+
+registerServiceWorker()

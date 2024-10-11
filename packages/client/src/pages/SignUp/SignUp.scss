@@ -1,0 +1,6 @@
+@import '../../scss/form-mixin';
+
+.registration-page {
+  @include page-background-layout($background-image: ($img_registration-background, $img_page_background_left));
+  @include form-styles();
+}

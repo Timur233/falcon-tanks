@@ -1,70 +1,84 @@
-import { useState } from 'react'
+import './SignIn.scss'
+import React, { useState } from 'react'
 import { useAppDispatch } from '@/store'
 import { signInUser } from '@/store/reducers/auth-reducer'
 import { Button } from '@/components/ui/Button/Button'
-import { useSearchParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { Form } from '@/components/ui/Form/Form'
+import { Input } from '@/components/ui/Input/Input'
+import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
+import SiteLogo from '@/assets/images/site-logo.svg'
 
 export const SignIn = () => {
-  const [form, setForm] = useState({ login: '', password: '' })
-  const [searchParams] = useSearchParams()
-  const [query] = useState(searchParams.get('redirectUrl'))
+  const [userData, setUserData] = useState({ login: '', password: '' })
+  const [error, setError] = useState<string | null>(null)
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
 
-  const handleForm = (name: string, value: string) => {
-    setForm({ ...form, [name]: value })
-  }
+  const handleInputChange =
+    (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
+      setUserData(prevData => ({
+        ...prevData,
+        [field]: event.target.value,
+      }))
+    }
 
   const handleSubmit = () => {
-    dispatch(signInUser({ form: form, query: query }))
+    dispatch(signInUser({ form: userData }))
       .unwrap()
       .then(() => {
         navigate('/game')
       })
-      .catch((error?: any, code?: any) => {
-        toast.error(error.reason)
+      .catch((_error?: any, _code?: any) => {
+        setError('Ошибка входа в аккаунт!')
       })
   }
 
   return (
-    <>
-      <form
-        onSubmit={e => {
-          e.preventDefault()
-        }}>
-        <label>
-          <span>Логин</span>
-          <input
-            onChange={e => handleForm('login', e.target.value)}
-            type="text"
-            name={'login'}
-            value={form.login}
-          />
-        </label>
-        <label>
-          <span>Пароль</span>
-          <input
-            onChange={e => handleForm('password', e.target.value)}
-            type="password"
-            name={'password'}
-            value={form.password}
-          />
-        </label>
-        <Button
-          text={'войти'}
-          useFixWidth={true}
-          onClick={() => handleSubmit()}
+    <div className={'login-page'}>
+      <Link className="login-page__link" to="/">
+        <img
+          src={SiteLogo}
+          className="login-page__link__image"
+          alt="Falcon Tanks Logo"
+          draggable="false"
         />
-      </form>
-      <Button
-        text={'Регистрация'}
-        useFixWidth={true}
-        onClick={() => {
-          navigate('/sign-up')
-        }}
-      />
-    </>
+      </Link>
+      <div className="container">
+        <div className={'row'}>
+          <div className={'column col-6'}>
+            <CustomPageTitle className={'login-page__title'} text={'Вход'} />
+            <Form className={'login-page__login-form'}>
+              <Input
+                className={'login'}
+                name={'login'}
+                placeholder={'Логин'}
+                onChange={handleInputChange('login')}
+              />
+              <Input
+                className={'password'}
+                name={'password'}
+                type={'password'}
+                placeholder={'Пароль'}
+                onChange={handleInputChange('password')}
+              />
+              {error && (
+                <div className={'login-page__error-message'}>{error}</div>
+              )}
+            </Form>
+            <Button text={'Войти'} useFixWidth={true} onClick={handleSubmit} />
+            <Button
+              className={'link-button'}
+              text={'Регистрация'}
+              useFixWidth={true}
+              onClick={() => {
+                navigate('/sign-up')
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }

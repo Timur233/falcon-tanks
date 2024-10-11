@@ -1,0 +1,6 @@
+@import '../../scss/form-mixin';
+
+.login-page {
+  @include page-background-layout();
+  @include form-styles();
+}
