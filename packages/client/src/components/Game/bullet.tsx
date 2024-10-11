@@ -4,8 +4,8 @@ export const createBullet = (player: AbstractEntity): AbstractEntity => {
   return {
     x: player.x + player.width / 2 - 2.5, // Пуля появляется в центре танка
     y: player.y + player.height / 2 - 2.5,
-    width: 5,
-    height: 5,
+    width: 10,
+    height: 10,
     speed: 5, // Скорость пули
     direction: player.direction, // Пуля летит в направлении танка
   }

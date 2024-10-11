@@ -9,8 +9,8 @@ export const initializeEnemies = (numberOfEnemies: number) => {
     const enemy: AbstractEntity = {
       x,
       y,
-      width: 30,
-      height: 30,
+      width: 70,
+      height: 70,
       speed: 1,
       direction: { x: 0, y: 0 },
     }

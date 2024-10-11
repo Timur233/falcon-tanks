@@ -4,6 +4,7 @@ import { detectCollision } from '@/components/Game/collision'
 import { createBullet } from '@/components/Game/bullet'
 
 let pressedKeys: string[] = []
+let shootPressed = false // Флаг для стрельбы
 
 enum Action {
   MoveUp = 'MoveUp',
@@ -38,10 +39,20 @@ export const handleKeyDown = (key: string) => {
   if (!pressedKeys.includes(key)) {
     pressedKeys.push(key)
   }
+
+  // Устанавливаем флаг, если нажата клавиша пробела (стрельба)
+  if (key === ' ') {
+    shootPressed = true
+  }
 }
 
 export const handleKeyUp = (key: string) => {
   pressedKeys = pressedKeys.filter(currentKey => currentKey !== key)
+
+  // Сбрасываем флаг, если клавиша пробела отпущена
+  if (key === ' ') {
+    shootPressed = false
+  }
 }
 
 const getActionControlByKey = (key: string): Action | null => {
@@ -78,14 +89,20 @@ export const updatePlayerAction = (props: ControlsProps) => {
   const vector = VECTORS[lastMovementAction]
 
   if (!vector) return
+
   if (lastMovementAction === Action.Shoot) {
-    props.bulletsRef.current.push(createBullet(props.playerRef.current))
+    // Стреляем только при первом нажатии на пробел
+    if (shootPressed) {
+      props.bulletsRef.current.push(createBullet(props.playerRef.current))
+      shootPressed = false // Сбрасываем флаг после выстрела
+    }
   } else {
     props.playerRef.current.direction = vector
 
     newX += vector.x * speed
     newY += vector.y * speed
   }
+
   const hasCollision = props.obstacles.some(obstacle => {
     return detectCollision(
       { ...props.playerRef.current, x: newX, y: newY },

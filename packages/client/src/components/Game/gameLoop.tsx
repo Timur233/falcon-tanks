@@ -73,6 +73,8 @@ export const gameLoop = (
       if (hit) {
         // Убираем врага, если попали
         killEnemy(enemiesRef, enemy)
+        // Убираем пулю, если попали
+        bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
         return false
       }
       return true
