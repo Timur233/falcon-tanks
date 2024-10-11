@@ -1,6 +1,6 @@
-import { AbstractEntity, Enemy } from '@/components/Game/gameTypes'
+import { AbstractEntity } from '@/components/Game/gameTypes'
 
-export const createBullet = (enemy: Enemy): AbstractEntity => {
+export const createBullet = (enemy: AbstractEntity): AbstractEntity => {
   const bulletSpeed = 5 // Задайте скорость пули
   const bulletDirection = { x: enemy.direction.x, y: enemy.direction.y }
 

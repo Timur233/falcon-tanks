@@ -108,7 +108,7 @@ export const gameLoop = (
         livesRef,
         handleGameOver,
         () => resetPlayerPosition(playerRef),
-        () => respawnEnemies(enemiesRef)
+        () => respawnEnemies(enemiesRef, canvasRef)
       )
     }
   })

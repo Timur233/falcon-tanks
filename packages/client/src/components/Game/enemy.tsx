@@ -1,6 +1,7 @@
 import { getRandomEdgePosition } from './utils'
 import { AbstractEntity, Enemy } from '@/components/Game/gameTypes'
 import { createBullet } from '@/components/Game/bullet'
+import { detectCollision } from '@/components/Game/collision'
 
 export const initializeEnemies = (numberOfEnemies: number) => {
   const initialEnemies: Enemy[] = []
@@ -63,15 +64,62 @@ export const updateEnemyPositions = (
     const newX = enemy.x + stepX
     const newY = enemy.y + stepY
 
-    // Обновляем направление врага
-    enemy.direction = newDirection
+    // Проверка столкновений с другими врагами
+    const hasCollision = enemiesRef.current.some(otherEnemy => {
+      if (otherEnemy === enemy) return false // Пропускаем сравнение с самим собой
+      return detectCollision({ ...enemy, x: newX, y: newY }, otherEnemy)
+    })
 
-    return { ...enemy, x: newX, y: newY, direction: newDirection }
+    // Если нет коллизии, обновляем позицию врага
+    if (!hasCollision) {
+      enemy.direction = newDirection // Обновляем направление врага
+      return { ...enemy, x: newX, y: newY, direction: newDirection }
+    }
+
+    // Если есть коллизия, возвращаем текущую позицию
+    return enemy
   })
 }
 
-export const respawnEnemies = (enemiesRef: React.MutableRefObject<Enemy[]>) => {
-  enemiesRef.current = initializeEnemies(5)
+const isPositionOccupied = (
+  position: { x: number; y: number },
+  enemies: AbstractEntity[]
+) => {
+  return enemies.some(enemy =>
+    detectCollision({ ...enemy, x: position.x, y: position.y }, enemy)
+  )
+}
+
+const respawnEnemy = (
+  enemy: AbstractEntity,
+  enemies: AbstractEntity[],
+  canvasWidth: number,
+  canvasHeight: number
+) => {
+  let newPosition
+  do {
+    newPosition = {
+      x: Math.random() * canvasWidth, // Предполагается, что canvasWidth доступен
+      y: Math.random() * canvasHeight, // Предполагается, что canvasHeight доступен
+    }
+  } while (isPositionOccupied(newPosition, enemies))
+
+  return { ...enemy, ...newPosition } // Возвращаем врага с новой позицией
+}
+
+// Пример использования respawnEnemy в вашем коде
+export const respawnEnemies = (
+  enemiesRef: React.MutableRefObject<AbstractEntity[]>,
+  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>
+) => {
+  if (!canvasRef.current) {
+    return
+  }
+  const { width: canvasWidth, height: canvasHeight } =
+    canvasRef.current.getBoundingClientRect()
+  enemiesRef.current = enemiesRef.current.map(enemy =>
+    respawnEnemy(enemy, enemiesRef.current, canvasWidth, canvasHeight)
+  )
 }
 
 export const killEnemy = (
