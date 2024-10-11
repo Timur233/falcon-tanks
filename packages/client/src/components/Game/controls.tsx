@@ -1,6 +1,7 @@
 import { ControlsProps } from '@/components/Game/gameTypes'
 
 import { detectCollision } from '@/components/Game/collision'
+import { createBullet } from '@/components/Game/bullet'
 
 let pressedKeys: string[] = []
 
@@ -9,6 +10,7 @@ enum Action {
   MoveDown = 'MoveDown',
   MoveLeft = 'MoveLeft',
   MoveRight = 'MoveRight',
+  Shoot = 'Shoot',
 }
 
 type Vector = {
@@ -16,11 +18,12 @@ type Vector = {
   y: -1 | 0 | 1
 }
 
-const MOVEMENT_CONTROLS: Record<Action, string[]> = {
+const ACTION_CONTROLS: Record<Action, string[]> = {
   [Action.MoveUp]: ['ArrowUp', 'w', 'ц', 'W', 'Ц'],
   [Action.MoveDown]: ['ArrowDown', 's', 'ы', 'S', 'Ы'],
   [Action.MoveLeft]: ['ArrowLeft', 'a', 'ф', 'A', 'Ф'],
   [Action.MoveRight]: ['ArrowRight', 'd', 'в', 'D', 'В'],
+  [Action.Shoot]: [' '],
 }
 
 const VECTORS: Record<Action, Vector> = {
@@ -28,6 +31,7 @@ const VECTORS: Record<Action, Vector> = {
   [Action.MoveDown]: { x: 0, y: 1 },
   [Action.MoveLeft]: { x: -1, y: 0 },
   [Action.MoveRight]: { x: 1, y: 0 },
+  [Action.Shoot]: { x: 0, y: 0 },
 }
 
 export const handleKeyDown = (key: string) => {
@@ -40,8 +44,8 @@ export const handleKeyUp = (key: string) => {
   pressedKeys = pressedKeys.filter(currentKey => currentKey !== key)
 }
 
-const getMovementControlByKey = (key: string): Action | null => {
-  for (const [action, keys] of Object.entries(MOVEMENT_CONTROLS)) {
+const getActionControlByKey = (key: string): Action | null => {
+  for (const [action, keys] of Object.entries(ACTION_CONTROLS)) {
     if (keys.includes(key)) {
       return action as Action
     }
@@ -50,9 +54,9 @@ const getMovementControlByKey = (key: string): Action | null => {
   return null
 }
 
-const getLastMovementAction = (): Action | null => {
+const getLastAction = (): Action | null => {
   for (let i = pressedKeys.length - 1; i >= 0; i--) {
-    const action = getMovementControlByKey(pressedKeys[i])
+    const action = getActionControlByKey(pressedKeys[i])
 
     if (action) {
       return action
@@ -62,24 +66,26 @@ const getLastMovementAction = (): Action | null => {
   return null
 }
 
-export const updatePlayerMovement = (props: ControlsProps) => {
+export const updatePlayerAction = (props: ControlsProps) => {
   const speed = props.playerRef.current.speed
   let newX = props.playerRef.current.x
   let newY = props.playerRef.current.y
 
-  const lastMovementAction = getLastMovementAction()
+  const lastMovementAction = getLastAction()
 
   if (!lastMovementAction) return
 
   const vector = VECTORS[lastMovementAction]
 
   if (!vector) return
+  if (lastMovementAction === Action.Shoot) {
+    props.bulletsRef.current.push(createBullet(props.playerRef.current))
+  } else {
+    props.playerRef.current.direction = vector
 
-  props.playerRef.current.direction = vector
-
-  newX += vector.x * speed
-  newY += vector.y * speed
-
+    newX += vector.x * speed
+    newY += vector.y * speed
+  }
   const hasCollision = props.obstacles.some(obstacle => {
     return detectCollision(
       { ...props.playerRef.current, x: newX, y: newY },

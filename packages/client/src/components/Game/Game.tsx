@@ -4,7 +4,7 @@ import { initializeEnemies } from '@/components/Game/enemy'
 import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import { handleKeyDown, handleKeyUp } from '@/components/Game/controls'
-import { Obstacle } from '@/components/Game/gameTypes'
+import { AbstractEntity, Obstacle } from '@/components/Game/gameTypes'
 import { initializeObstacle } from '@/components/Game/obstacle'
 import { Modal } from '../common/Modal/Modal'
 
@@ -14,6 +14,7 @@ export const Game: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
   const enemiesRef = useRef(initializeEnemies(5))
+  const bulletsRef = useRef<AbstractEntity[]>([])
   const obstaclesRef = useRef<Obstacle[]>(initializeObstacle())
   const livesRef = useRef(livesUse)
   const [gameStarted, setGameStarted] = useState(false)
@@ -41,6 +42,7 @@ export const Game: React.FC = () => {
           canvasRef,
           playerRef,
           enemiesRef,
+          bulletsRef,
           obstaclesRef,
           livesRef,
           handleGameOver

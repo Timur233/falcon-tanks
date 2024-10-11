@@ -16,6 +16,7 @@ export interface Obstacle {
 
 export interface ControlsProps {
   playerRef: React.MutableRefObject<AbstractEntity>
+  bulletsRef: React.MutableRefObject<AbstractEntity[]>
   obstacles: Obstacle[]
   canvasWidth: number
   canvasHeight: number

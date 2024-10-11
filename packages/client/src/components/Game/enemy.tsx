@@ -43,3 +43,10 @@ export const respawnEnemies = (
 ) => {
   enemiesRef.current = initializeEnemies(5)
 }
+
+export const killEnemy = (
+  enemiesRef: React.MutableRefObject<AbstractEntity[]>,
+  enemy: AbstractEntity
+) => {
+  enemiesRef.current = enemiesRef.current.filter(e => e !== enemy)
+}

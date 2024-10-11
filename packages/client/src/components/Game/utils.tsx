@@ -85,3 +85,13 @@ export const drawObstacles = (
     context.drawImage(wallSprite, obstacle.x, obstacle.y)
   })
 }
+
+export const drawBullets = (
+  context: CanvasRenderingContext2D,
+  bullets: AbstractEntity[]
+) => {
+  context.fillStyle = 'yellow'
+  bullets.forEach(bullet => {
+    context.fillRect(bullet.x, bullet.y, bullet.width, bullet.height)
+  })
+}

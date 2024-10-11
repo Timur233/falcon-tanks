@@ -23,3 +23,15 @@ export const detectEnemyCollision = (
     rect1.y + rect1.height > rect2.y
   )
 }
+
+export const detectBulletCollision = (
+  bullet: AbstractEntity,
+  entity: AbstractEntity
+): boolean => {
+  return (
+    bullet.x < entity.x + entity.width &&
+    bullet.x + bullet.width > entity.x &&
+    bullet.y < entity.y + entity.height &&
+    bullet.y + bullet.height > entity.y
+  )
+}
