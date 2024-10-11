@@ -3,7 +3,7 @@ import { Game as GamePrototype } from '@/components/Game/Game'
 import { Modal } from '@/components/common/Modal/Modal'
 import { Button } from '@/components/ui/Button/Button'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
-import { useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Arrows } from './components/Arrows/Arrows'
 import { FireControll } from './components/FireControll/FireControll'
 import { KillsCounter } from './components/KillsCounter/KillsCounter'
@@ -16,11 +16,11 @@ const DEFAULT_LIVES_COUNT = 3
 export const Game = () => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
   const [buttonsState, setButtonsState] = useState({
-    upButton: false,
-    downButton: false,
-    leftButton: false,
-    rightButton: false,
-    fireButton: false,
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+    fire: false,
   })
   const [gameState, setGameState] = useState({
     lives: DEFAULT_LIVES_COUNT,
@@ -45,70 +45,49 @@ export const Game = () => {
     }))
   }
 
-  const deathHandler = (lives: number) => {
+  const deathHandler = useCallback((lives: number) => {
     setGameState(state => ({
       ...state,
       lives,
     }))
-  }
+  }, [])
 
-  const gameOverHandler = () => {
+  const gameOverHandler = useCallback(() => {
     setGameState({
       lives: 0,
       isGameOver: true,
       isGameStarted: false,
       isGamePused: true,
     })
-  }
+  }, [])
 
   const helpHandler = () => {
     setIsInfoModalOpen(true)
   }
 
-  const arrowClickHandler = () => {
-    return
+  const arrowClickHandler = (
+    eventName: string,
+    key: string,
+    keyCode: number
+  ) => {
+    const event = new KeyboardEvent(eventName, {
+      key,
+      code: key,
+      keyCode,
+      which: keyCode,
+      bubbles: true,
+      cancelable: true,
+    })
+
+    window.dispatchEvent(event)
   }
 
-  const toggleButton = (event: Event, buttonName: string, state: boolean) => {
-    event.preventDefault()
-
-    setButtonsState({ ...buttonsState, [buttonName]: state })
-  }
-
-  // TODO: Заменить на финальное решение для отслеживания кнопок
-  useEffect(() => {
-    const handleKey = (event: KeyboardEvent) => {
-      const isKeydown = event.type === 'keydown'
-
-      switch (event.key) {
-        case 'ArrowUp':
-          toggleButton(event, 'upButton', isKeydown)
-          break
-        case 'ArrowDown':
-          toggleButton(event, 'downButton', isKeydown)
-          break
-        case 'ArrowLeft':
-          toggleButton(event, 'leftButton', isKeydown)
-          break
-        case 'ArrowRight':
-          toggleButton(event, 'rightButton', isKeydown)
-          break
-        case ' ':
-          toggleButton(event, 'fireButton', isKeydown)
-          break
-        default:
-          break
-      }
-    }
-
-    window.addEventListener('keydown', handleKey)
-    window.addEventListener('keyup', handleKey)
-
-    return () => {
-      window.removeEventListener('keydown', handleKey)
-      window.removeEventListener('keyup', handleKey)
-    }
-  })
+  const changeButtonsState = useCallback(
+    (state: typeof buttonsState) => {
+      setButtonsState({ ...state })
+    },
+    [setButtonsState]
+  )
 
   return (
     <section className="game-page">
@@ -127,6 +106,7 @@ export const Game = () => {
                 isGamePused={gameState.isGamePused}
                 onDeath={deathHandler}
                 onGameOver={gameOverHandler}
+                onKeyDownUp={changeButtonsState}
               />
 
               <div
@@ -170,7 +150,9 @@ export const Game = () => {
               <PauseHelp
                 className="game-controll__pause-help-buttons"
                 pauseIcon={
-                  gameState.isGamePused && !gameState.isGameOver ? (
+                  gameState.isGamePused &&
+                  gameState.isGameStarted &&
+                  !gameState.isGameOver ? (
                     <Icon id="arrow-right" width={12} height={16}></Icon>
                   ) : (
                     <Icon id="pause-icon" width={16} height={17}></Icon>
@@ -183,13 +165,13 @@ export const Game = () => {
               <Arrows
                 buttonsState={buttonsState}
                 className="game-controll__arrows"
-                clickHandler={arrowClickHandler}
+                mouseDownUpHandler={arrowClickHandler}
               />
 
               <FireControll
                 className="game-controll__fire"
-                buttonPressed={buttonsState.fireButton}
-                fireHandler={pauseHandler}
+                buttonPressed={buttonsState.fire}
+                mouseDownUpHandler={arrowClickHandler}
               />
             </div>
           </div>

@@ -1,17 +1,42 @@
-import { ControlsProps, KeyMap } from '@/components/Game/gameTypes'
-
+import { ControlsProps, BtnStates } from '@/components/Game/gameTypes'
 import { detectCollision } from '@/components/Game/collision'
 
-const keyMap: KeyMap = {}
-
-// Обработчик нажатия клавиш
-export const handleKeyDown = (key: string) => {
-  keyMap[key] = true
+const btnStates: BtnStates = {
+  up: false,
+  down: false,
+  left: false,
+  right: false,
+  fire: false,
 }
 
-// Обработчик отпускания клавиш
-export const handleKeyUp = (key: string) => {
-  delete keyMap[key]
+export const handleKeyDownUp = (
+  type: string,
+  key: string,
+  onKeyDownUp: (state: BtnStates) => void
+) => {
+  const checkBtnState = (
+    aliases: string[],
+    type: string,
+    prevState: boolean
+  ) => {
+    if (aliases.includes(key)) {
+      return type === 'keydown'
+    }
+
+    return prevState
+  }
+
+  btnStates.up = checkBtnState(['ArrowUp', 'w', 'ц'], type, btnStates.up)
+  btnStates.down = checkBtnState(['ArrowDown', 's', 'ы'], type, btnStates.down)
+  btnStates.left = checkBtnState(['ArrowLeft', 'a', 'ф'], type, btnStates.left)
+  btnStates.right = checkBtnState(
+    ['ArrowRight', 'd', 'в'],
+    type,
+    btnStates.right
+  )
+  btnStates.fire = checkBtnState([' '], type, btnStates.fire)
+
+  onKeyDownUp(btnStates)
 }
 
 // Функция для обновления позиции игрока на основе нажатых клавиш
@@ -21,16 +46,16 @@ export const updatePlayerMovement = (props: ControlsProps) => {
   let newY = props.playerRef.current.y
 
   // Определение направления движения
-  if (keyMap['ArrowUp'] || keyMap['w'] || keyMap['ц']) {
+  if (btnStates.up) {
     newY -= speed
   }
-  if (keyMap['ArrowDown'] || keyMap['s'] || keyMap['ы']) {
+  if (btnStates.down) {
     newY += speed
   }
-  if (keyMap['ArrowLeft'] || keyMap['a'] || keyMap['ф']) {
+  if (btnStates.left) {
     newX -= speed
   }
-  if (keyMap['ArrowRight'] || keyMap['d'] || keyMap['в']) {
+  if (btnStates.right) {
     newX += speed
   }
 

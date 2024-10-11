@@ -1,14 +1,13 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './Game.scss'
 import { initializeEnemies } from '@/components/Game/enemy'
 import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import {
-  handleKeyDown,
-  handleKeyUp,
+  handleKeyDownUp,
   updatePlayerMovement,
 } from '@/components/Game/controls'
-import { ControlsProps, Obstacle } from '@/components/Game/gameTypes'
+import { BtnStates, ControlsProps, Obstacle } from '@/components/Game/gameTypes'
 import { initializeObstacle } from '@/components/Game/obstacle'
 
 type GamePropsType = {
@@ -17,10 +16,18 @@ type GamePropsType = {
   isGamePused: boolean
   onDeath: (lives: number) => void
   onGameOver: () => void
+  onKeyDownUp: (btnStates: BtnStates) => void
 }
 
 export const Game = (props: GamePropsType) => {
-  const { lives, isGameStarted, isGamePused, onDeath, onGameOver } = props
+  const {
+    lives,
+    isGameStarted,
+    isGamePused,
+    onDeath,
+    onGameOver,
+    onKeyDownUp,
+  } = props
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
@@ -70,24 +77,25 @@ export const Game = (props: GamePropsType) => {
 
   const startGame = useCallback(() => {
     setIsGameRunning(true)
-    isPausedRef.current = false
     setIsGameOver(false)
+
+    isPausedRef.current = false
     livesRef.current = lives
     playerRef.current = PLAYER_DEFAULT_PARAMS
     enemiesRef.current = initializeEnemies(5)
   }, [lives])
 
   useEffect(() => {
-    const handleKeyDownWrapper = (event: KeyboardEvent) =>
-      handleKeyDown(event.key)
-    const handleKeyUpWrapper = (event: KeyboardEvent) => handleKeyUp(event.key)
+    const handleKeyDownUpWrapper = (event: KeyboardEvent) => {
+      handleKeyDownUp(event.type, event.key, onKeyDownUp)
+    }
 
-    window.addEventListener('keydown', handleKeyDownWrapper)
-    window.addEventListener('keyup', handleKeyUpWrapper)
+    window.addEventListener('keydown', handleKeyDownUpWrapper)
+    window.addEventListener('keyup', handleKeyDownUpWrapper)
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDownWrapper)
-      window.removeEventListener('keyup', handleKeyUpWrapper)
+      window.removeEventListener('keydown', handleKeyDownUpWrapper)
+      window.removeEventListener('keyup', handleKeyDownUpWrapper)
     }
   }, [])
 
@@ -101,9 +109,7 @@ export const Game = (props: GamePropsType) => {
     livesRef.current = lives
     isPausedRef.current = isGamePused
 
-    if (isGameStarted && isGameRunning === false) {
-      startGame()
-    }
+    if (isGameStarted && isGameRunning === false) startGame()
   }, [lives, isGameStarted, isGamePused, isGameRunning, startGame])
 
   return <canvas ref={canvasRef} width={800} height={600}></canvas>

@@ -23,8 +23,12 @@ export interface Obstacle {
   height: number
 }
 
-export interface KeyMap {
-  [key: string]: boolean
+export interface BtnStates {
+  up: boolean
+  down: boolean
+  left: boolean
+  right: boolean
+  fire: boolean
 }
 
 export interface ControlsProps {
