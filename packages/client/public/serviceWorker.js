@@ -1,13 +1,12 @@
 const CACHE_NAME = 'cache-data-v1'
-const urlsToCache = [
-  '/'
-]
+const urlsToCache = ['/']
 
-const networkFirst = async (request) => {
+const networkFirst = async request => {
   const cache = await caches.open(CACHE_NAME)
   try {
     const response = await fetch(request)
-    const cachePutCondition = response && response.status === 200 && response.type === 'basic'
+    const cachePutCondition =
+      response && response.status === 200 && response.type === 'basic'
     if (cachePutCondition) {
       await cache.put(request, response.clone())
     }
@@ -25,21 +24,21 @@ const networkFirst = async (request) => {
   }
 }
 
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
     caches
       .open(CACHE_NAME)
-      .then((cache) => {
+      .then(cache => {
         return cache.addAll(urlsToCache)
       })
       .then(() => self.skipWaiting())
-      .catch((err) => {
+      .catch(err => {
         console.error('Cache installation failed:', err)
       })
   )
 })
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   const { request } = event
   const { url, method } = request
 
