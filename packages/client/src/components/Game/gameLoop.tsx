@@ -31,21 +31,20 @@ export const gameLoop = (
   drawPlayer(context, playerRef.current)
   drawEnemies(context, enemiesRef.current)
 
-  let collisionOccurred = false
+  const collidedEnemy = enemiesRef.current.find(enemy =>
+    detectEnemyCollision(playerRef.current, enemy)
+  )
 
-  enemiesRef.current.forEach(enemy => {
-    if (!collisionOccurred && detectEnemyCollision(playerRef.current, enemy)) {
-      collisionOccurred = true
-      HandlePlayerHit(
-        livesRef,
-        handleGameOver,
-        () => {
-          playerRef.current = { ...playerRef.current, x: 400, y: 560 }
-        },
-        () => {
-          enemiesRef.current = enemiesRef.current.map(e => ({ ...e }))
-        }
-      )
-    }
-  })
+  if (collidedEnemy) {
+    HandlePlayerHit(
+      livesRef,
+      handleGameOver,
+      () => {
+        playerRef.current = { ...playerRef.current, x: 400, y: 560 }
+      },
+      () => {
+        enemiesRef.current = enemiesRef.current.map(e => ({ ...e }))
+      }
+    )
+  }
 }

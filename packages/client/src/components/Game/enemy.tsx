@@ -1,32 +1,18 @@
 import React from 'react'
 import { Enemy, Player } from '@/components/Game/gameTypes'
 
+const enemyParams = {
+  width: 70,
+  height: 70,
+  speed: 0,
+  direction: { x: 0, y: 0 },
+}
+
 export const initializeEnemies = (): Enemy[] => {
   return [
-    {
-      x: 10,
-      y: 55,
-      width: 70,
-      height: 70,
-      speed: 0,
-      direction: { x: 0, y: 0 },
-    },
-    {
-      x: 320,
-      y: 250,
-      width: 70,
-      height: 70,
-      speed: 0,
-      direction: { x: 0, y: 0 },
-    },
-    {
-      x: 715,
-      y: 60,
-      width: 70,
-      height: 70,
-      speed: 0,
-      direction: { x: 0, y: 0 },
-    },
+    { ...enemyParams, x: 50, y: 55 },
+    { ...enemyParams, x: 320, y: 250 },
+    { ...enemyParams, x: 715, y: 60 },
   ]
 }
 
