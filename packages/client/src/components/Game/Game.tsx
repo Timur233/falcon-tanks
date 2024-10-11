@@ -3,12 +3,8 @@ import './Game.scss'
 import { initializeEnemies } from '@/components/Game/enemy'
 import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
-import {
-  handleKeyDown,
-  handleKeyUp,
-  updatePlayerMovement,
-} from '@/components/Game/controls'
-import { ControlsProps, Obstacle } from '@/components/Game/gameTypes'
+import { handleKeyDown, handleKeyUp } from '@/components/Game/controls'
+import { Obstacle } from '@/components/Game/gameTypes'
 import { initializeObstacle } from '@/components/Game/obstacle'
 import { Modal } from '../common/Modal/Modal'
 
@@ -40,19 +36,12 @@ export const Game: React.FC = () => {
     if (!isPausedRef.current && !isGameOver && canvasRef.current) {
       const context = canvasRef.current.getContext('2d')
       if (context) {
-        const moveProps: ControlsProps = {
-          playerRef,
-          obstacles: obstaclesRef.current,
-          canvasWidth: canvasRef.current.width,
-          canvasHeight: canvasRef.current.height,
-        }
-        updatePlayerMovement(moveProps)
-
         gameLoop(
           context,
+          canvasRef,
           playerRef,
           enemiesRef,
-          obstaclesRef.current,
+          obstaclesRef,
           livesRef,
           handleGameOver
         )
