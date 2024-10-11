@@ -23,10 +23,6 @@ export interface Obstacle {
   height: number
 }
 
-export interface KeyMap {
-  [key: string]: boolean
-}
-
 export interface ControlsProps {
   playerRef: React.MutableRefObject<Player>
   obstacles: Obstacle[]
