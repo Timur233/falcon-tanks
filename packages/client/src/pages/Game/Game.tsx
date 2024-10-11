@@ -3,7 +3,7 @@ import { Game as GamePrototype } from '@/components/Game/Game'
 import { Modal } from '@/components/common/Modal/Modal'
 import { Button } from '@/components/ui/Button/Button'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Arrows } from './components/Arrows/Arrows'
 import { FireControll } from './components/FireControll/FireControll'
 import { KillsCounter } from './components/KillsCounter/KillsCounter'
@@ -38,12 +38,12 @@ export const Game = () => {
     })
   }
 
-  const pauseHandler = () => {
+  const pauseHandler = useCallback(() => {
     setGameState(state => ({
       ...state,
-      isGamePused: !gameState.isGamePused,
+      isGamePused: !state.isGamePused,
     }))
-  }
+  }, [])
 
   const deathHandler = useCallback((lives: number) => {
     setGameState(state => ({
@@ -88,6 +88,20 @@ export const Game = () => {
     },
     [setButtonsState]
   )
+
+  useEffect(() => {
+    const escapeKeyDownHandler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        pauseHandler()
+      }
+    }
+
+    window.addEventListener('keydown', escapeKeyDownHandler)
+
+    return () => {
+      window.removeEventListener('keydown', escapeKeyDownHandler)
+    }
+  }, [pauseHandler])
 
   return (
     <section className="game-page">
