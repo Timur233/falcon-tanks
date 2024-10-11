@@ -27,6 +27,7 @@ export const Game = () => {
     isGameStarted: false,
     isGamePused: false,
     isGameOver: false,
+    isGameWinning: false,
   })
 
   const startGameHandler = () => {
@@ -35,6 +36,7 @@ export const Game = () => {
       isGameStarted: true,
       isGamePused: false,
       isGameOver: false,
+      isGameWinning: false,
     })
   }
 
@@ -56,6 +58,17 @@ export const Game = () => {
     setGameState({
       lives: 0,
       isGameOver: true,
+      isGameWinning: false,
+      isGameStarted: false,
+      isGamePused: true,
+    })
+  }, [])
+
+  const gameWiningHandler = useCallback(() => {
+    setGameState({
+      lives: 0,
+      isGameOver: false,
+      isGameWinning: true,
       isGameStarted: false,
       isGamePused: true,
     })
@@ -120,14 +133,15 @@ export const Game = () => {
                 isGamePused={gameState.isGamePused}
                 onDeath={deathHandler}
                 onGameOver={gameOverHandler}
+                onGameWining={gameWiningHandler}
                 onKeyDownUp={changeButtonsState}
               />
 
               <div
-                data-is-started={gameState.isGameStarted}
-                data-is-gameover={gameState.isGameOver}
                 className={`start-screen${
-                  !gameState.isGameStarted && !gameState.isGameOver
+                  !gameState.isGameStarted &&
+                  !gameState.isGameOver &&
+                  !gameState.isGameWinning
                     ? ' start-screen_show'
                     : ''
                 }`}>
@@ -143,6 +157,18 @@ export const Game = () => {
                   gameState.isGameOver ? ' game-over-screen_show' : ''
                 }`}>
                 <span className="game-over-screen__title">Game Over</span>
+                <Button
+                  text="Начать заново"
+                  onClick={startGameHandler}
+                  useFixWidth
+                />
+              </div>
+
+              <div
+                className={`win-screen${
+                  gameState.isGameWinning ? ' win-screen_show' : ''
+                }`}>
+                <span className="win-screen__title">Победа!</span>
                 <Button
                   text="Начать заново"
                   onClick={startGameHandler}
@@ -166,7 +192,8 @@ export const Game = () => {
                 pauseIcon={
                   gameState.isGamePused &&
                   gameState.isGameStarted &&
-                  !gameState.isGameOver ? (
+                  !gameState.isGameOver &&
+                  !gameState.isGameWinning ? (
                     <Icon id="arrow-right" width={12} height={16}></Icon>
                   ) : (
                     <Icon id="pause-icon" width={16} height={17}></Icon>

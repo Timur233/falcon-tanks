@@ -17,6 +17,7 @@ type GamePropsType = {
   isGamePused: boolean
   onDeath: (lives: number) => void
   onGameOver: () => void
+  onGameWining: () => void
   onKeyDownUp: (btnStates: BtnStates) => void
 }
 
@@ -27,8 +28,11 @@ export const Game = (props: GamePropsType) => {
     isGamePused,
     onDeath,
     onGameOver,
+    onGameWining,
     onKeyDownUp,
   } = props
+
+  // TODO: Нужно обработать победу в игре
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)

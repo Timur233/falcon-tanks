@@ -156,7 +156,8 @@ $border-color: #70842f;
   }
 }
 
-.game-over-screen {
+.game-over-screen,
+.win-screen {
   display: none;
   flex-direction: column;
   align-items: center;
@@ -177,4 +178,8 @@ $border-color: #70842f;
   &_show {
     display: flex;
   }
+}
+
+.win-screen {
+  background-image: url('@/assets/images/win-screen.png');
 }
