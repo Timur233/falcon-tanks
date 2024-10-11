@@ -19,6 +19,7 @@ export const gameLoop = (
   enemiesRef: React.MutableRefObject<Enemy[]>,
   obstacles: Obstacle[],
   livesRef: React.MutableRefObject<number>,
+  handleDeath: (lives: number) => void,
   handleGameOver: () => void
 ) => {
   clearCanvas(context)
@@ -41,6 +42,8 @@ export const gameLoop = (
         () => resetPlayerPosition(playerRef),
         () => respawnEnemies(enemiesRef)
       )
+
+      handleDeath(livesRef.current)
     }
   })
 }

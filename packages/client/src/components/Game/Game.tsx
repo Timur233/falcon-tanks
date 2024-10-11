@@ -10,35 +10,40 @@ import {
 } from '@/components/Game/controls'
 import { ControlsProps, Obstacle } from '@/components/Game/gameTypes'
 import { initializeObstacle } from '@/components/Game/obstacle'
-import { Modal } from '../common/Modal/Modal'
 
-const livesUse = 3
+type GamePropsType = {
+  lives: number
+  isGameStarted: boolean
+  isGamePused: boolean
+  onDeath: (lives: number) => void
+  onGameOver: () => void
+}
 
-export const Game: React.FC = () => {
+export const Game = (props: GamePropsType) => {
+  const { lives, isGameStarted, isGamePused, onDeath, onGameOver } = props
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
   const enemiesRef = useRef(initializeEnemies(5))
   const obstaclesRef = useRef<Obstacle[]>(initializeObstacle())
-  const livesRef = useRef(livesUse)
-  const [gameStarted, setGameStarted] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
+  const livesRef = useRef(0)
   const isPausedRef = useRef(false)
+
+  const [isGameRunning, setIsGameRunning] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
 
-  const togglePause = useCallback(() => {
-    setIsPaused(prev => !prev)
-    isPausedRef.current = !isPausedRef.current // Обновляем ref для паузы
-  }, [])
-
   const handleGameOver = useCallback(() => {
+    onGameOver()
     setIsGameOver(true)
-    setIsPaused(true)
+    setIsGameRunning(false)
+
     isPausedRef.current = true
-  }, [])
+  }, [onGameOver])
 
   const loop = useCallback(() => {
     if (!isPausedRef.current && !isGameOver && canvasRef.current) {
       const context = canvasRef.current.getContext('2d')
+
       if (context) {
         const moveProps: ControlsProps = {
           playerRef,
@@ -46,20 +51,31 @@ export const Game: React.FC = () => {
           canvasWidth: canvasRef.current.width,
           canvasHeight: canvasRef.current.height,
         }
-        updatePlayerMovement(moveProps)
 
+        updatePlayerMovement(moveProps)
         gameLoop(
           context,
           playerRef,
           enemiesRef,
           obstaclesRef.current,
           livesRef,
+          onDeath,
           handleGameOver
         )
       }
+
       requestAnimationFrame(loop)
     }
-  }, [isGameOver, handleGameOver, livesRef])
+  }, [isGameOver, onDeath, handleGameOver])
+
+  const startGame = useCallback(() => {
+    setIsGameRunning(true)
+    isPausedRef.current = false
+    setIsGameOver(false)
+    livesRef.current = lives
+    playerRef.current = PLAYER_DEFAULT_PARAMS
+    enemiesRef.current = initializeEnemies(5)
+  }, [lives])
 
   useEffect(() => {
     const handleKeyDownWrapper = (event: KeyboardEvent) =>
@@ -76,38 +92,19 @@ export const Game: React.FC = () => {
   }, [])
 
   useEffect(() => {
-    if (gameStarted && !isPaused) {
+    if (isGameRunning && !isGamePused) {
       requestAnimationFrame(loop)
     }
-  }, [gameStarted, isPaused, loop])
+  }, [isGameRunning, isGamePused, loop])
 
-  const startGame = () => {
-    setGameStarted(true)
-    setIsPaused(false)
-    isPausedRef.current = false
-    setIsGameOver(false)
-    livesRef.current = livesUse
-    playerRef.current = PLAYER_DEFAULT_PARAMS
-    enemiesRef.current = initializeEnemies(5)
-  }
+  useEffect(() => {
+    livesRef.current = lives
+    isPausedRef.current = isGamePused
 
-  return (
-    <div className="game-container">
-      <div className="lives">{`Жизни: ${livesRef.current.toString()}`}</div>
-      <canvas ref={canvasRef} width={800} height={600}></canvas>
+    if (isGameStarted && isGameRunning === false) {
+      startGame()
+    }
+  }, [lives, isGameStarted, isGamePused, isGameRunning, startGame])
 
-      {!gameStarted ? (
-        <button onClick={startGame}>Начать игру</button>
-      ) : (
-        <button onClick={togglePause}>
-          {isPaused ? 'Продолжить' : 'Пауза'}
-        </button>
-      )}
-
-      <Modal show={isGameOver} onClose={() => setIsGameOver(false)}>
-        <h2>Игра окончена</h2>
-        <button onClick={startGame}>Заново</button>
-      </Modal>
-    </div>
-  )
+  return <canvas ref={canvasRef} width={800} height={600}></canvas>
 }

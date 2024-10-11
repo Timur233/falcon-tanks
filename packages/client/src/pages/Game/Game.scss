@@ -18,7 +18,7 @@ $border-color: #70842f;
 
 .game-wrapper {
   position: relative;
-  width: 800px;
+  width: 832px;
   height: auto;
   background-color: $c_black;
   border-radius: 8px;
@@ -144,20 +144,20 @@ $border-color: #70842f;
 }
 
 .start-screen {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   position: absolute;
   inset: 12px;
   background-color: $overlay-color;
 
-  &_hide {
-    display: none;
+  &_show {
+    display: flex;
   }
 }
 
 .game-over-screen {
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
@@ -172,5 +172,9 @@ $border-color: #70842f;
     font-weight: 900;
     text-transform: uppercase;
     margin-bottom: 16px;
+  }
+
+  &_show {
+    display: flex;
   }
 }

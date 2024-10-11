@@ -9,6 +9,9 @@ import { FireControll } from './components/FireControll/FireControll'
 import { KillsCounter } from './components/KillsCounter/KillsCounter'
 import { PauseHelp } from './components/PauseHelp/PauseHelp'
 import './Game.scss'
+import { Icon } from '@/components/ui/Icon/Icon'
+
+const DEFAULT_LIVES_COUNT = 3
 
 export const Game = () => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
@@ -19,10 +22,43 @@ export const Game = () => {
     rightButton: false,
     fireButton: false,
   })
-  const [isStartedGame, setIsStartedGame] = useState(false)
+  const [gameState, setGameState] = useState({
+    lives: DEFAULT_LIVES_COUNT,
+    isGameStarted: false,
+    isGamePused: false,
+    isGameOver: false,
+  })
+
+  const startGameHandler = () => {
+    setGameState({
+      lives: DEFAULT_LIVES_COUNT,
+      isGameStarted: true,
+      isGamePused: false,
+      isGameOver: false,
+    })
+  }
 
   const pauseHandler = () => {
-    console.log('pauseHandler')
+    setGameState(state => ({
+      ...state,
+      isGamePused: !gameState.isGamePused,
+    }))
+  }
+
+  const deathHandler = (lives: number) => {
+    setGameState(state => ({
+      ...state,
+      lives,
+    }))
+  }
+
+  const gameOverHandler = () => {
+    setGameState({
+      lives: 0,
+      isGameOver: true,
+      isGameStarted: false,
+      isGamePused: true,
+    })
   }
 
   const helpHandler = () => {
@@ -85,21 +121,39 @@ export const Game = () => {
             <div className="game-page__wrapper game-wrapper">
               <div className="game-wrapper__decor-hr"></div>
               <div className="game-wrapper__decor-vr"></div>
-              <GamePrototype />
+              <GamePrototype
+                lives={gameState.lives}
+                isGameStarted={gameState.isGameStarted}
+                isGamePused={gameState.isGamePused}
+                onDeath={deathHandler}
+                onGameOver={gameOverHandler}
+              />
+
               <div
-                style={{ display: 'none' }}
+                data-is-started={gameState.isGameStarted}
+                data-is-gameover={gameState.isGameOver}
                 className={`start-screen${
-                  isStartedGame ? ' start-screen_hide' : ''
+                  !gameState.isGameStarted && !gameState.isGameOver
+                    ? ' start-screen_show'
+                    : ''
                 }`}>
                 <Button
                   text="Начать игру"
-                  onClick={() => setIsStartedGame(true)}
+                  onClick={startGameHandler}
                   useFixWidth
                 />
               </div>
-              <div className="game-over-screen" style={{ display: 'none' }}>
+
+              <div
+                className={`game-over-screen${
+                  gameState.isGameOver ? ' game-over-screen_show' : ''
+                }`}>
                 <span className="game-over-screen__title">Game Over</span>
-                <Button text="Начать заново" useFixWidth />
+                <Button
+                  text="Начать заново"
+                  onClick={startGameHandler}
+                  useFixWidth
+                />
               </div>
             </div>
           </div>
@@ -109,12 +163,19 @@ export const Game = () => {
 
               <CustomPageTitle
                 className="game-controll__lives"
-                text="3"
+                text={gameState.lives.toString()}
                 tagName="span"
               />
 
               <PauseHelp
                 className="game-controll__pause-help-buttons"
+                pauseIcon={
+                  gameState.isGamePused && !gameState.isGameOver ? (
+                    <Icon id="arrow-right" width={12} height={16}></Icon>
+                  ) : (
+                    <Icon id="pause-icon" width={16} height={17}></Icon>
+                  )
+                }
                 pauseHandler={pauseHandler}
                 helpHandler={helpHandler}
               />

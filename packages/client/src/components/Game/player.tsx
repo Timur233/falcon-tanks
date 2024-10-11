@@ -33,11 +33,11 @@ export const HandlePlayerHit = (
 ) => {
   const newLives = livesRef.current - 1
 
+  livesRef.current = newLives
+  resetPlayerPosition() // Сбрасываем позицию игрока
+  respawnEnemies() // Респавн врагов
+
   if (newLives <= 0) {
     handleGameOver()
-  } else {
-    livesRef.current = newLives
-    resetPlayerPosition() // Сбрасываем позицию игрока
-    respawnEnemies() // Респавн врагов
   }
 }
