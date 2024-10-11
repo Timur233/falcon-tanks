@@ -2,7 +2,7 @@ import { Player } from '@/components/Game/gameTypes'
 
 export const PLAYER_DEFAULT_PARAMS = {
   x: 400,
-  y: 300,
+  y: 560,
   width: 70,
   height: 70,
   speed: 2,
@@ -31,13 +31,12 @@ export const HandlePlayerHit = (
   resetPlayerPosition: () => void,
   respawnEnemies: () => void
 ) => {
-  const newLives = livesRef.current - 1
+  livesRef.current -= 1
 
-  if (newLives <= 0) {
+  if (livesRef.current <= 0) {
     handleGameOver()
   } else {
-    livesRef.current = newLives
-    resetPlayerPosition() // Сбрасываем позицию игрока
-    respawnEnemies() // Респавн врагов
+    resetPlayerPosition()
+    respawnEnemies()
   }
 }

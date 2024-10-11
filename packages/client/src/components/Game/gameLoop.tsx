@@ -1,5 +1,5 @@
-import { HandlePlayerHit, resetPlayerPosition } from './player'
-import { updateEnemyPositions, respawnEnemies } from './enemy'
+import { HandlePlayerHit } from './player'
+import { updateEnemyPositions } from './enemy'
 import { clearCanvas, drawPlayer, drawEnemies, drawObstacles } from './utils'
 import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
 import { detectEnemyCollision } from '@/components/Game/collision'
@@ -31,15 +31,20 @@ export const gameLoop = (
   drawPlayer(context, playerRef.current)
   drawEnemies(context, enemiesRef.current)
 
-  // Проверка на столкновения между игроком и врагами
+  let collisionOccurred = false
+
   enemiesRef.current.forEach(enemy => {
-    if (detectEnemyCollision(playerRef.current, enemy)) {
-      // Обработка столкновения: уменьшаем жизни
+    if (!collisionOccurred && detectEnemyCollision(playerRef.current, enemy)) {
+      collisionOccurred = true
       HandlePlayerHit(
         livesRef,
         handleGameOver,
-        () => resetPlayerPosition(playerRef),
-        () => respawnEnemies(enemiesRef)
+        () => {
+          playerRef.current = { ...playerRef.current, x: 400, y: 560 }
+        },
+        () => {
+          enemiesRef.current = enemiesRef.current.map(e => ({ ...e }))
+        }
       )
     }
   })

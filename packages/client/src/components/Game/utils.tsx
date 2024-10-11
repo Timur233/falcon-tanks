@@ -70,7 +70,22 @@ export const drawObstacles = (
   context: CanvasRenderingContext2D,
   obstacles: Obstacle[]
 ) => {
+  const SPRITE_SIZE = 50
+
   obstacles.forEach(obstacle => {
-    context.drawImage(wallSprite, obstacle.x, obstacle.y)
+    const horizontalCount = Math.ceil(obstacle.width / SPRITE_SIZE)
+    const verticalCount = Math.ceil(obstacle.height / SPRITE_SIZE)
+
+    for (let i = 0; i < horizontalCount; i++) {
+      for (let j = 0; j < verticalCount; j++) {
+        const x = obstacle.x + i * SPRITE_SIZE
+        const y = obstacle.y + j * SPRITE_SIZE
+
+        const width = Math.min(SPRITE_SIZE, obstacle.width - i * SPRITE_SIZE)
+        const height = Math.min(SPRITE_SIZE, obstacle.height - j * SPRITE_SIZE)
+
+        context.drawImage(wallSprite, 0, 0, width, height, x, y, width, height)
+      }
+    }
   })
 }

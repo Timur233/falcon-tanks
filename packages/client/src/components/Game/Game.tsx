@@ -17,7 +17,7 @@ const livesUse = 3
 export const Game: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
-  const enemiesRef = useRef(initializeEnemies(5))
+  const enemiesRef = useRef(initializeEnemies())
   const obstaclesRef = useRef<Obstacle[]>(initializeObstacle())
   const livesRef = useRef(livesUse)
   const [gameStarted, setGameStarted] = useState(false)
@@ -86,9 +86,9 @@ export const Game: React.FC = () => {
     setIsPaused(false)
     isPausedRef.current = false
     setIsGameOver(false)
-    livesRef.current = livesUse
-    playerRef.current = PLAYER_DEFAULT_PARAMS
-    enemiesRef.current = initializeEnemies(5)
+    livesRef.current = 3
+    playerRef.current = { ...PLAYER_DEFAULT_PARAMS }
+    enemiesRef.current = initializeEnemies()
   }
 
   return (
