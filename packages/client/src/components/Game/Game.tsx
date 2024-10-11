@@ -35,6 +35,7 @@ export const Game = (props: GamePropsType) => {
   const obstaclesRef = useRef<Obstacle[]>(initializeObstacle())
   const livesRef = useRef(0)
   const isPausedRef = useRef(false)
+  const isStartedLoopRef = useRef(false)
 
   const [isGameRunning, setIsGameRunning] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
@@ -83,6 +84,7 @@ export const Game = (props: GamePropsType) => {
     livesRef.current = lives
     playerRef.current = PLAYER_DEFAULT_PARAMS
     enemiesRef.current = initializeEnemies(5)
+    isStartedLoopRef.current = false
   }, [lives])
 
   useEffect(() => {
@@ -97,10 +99,12 @@ export const Game = (props: GamePropsType) => {
       window.removeEventListener('keydown', handleKeyDownUpWrapper)
       window.removeEventListener('keyup', handleKeyDownUpWrapper)
     }
-  }, [])
+  }, [onKeyDownUp])
 
   useEffect(() => {
-    if (isGameRunning && !isGamePused) {
+    if (isGameRunning && !isGamePused && !isStartedLoopRef.current) {
+      isStartedLoopRef.current = true
+
       requestAnimationFrame(loop)
     }
   }, [isGameRunning, isGamePused, loop])
@@ -108,6 +112,10 @@ export const Game = (props: GamePropsType) => {
   useEffect(() => {
     livesRef.current = lives
     isPausedRef.current = isGamePused
+
+    if (!isGamePused) {
+      isStartedLoopRef.current = false
+    }
 
     if (isGameStarted && isGameRunning === false) startGame()
   }, [lives, isGameStarted, isGamePused, isGameRunning, startGame])
