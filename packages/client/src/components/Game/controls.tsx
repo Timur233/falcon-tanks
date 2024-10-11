@@ -72,7 +72,10 @@ export const updatePlayerMovement = (props: ControlsProps) => {
   if (!lastMovementAction) return
 
   const vector = VECTORS[lastMovementAction]
-  if (vector) props.playerRef.current.direction = vector
+
+  if (!vector) return
+
+  props.playerRef.current.direction = vector
 
   newX += vector.x * speed
   newY += vector.y * speed
