@@ -17,10 +17,10 @@ type Vector = {
 }
 
 const MOVEMENT_CONTROLS: Record<Action, string[]> = {
-  [Action.MoveUp]: ['ArrowUp', 'w', 'ц'],
-  [Action.MoveDown]: ['ArrowDown', 's', 'ы'],
-  [Action.MoveLeft]: ['ArrowLeft', 'a', 'ф'],
-  [Action.MoveRight]: ['ArrowRight', 'd', 'в'],
+  [Action.MoveUp]: ['ArrowUp', 'w', 'ц', 'W', 'Ц'],
+  [Action.MoveDown]: ['ArrowDown', 's', 'ы', 'S', 'Ы'],
+  [Action.MoveLeft]: ['ArrowLeft', 'a', 'ф', 'A', 'Ф'],
+  [Action.MoveRight]: ['ArrowRight', 'd', 'в', 'D', 'В'],
 }
 
 const VECTORS: Record<Action, Vector> = {
