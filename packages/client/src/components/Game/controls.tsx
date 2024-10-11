@@ -1,44 +1,82 @@
-import { ControlsProps, KeyMap } from '@/components/Game/gameTypes'
+import { ControlsProps } from '@/components/Game/gameTypes'
 
 import { detectCollision } from '@/components/Game/collision'
 
-const keyMap: KeyMap = {}
+let pressedKeys: string[] = []
 
-// Обработчик нажатия клавиш
+enum Action {
+  MoveUp = 'MoveUp',
+  MoveDown = 'MoveDown',
+  MoveLeft = 'MoveLeft',
+  MoveRight = 'MoveRight',
+}
+
+type Vector = {
+  x: -1 | 0 | 1
+  y: -1 | 0 | 1
+}
+
+const MOVEMENT_CONTROLS: Record<Action, string[]> = {
+  [Action.MoveUp]: ['ArrowUp', 'w', 'ц'],
+  [Action.MoveDown]: ['ArrowDown', 's', 'ы'],
+  [Action.MoveLeft]: ['ArrowLeft', 'a', 'ф'],
+  [Action.MoveRight]: ['ArrowRight', 'd', 'в'],
+}
+
+const VECTORS: Record<Action, Vector> = {
+  [Action.MoveUp]: { x: 0, y: -1 },
+  [Action.MoveDown]: { x: 0, y: 1 },
+  [Action.MoveLeft]: { x: -1, y: 0 },
+  [Action.MoveRight]: { x: 1, y: 0 },
+}
+
 export const handleKeyDown = (key: string) => {
-  keyMap[key] = true
+  if (!pressedKeys.includes(key)) {
+    pressedKeys.push(key)
+  }
 }
 
-// Обработчик отпускания клавиш
 export const handleKeyUp = (key: string) => {
-  delete keyMap[key]
+  pressedKeys = pressedKeys.filter(currentKey => currentKey !== key)
 }
 
-// Функция для обновления позиции игрока на основе нажатых клавиш
+const getMovementControlByKey = (key: string): Action | null => {
+  for (const [action, keys] of Object.entries(MOVEMENT_CONTROLS)) {
+    if (keys.includes(key)) {
+      return action as Action
+    }
+  }
+
+  return null
+}
+
+const getLastMovementAction = (): Action | null => {
+  for (let i = pressedKeys.length - 1; i >= 0; i--) {
+    const action = getMovementControlByKey(pressedKeys[i])
+
+    if (action) {
+      return action
+    }
+  }
+
+  return null
+}
+
 export const updatePlayerMovement = (props: ControlsProps) => {
   const speed = props.playerRef.current.speed
   let newX = props.playerRef.current.x
   let newY = props.playerRef.current.y
 
-  // Определение направления движения
-  if (keyMap['ArrowUp'] || keyMap['w'] || keyMap['ц']) {
-    props.playerRef.current.direction = { x: 0, y: 1 }
-    newY -= speed
-  }
-  if (keyMap['ArrowDown'] || keyMap['s'] || keyMap['ы']) {
-    props.playerRef.current.direction = { x: 0, y: -1 }
-    newY += speed
-  }
-  if (keyMap['ArrowLeft'] || keyMap['a'] || keyMap['ф']) {
-    props.playerRef.current.direction = { x: -1, y: 0 }
-    newX -= speed
-  }
-  if (keyMap['ArrowRight'] || keyMap['d'] || keyMap['в']) {
-    props.playerRef.current.direction = { x: 1, y: 0 }
-    newX += speed
-  }
+  const lastMovementAction = getLastMovementAction()
 
-  // Обработка столкновений с препятствиями
+  if (!lastMovementAction) return
+
+  const vector = VECTORS[lastMovementAction]
+  if (vector) props.playerRef.current.direction = vector
+
+  newX += vector.x * speed
+  newY += vector.y * speed
+
   const hasCollision = props.obstacles.some(obstacle => {
     return detectCollision(
       { ...props.playerRef.current, x: newX, y: newY },
@@ -46,9 +84,7 @@ export const updatePlayerMovement = (props: ControlsProps) => {
     )
   })
 
-  // Если есть столкновение, то оставить предыдущую позицию
   if (!hasCollision) {
-    // Ограничение движения по краям canvas
     newX = Math.max(
       0,
       Math.min(newX, props.canvasWidth - props.playerRef.current.width)
@@ -58,7 +94,6 @@ export const updatePlayerMovement = (props: ControlsProps) => {
       Math.min(newY, props.canvasHeight - props.playerRef.current.height)
     )
 
-    // Обновляем позицию игрока в референсе
     props.playerRef.current.x = newX
     props.playerRef.current.y = newY
   }
