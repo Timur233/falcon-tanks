@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import './PrivateLayout.scss'
+import { Loader } from '@/components/ui/Loader/Loader'
 
 export default function PrivateLayout() {
   const user = useSelector<RootState, UserType>(state => state.authReducer.user)
@@ -19,10 +20,10 @@ export default function PrivateLayout() {
         .unwrap()
         .then(data => {
           dispatch(actions.setUser(data))
-          window.sessionStorage.setItem('userIsLogged', '1') // 0
+          window.sessionStorage.setItem('userIsLogged', '1')
         })
         .catch(() => {
-          window.sessionStorage.setItem('userIsLogged', '0') // 0
+          window.sessionStorage.setItem('userIsLogged', '0')
 
           toast.error('Необходимо авторизоваться', {
             autoClose: 1500,
@@ -32,7 +33,7 @@ export default function PrivateLayout() {
           })
         })
     }
-  }, [])
+  }, [dispatch, navigate, userIsLogged])
 
   if (userIsLogged) {
     return (
@@ -44,5 +45,6 @@ export default function PrivateLayout() {
       </div>
     )
   }
-  return user === null ? <h1>Загрузка...</h1> : <Outlet />
+
+  return user === null ? <Loader show={true} /> : <Outlet />
 }
