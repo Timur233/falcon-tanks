@@ -1,10 +1,11 @@
 import { ControlsProps } from '@/components/Game/gameTypes'
-
 import { detectCollision } from '@/components/Game/collision'
 import { createBullet } from '@/components/Game/bullet'
 
 let pressedKeys: string[] = []
 let shootPressed = false // Флаг для стрельбы
+let lastShotTime = 0 // Время последнего выстрела
+const SHOOT_DELAY = 500 // Задержка между выстрелами (в миллисекундах)
 
 enum Action {
   MoveUp = 'MoveUp',
@@ -90,11 +91,13 @@ export const updatePlayerAction = (props: ControlsProps) => {
 
   if (!vector) return
 
+  const currentTime = Date.now() // Получаем текущее время
+
   if (lastMovementAction === Action.Shoot) {
-    // Стреляем только при первом нажатии на пробел
-    if (shootPressed) {
+    // Ограничение скорости стрельбы с помощью таймера
+    if (shootPressed && currentTime - lastShotTime >= SHOOT_DELAY) {
       props.bulletsRef.current.push(createBullet(props.playerRef.current))
-      shootPressed = false // Сбрасываем флаг после выстрела
+      lastShotTime = currentTime // Обновляем время последнего выстрела
     }
   } else {
     props.playerRef.current.direction = vector
