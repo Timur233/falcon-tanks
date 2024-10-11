@@ -1,9 +1,10 @@
 import { ComponentType, useEffect } from 'react'
-import { actions, getUser, UserType } from '@/store/reducers/auth-reducer'
+import { UserType } from '@/store/reducers/auth-reducer'
 import { toast } from 'react-toastify'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { RootState, useAppDispatch } from '@/store'
 import { useSelector } from 'react-redux'
+import { userService } from '@/services/userService'
 
 type WithAuthUserProps = {
   userIsLogged: boolean
@@ -18,42 +19,36 @@ export default function withAuthUser<P extends object>(
     const user = useSelector<RootState, UserType>(
       state => state.authReducer.user
     )
-    const userIsLogged = window.sessionStorage.getItem('userIsLogged') === '1'
+    const userIsLogged = userService.isLoggedIn()
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
-    const location = useLocation()
-    const { pathname } = location
+    const { pathname } = useLocation()
+    const isAuthPath = import.meta.env.VITE_AUTH_PATHNAMES.split(', ').includes(
+      pathname
+    )
 
-    const successAuth = (redirectTo: string) => {
-      toast.success('Вы уже авторизованы')
-      navigate(redirectTo)
+    const handleAuthentication = async () => {
+      const isAuthenticated = await userService.fetchUser(dispatch)
+
+      if (!isAuthenticated && !isAuthPath) {
+        toast.error('Необходимо авторизоваться', { autoClose: 1500 })
+        navigate('/sign-in')
+      }
     }
 
     useEffect(() => {
       if (!userIsLogged || user === null) {
-        dispatch(getUser())
-          .unwrap()
-          .then(data => {
-            dispatch(actions.setUser(data))
-            window.sessionStorage.setItem('userIsLogged', '1') // 0
-
-            if (redirectTo) {
-              successAuth(redirectTo)
-            }
-          })
-          .catch(() => {
-            window.sessionStorage.setItem('userIsLogged', '0') // 1
-
-            if (!['/sign-in', '/sign-up'].includes(pathname)) {
-              toast.error('Необходимо авторизоваться')
-              navigate('/sign-in')
-            }
-          })
+        handleAuthentication()
       } else if (redirectTo) {
-        successAuth(redirectTo)
+        toast.success('Вы уже авторизованы', { autoClose: 1500 })
+        navigate(redirectTo)
       }
     }, [user, userIsLogged])
 
-    return <Component {...props} userIsLogged={userIsLogged} user={user} />
+    if (userIsLogged || isAuthPath) {
+      return <Component {...props} userIsLogged={userIsLogged} user={user} />
+    }
+
+    return <h1>Загрузка...</h1>
   }
 }

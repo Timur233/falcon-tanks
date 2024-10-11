@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { AppDispatch, InferAppActions } from '@/store'
+import { InferAppActions } from '@/store'
 import backendApi from '@/api/backendApi'
 
 export type UserType = {
