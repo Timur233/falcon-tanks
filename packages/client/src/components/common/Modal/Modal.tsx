@@ -17,9 +17,9 @@ export const Modal = (props: ModalPropsType) => {
 
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      event.preventDefault()
+      if (event.key === 'Escape' && show) {
+        event.preventDefault()
 
-      if (event.key === 'Escape') {
         onClose()
       }
     }
@@ -29,7 +29,7 @@ export const Modal = (props: ModalPropsType) => {
     return () => {
       document.removeEventListener('keydown', handleEscape)
     }
-  }, [onClose])
+  }, [onClose, show])
 
   return ReactDOM.createPortal(
     <div className={`modal ${show ? 'modal_show' : ''}`} onClick={onClose}>
