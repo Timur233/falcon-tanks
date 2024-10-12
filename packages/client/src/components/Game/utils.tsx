@@ -134,12 +134,31 @@ export const drawObstacles = (
   })
 }
 
+const bulletSprite = new Image()
+
+bulletSprite.src = bulletSpritePath
+
 export const drawBullets = (
   context: CanvasRenderingContext2D,
   bullets: AbstractEntity[]
 ) => {
-  context.fillStyle = 'yellow'
   bullets.forEach(bullet => {
-    context.fillRect(bullet.x, bullet.y, bullet.width, bullet.height)
+    context.save()
+    context.translate(bullet.x + bullet.width / 2, bullet.y + bullet.height / 2)
+    context.rotate(Math.atan2(bullet.direction.x, -bullet.direction.y))
+
+    context.drawImage(
+      bulletSprite,
+      0,
+      0,
+      bulletSprite.width,
+      bulletSprite.height,
+      -bulletSprite.width / 2,
+      -bulletSprite.height / 2,
+      bulletSprite.width,
+      bulletSprite.height
+    )
+
+    context.restore()
   })
 }
