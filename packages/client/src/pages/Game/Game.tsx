@@ -97,6 +97,18 @@ export const Game = () => {
     [setButtonsState]
   )
 
+  const getPauseIcon = () => {
+    if (
+      gameState.isGamePaused &&
+      gameState.isGameStarted &&
+      !gameState.isGameOver &&
+      !gameState.isGameWinning
+    ) {
+      return <Icon id="arrow-right" width={12} height={16} />
+    }
+    return <Icon id="pause-icon" width={16} height={17} />
+  }
+
   useEffect(() => {
     const escapeKeyDownHandler = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -170,16 +182,7 @@ export const Game = () => {
 
               <PauseHelp
                 className="game-controll__pause-help-buttons"
-                pauseIcon={
-                  gameState.isGamePaused &&
-                  gameState.isGameStarted &&
-                  !gameState.isGameOver &&
-                  !gameState.isGameWinning ? (
-                    <Icon id="arrow-right" width={12} height={16}></Icon>
-                  ) : (
-                    <Icon id="pause-icon" width={16} height={17}></Icon>
-                  )
-                }
+                pauseIcon={getPauseIcon()}
                 pauseHandler={pauseHandler}
                 helpHandler={() => setIsInfoModalOpen(true)}
               />
