@@ -6,8 +6,14 @@ export const PLAYER_DEFAULT_PARAMS = {
   y: 560,
   width: 70,
   height: 70,
-  speed: 3,
+  speed: 2,
   direction: { x: 0, y: 0 },
+  animation: {
+    currentFrame: 0,      // Текущий кадр спрайта
+    totalFrames: 4,       // Общее количество кадров в спрайте
+    frameInterval: 10,    // Интервал для смены кадра (в циклах или миллисекундах)
+    frameCount: 0,        // Счетчик кадров для контроля интервала
+  }
 }
 
 export const resetPlayerPosition = (

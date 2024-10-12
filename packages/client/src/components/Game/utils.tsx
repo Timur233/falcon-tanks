@@ -1,5 +1,6 @@
-import enemiesSpritePath from '@/assets/images/sprites/enemy.svg'
-import tankSpritePath from '@/assets/images/sprites/tank.svg'
+import enemiesSpritePath from '@/assets/images/sprites/enemy.png'
+import playerSpritePath from '@/assets/images/sprites/tank.png'
+import bulletSpritePath from '@/assets/images/sprites/bullet.png'
 import wallSpritePath from '@/assets/images/sprites/wall.svg'
 import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
 
@@ -36,41 +37,59 @@ export const clearCanvas = (context: CanvasRenderingContext2D) => {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height)
 }
 
-const tankSprite = new Image()
-tankSprite.src = tankSpritePath
+const darawTank = (
+  sprite: HTMLImageElement, 
+  context: CanvasRenderingContext2D, 
+  data: AbstractEntity
+) => {
+  const { animation } = data
+  const { direction } = data
+  const moovment = direction.x !== 0 ? data.x : data.y
+  const spriteSettings = {
+    width: 0,
+    height: 0,
+    sourceX: 0,
+    sourceY: 0
+  }
 
-let lastPlayerDirection = { x: 0, y: 0 }
+  // Если смещение кратно 10 меняем кадр
+  if (moovment % animation.frameInterval === 0) { 
+    animation.currentFrame = (animation.currentFrame + 1) % 
+      animation?.totalFrames; 
+  }
+
+  spriteSettings.width = sprite.width / animation.totalFrames;
+  spriteSettings.height = sprite.height;
+  spriteSettings.sourceX = animation.currentFrame * spriteSettings.width; 
+  spriteSettings.sourceY = 0;
+
+  context.save()
+  context.translate(data.x + data.width / 2, data.y + data.height / 2)
+  context.rotate(Math.atan2(direction.x, -direction.y))
+  context.drawImage(
+    sprite,       
+    spriteSettings.sourceX,          
+    spriteSettings.sourceY,          
+    spriteSettings.width,      
+    spriteSettings.height,     
+    -data.width / 2,
+    -data.height / 2,
+    data.width,     
+    data.height     
+  ) 
+
+  context.restore()
+}
+
+const playerSprite = new Image()
+
+playerSprite.src = playerSpritePath
 
 export const drawPlayer = (
   context: CanvasRenderingContext2D,
   player: AbstractEntity
 ) => {
-  let direction = { ...player.direction }
-
-  const isPlayerIdle = direction.x === 0 && direction.y === 0
-
-  if (isPlayerIdle) {
-    direction = lastPlayerDirection
-  } else {
-    lastPlayerDirection = direction
-  }
-
-  context.save()
-
-  context.translate(player.x + player.width / 2, player.y + player.height / 2)
-
-  const angle = Math.atan2(direction.x, -direction.y)
-  context.rotate(angle)
-
-  context.drawImage(
-    tankSprite,
-    -player.width / 2,
-    -player.height / 2,
-    player.width,
-    player.height
-  )
-
-  context.restore()
+  darawTank(playerSprite, context, player)
 }
 
 const enemiesSprite = new Image()
@@ -83,35 +102,7 @@ export const drawEnemies = (
   enemies: Enemy[]
 ) => {
   enemies.forEach(enemy => {
-    let direction = { ...enemy.direction }
-
-    // Если враг не двигается, используем последнее направление
-    const isEnemyIdle = direction.x === 0 && direction.y === 0
-    if (isEnemyIdle) {
-      direction = lastEnemyDirection[enemy.id] || { x: 1, y: 0 } // по умолчанию вправо
-    } else {
-      lastEnemyDirection[enemy.id] = direction // сохраняем последнее направление для врага
-    }
-
-    context.save()
-
-    // Перемещаем контекст на позицию врага
-    context.translate(enemy.x + enemy.width / 2, enemy.y + enemy.height / 2)
-
-    // Вычисляем угол поворота на основе направления
-    const angle = Math.atan2(direction.x, -direction.y)
-    context.rotate(angle)
-
-    // Отрисовываем спрайт врага с учётом его ширины и высоты
-    context.drawImage(
-      enemiesSprite,
-      -enemy.width / 2,
-      -enemy.height / 2,
-      enemy.width,
-      enemy.height
-    )
-
-    context.restore()
+    darawTank(enemiesSprite, context, enemy)
   })
 }
 

@@ -1,3 +1,10 @@
+interface AnimationParams {
+  currentFrame: number,
+  totalFrames: number,
+  frameInterval: number,
+  frameCount?: number,
+}
+
 export interface AbstractEntity {
   x: number
   y: number
@@ -5,6 +12,7 @@ export interface AbstractEntity {
   height: number
   speed: number
   direction: { x: number; y: number }
+  animation: AnimationParams
 }
 
 export interface Enemy extends AbstractEntity {
