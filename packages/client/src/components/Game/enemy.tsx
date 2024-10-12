@@ -24,8 +24,8 @@ export const initializeRandomEnemies = (numberOfEnemies: number) => {
         currentFrame: 0,
         totalFrames: 4,
         frameInterval: 10,
-        frameCount: 0,    
-      }
+        frameCount: 0,
+      },
     }
     initialEnemies.push(enemy)
   }
@@ -34,41 +34,41 @@ export const initializeRandomEnemies = (numberOfEnemies: number) => {
 
 export const initializeCampanyEnemies = (): Enemy[] => {
   return [
-    { 
-      ...enemyParams, 
-      id: 0, 
-      x: 50, 
+    {
+      ...enemyParams,
+      id: 0,
+      x: 50,
       y: 55,
       animation: {
         currentFrame: 0,
         totalFrames: 4,
         frameInterval: 10,
-        frameCount: 0,    
-      }
+        frameCount: 0,
+      },
     },
-    { 
-      ...enemyParams, 
-      id: 1, 
-      x: 320, 
+    {
+      ...enemyParams,
+      id: 1,
+      x: 320,
       y: 250,
       animation: {
         currentFrame: 0,
         totalFrames: 4,
         frameInterval: 10,
-        frameCount: 0,    
-      }
+        frameCount: 0,
+      },
     },
-    { 
-      ...enemyParams, 
-      id: 2, 
-      x: 715, 
+    {
+      ...enemyParams,
+      id: 2,
+      x: 715,
       y: 60,
       animation: {
         currentFrame: 0,
         totalFrames: 4,
         frameInterval: 10,
-        frameCount: 0,    
-      }
+        frameCount: 0,
+      },
     },
   ]
 }

@@ -38,8 +38,8 @@ export const clearCanvas = (context: CanvasRenderingContext2D) => {
 }
 
 const darawTank = (
-  sprite: HTMLImageElement, 
-  context: CanvasRenderingContext2D, 
+  sprite: HTMLImageElement,
+  context: CanvasRenderingContext2D,
   data: AbstractEntity
 ) => {
   const { animation } = data
@@ -49,34 +49,34 @@ const darawTank = (
     width: 0,
     height: 0,
     sourceX: 0,
-    sourceY: 0
+    sourceY: 0,
   }
 
   // Если смещение кратно 10 меняем кадр
-  if (moovment % animation.frameInterval === 0) { 
-    animation.currentFrame = (animation.currentFrame + 1) % 
-      animation?.totalFrames; 
+  if (moovment % animation.frameInterval === 0) {
+    animation.currentFrame =
+      (animation.currentFrame + 1) % animation?.totalFrames
   }
 
-  spriteSettings.width = sprite.width / animation.totalFrames;
-  spriteSettings.height = sprite.height;
-  spriteSettings.sourceX = animation.currentFrame * spriteSettings.width; 
-  spriteSettings.sourceY = 0;
+  spriteSettings.width = sprite.width / animation.totalFrames
+  spriteSettings.height = sprite.height
+  spriteSettings.sourceX = animation.currentFrame * spriteSettings.width
+  spriteSettings.sourceY = 0
 
   context.save()
   context.translate(data.x + data.width / 2, data.y + data.height / 2)
   context.rotate(Math.atan2(direction.x, -direction.y))
   context.drawImage(
-    sprite,       
-    spriteSettings.sourceX,          
-    spriteSettings.sourceY,          
-    spriteSettings.width,      
-    spriteSettings.height,     
+    sprite,
+    spriteSettings.sourceX,
+    spriteSettings.sourceY,
+    spriteSettings.width,
+    spriteSettings.height,
     -data.width / 2,
     -data.height / 2,
-    data.width,     
-    data.height     
-  ) 
+    data.width,
+    data.height
+  )
 
   context.restore()
 }
@@ -93,6 +93,7 @@ export const drawPlayer = (
 }
 
 const enemiesSprite = new Image()
+
 enemiesSprite.src = enemiesSpritePath
 
 const lastEnemyDirection: Record<number, { x: number; y: number }> = {}

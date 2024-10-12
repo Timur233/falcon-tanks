@@ -1,8 +1,8 @@
 interface AnimationParams {
-  currentFrame: number,
-  totalFrames: number,
-  frameInterval: number,
-  frameCount?: number,
+  currentFrame: number
+  totalFrames: number
+  frameInterval: number
+  frameCount?: number
 }
 
 export interface AbstractEntity {
