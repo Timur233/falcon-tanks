@@ -3,23 +3,35 @@ import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
 import { createBullet } from '@/components/Game/bullet'
 import { detectCollision } from '@/components/Game/collision'
 
-export const initializeEnemies = (numberOfEnemies: number) => {
+const enemyParams = {
+  width: 70,
+  height: 70,
+  speed: 1,
+  direction: { x: 0, y: 0 },
+}
+
+export const initializeRandomEnemies = (numberOfEnemies: number) => {
   const initialEnemies: Enemy[] = []
   for (let i = 0; i < numberOfEnemies; i++) {
     // количество врагов
     const { x, y } = getRandomEdgePosition(800, 600)
     const enemy: Enemy = {
+      ...enemyParams,
       id: i,
       x,
       y,
-      width: 70,
-      height: 70,
-      speed: 1,
-      direction: { x: 0, y: 0 },
     }
     initialEnemies.push(enemy)
   }
   return initialEnemies as Enemy[]
+}
+
+export const initializeCampanyEnemies = (): Enemy[] => {
+  return [
+    { ...enemyParams, id: 0, x: 50, y: 55 },
+    { ...enemyParams, id: 1, x: 320, y: 250 },
+    { ...enemyParams, id: 2, x: 715, y: 60 },
+  ]
 }
 
 export const updateEnemyPositions = (
@@ -97,8 +109,8 @@ const isPositionOccupied = (
 }
 
 const respawnEnemy = (
-  enemy: AbstractEntity,
-  enemies: AbstractEntity[],
+  enemy: Enemy,
+  enemies: Enemy[],
   canvasWidth: number,
   canvasHeight: number
 ) => {
@@ -115,7 +127,7 @@ const respawnEnemy = (
 
 // Пример использования respawnEnemy в вашем коде
 export const respawnEnemies = (
-  enemiesRef: React.MutableRefObject<AbstractEntity[]>,
+  enemiesRef: React.MutableRefObject<Enemy[]>,
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>
 ) => {
   if (!canvasRef.current) {

@@ -1,10 +1,5 @@
-import { HandlePlayerHit, resetPlayerPosition } from './player'
-import {
-  updateEnemyPositions,
-  respawnEnemies,
-  killEnemy,
-  handleEnemyShooting,
-} from './enemy'
+import { HandlePlayerHit } from './player'
+import { updateEnemyPositions, killEnemy, handleEnemyShooting } from './enemy'
 import {
   clearCanvas,
   drawPlayer,
@@ -104,16 +99,11 @@ export const gameLoop = (
     }
   })
 
-  // Проверка на столкновения между игроком и врагами
-  enemiesRef.current.forEach(enemy => {
-    if (detectEnemyCollision(playerRef.current, enemy)) {
-      // Обработка столкновения: уменьшаем жизни
-      HandlePlayerHit(
-        livesRef,
-        handleGameOver,
-        () => resetPlayerPosition(playerRef),
-        () => respawnEnemies(enemiesRef, canvasRef)
-      )
-    }
-  })
+  const collidedEnemy = enemiesRef.current.find(enemy =>
+    detectEnemyCollision(playerRef.current, enemy)
+  )
+
+  if (collidedEnemy) {
+    HandlePlayerHit(livesRef, playerRef, enemiesRef, canvasRef, handleGameOver)
+  }
 }

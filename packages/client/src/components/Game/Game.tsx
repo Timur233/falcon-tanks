@@ -1,11 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import './Game.scss'
-import { initializeEnemies } from '@/components/Game/enemy'
+import {
+  initializeCampanyEnemies,
+  initializeRandomEnemies,
+} from '@/components/Game/enemy'
 import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import { handleKeyDown, handleKeyUp } from '@/components/Game/controls'
 import { AbstractEntity, Obstacle } from '@/components/Game/gameTypes'
-import { initializeObstacle } from '@/components/Game/obstacle'
+import {
+  initializeCompanyMapObstacle,
+  initializeRandomObstacle,
+} from '@/components/Game/obstacle'
 import { Modal } from '../common/Modal/Modal'
 
 const livesUse = 3
@@ -13,9 +19,9 @@ const livesUse = 3
 export const Game: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
-  const enemiesRef = useRef(initializeEnemies(5))
+  const enemiesRef = useRef(initializeRandomEnemies(5))
   const bulletsRef = useRef<AbstractEntity[]>([])
-  const obstaclesRef = useRef<Obstacle[]>(initializeObstacle())
+  const obstaclesRef = useRef<Obstacle[]>(initializeRandomObstacle(20))
   const livesRef = useRef(livesUse)
   const [gameStarted, setGameStarted] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
@@ -78,8 +84,20 @@ export const Game: React.FC = () => {
     isPausedRef.current = false
     setIsGameOver(false)
     livesRef.current = livesUse
-    playerRef.current = PLAYER_DEFAULT_PARAMS
-    enemiesRef.current = initializeEnemies(5)
+    playerRef.current = { ...PLAYER_DEFAULT_PARAMS }
+    enemiesRef.current = initializeRandomEnemies(5)
+    obstaclesRef.current = initializeRandomObstacle(20)
+  }
+
+  const startCompany = () => {
+    setGameStarted(true)
+    setIsPaused(false)
+    isPausedRef.current = false
+    setIsGameOver(false)
+    livesRef.current = livesUse
+    playerRef.current = { ...PLAYER_DEFAULT_PARAMS }
+    enemiesRef.current = initializeCampanyEnemies()
+    obstaclesRef.current = initializeCompanyMapObstacle()
   }
 
   return (
@@ -88,7 +106,10 @@ export const Game: React.FC = () => {
       <canvas ref={canvasRef} width={800} height={600}></canvas>
 
       {!gameStarted ? (
-        <button onClick={startGame}>Начать игру</button>
+        <>
+          <button onClick={startGame}>Начать игру</button>
+          <button onClick={startCompany}>Начать компанию</button>
+        </>
       ) : (
         <button onClick={togglePause}>
           {isPaused ? 'Продолжить' : 'Пауза'}
@@ -97,7 +118,8 @@ export const Game: React.FC = () => {
 
       <Modal show={isGameOver} onClose={() => setIsGameOver(false)}>
         <h2>Игра окончена</h2>
-        <button onClick={startGame}>Заново</button>
+        <button onClick={startGame}>Новая игра</button>
+        <button onClick={startCompany}>Компания</button>
       </Modal>
     </div>
   )
