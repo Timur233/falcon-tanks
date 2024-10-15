@@ -1,7 +1,18 @@
-import enemiesSpritePath from '@/assets/images/sprites/enemy.svg'
-import tankSpritePath from '@/assets/images/sprites/tank.svg'
-import wallSpritePath from '@/assets/images/sprites/wall.svg'
-import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
+import enemiesSpritePath from '@/assets/images/sprites/enemy.png'
+import playerSpritePath from '@/assets/images/sprites/tank.png'
+import bulletSpritePath from '@/assets/images/sprites/bullet.png'
+import wallSpritePath from '@/assets/images/sprites/wall.png'
+import steelSpritePath from '@/assets/images/sprites/steel.png'
+import treeSpritePath from '@/assets/images/sprites/tree.png'
+import bangSpritePath from '@/assets/images/sprites/bang.png'
+import shotSpritePath from '@/assets/images/sprites/shot.png'
+import {
+  AbstractEntity,
+  Effect,
+  Enemy,
+  Obstacle,
+} from '@/components/Game/gameTypes'
+import { deleteEffect } from './effects'
 
 export const getRandomEdgePosition = (
   canvasWidth: number,
@@ -21,48 +32,80 @@ export const getRandomEdgePosition = (
   }
 }
 
+export const getRandomPosition = (
+  canvasWidth: number,
+  canvasHeight: number,
+  obstacleWidth = 50, // Ширина препятствия
+  obstacleHeight = 50 // Высота препятствия
+): { x: number; y: number } => {
+  const x = Math.random() * (canvasWidth - obstacleWidth) // Генерируем случайное X
+  const y = Math.random() * (canvasHeight - obstacleHeight) // Генерируем случайное Y
+  return { x, y }
+}
+
 export const clearCanvas = (context: CanvasRenderingContext2D) => {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height)
 }
 
-const tankSprite = new Image()
-tankSprite.src = tankSpritePath
-
-let lastPlayerDirection = { x: 0, y: 0 }
-
-export const drawPlayer = (
+const darawTank = (
+  sprite: HTMLImageElement,
   context: CanvasRenderingContext2D,
-  player: Player
+  data: AbstractEntity
 ) => {
-  let direction = { ...player.direction }
+  const { animation } = data
+  const { direction } = data
+  const moovment = direction.x !== 0 ? data.x : data.y
+  const spriteSettings = {
+    width: 0,
+    height: 0,
+    sourceX: 0,
+    sourceY: 0,
+  }
 
-  const isPlayerIdle = direction.x === 0 && direction.y === 0
+  // Если смещение кратно 10 меняем кадр
+  if (animation?.frameInterval && moovment % animation.frameInterval === 0) {
+    animation.currentFrame =
+      (animation.currentFrame + 1) % animation?.totalFrames
+  }
 
-  if (isPlayerIdle) {
-    direction = lastPlayerDirection
-  } else {
-    lastPlayerDirection = direction
+  if (animation) {
+    spriteSettings.width = sprite.width / animation.totalFrames
+    spriteSettings.height = sprite.height
+    spriteSettings.sourceX = animation.currentFrame * spriteSettings.width
+    spriteSettings.sourceY = 0
   }
 
   context.save()
-
-  context.translate(player.x + player.width / 2, player.y + player.height / 2)
-
-  const angle = Math.atan2(direction.x, -direction.y)
-  context.rotate(angle)
-
+  context.translate(data.x + data.width / 2, data.y + data.height / 2)
+  context.rotate(Math.atan2(direction.x, -direction.y))
   context.drawImage(
-    tankSprite,
-    -player.width / 2,
-    -player.height / 2,
-    player.width,
-    player.height
+    sprite,
+    spriteSettings.sourceX,
+    spriteSettings.sourceY,
+    spriteSettings.width,
+    spriteSettings.height,
+    -data.width / 2,
+    -data.height / 2,
+    data.width,
+    data.height
   )
 
   context.restore()
 }
 
+const playerSprite = new Image()
+
+playerSprite.src = playerSpritePath
+
+export const drawPlayer = (
+  context: CanvasRenderingContext2D,
+  player: AbstractEntity
+) => {
+  darawTank(playerSprite, context, player)
+}
+
 const enemiesSprite = new Image()
+
 enemiesSprite.src = enemiesSpritePath
 
 export const drawEnemies = (
@@ -70,33 +113,166 @@ export const drawEnemies = (
   enemies: Enemy[]
 ) => {
   enemies.forEach(enemy => {
-    context.drawImage(enemiesSprite, enemy.x, enemy.y)
+    darawTank(enemiesSprite, context, enemy)
   })
 }
 
 const wallSprite = new Image()
+const steelSprite = new Image()
+const treeSprite = new Image()
+
 wallSprite.src = wallSpritePath
+steelSprite.src = steelSpritePath
+treeSprite.src = treeSpritePath
 
 export const drawObstacles = (
   context: CanvasRenderingContext2D,
   obstacles: Obstacle[]
 ) => {
-  const SPRITE_SIZE = 50
-
   obstacles.forEach(obstacle => {
-    const horizontalCount = Math.ceil(obstacle.width / SPRITE_SIZE)
-    const verticalCount = Math.ceil(obstacle.height / SPRITE_SIZE)
+    let sprite: HTMLImageElement
 
-    Array.from({ length: horizontalCount }).forEach((_, i) => {
-      Array.from({ length: verticalCount }).forEach((_, j) => {
-        const x = obstacle.x + i * SPRITE_SIZE
-        const y = obstacle.y + j * SPRITE_SIZE
+    switch (obstacle.type) {
+      case 'steel':
+        sprite = steelSprite
 
-        const width = Math.min(SPRITE_SIZE, obstacle.width - i * SPRITE_SIZE)
-        const height = Math.min(SPRITE_SIZE, obstacle.height - j * SPRITE_SIZE)
+        break
+      case 'wall':
+        sprite = wallSprite
 
-        context.drawImage(wallSprite, 0, 0, width, height, x, y, width, height)
-      })
-    })
+        break
+      case 'tree':
+        sprite = treeSprite
+
+        break
+
+      default:
+        sprite = treeSprite
+
+        break
+    }
+
+    const spriteSize = sprite.width / obstacle.animation.totalFrames
+
+    context.drawImage(
+      sprite,
+      obstacle.animation.currentFrame * spriteSize,
+      0,
+      spriteSize,
+      spriteSize,
+      obstacle.x,
+      obstacle.y,
+      spriteSize,
+      spriteSize
+    )
+  })
+}
+
+const bulletSprite = new Image()
+
+bulletSprite.src = bulletSpritePath
+
+export const drawBullets = (
+  context: CanvasRenderingContext2D,
+  bullets: AbstractEntity[]
+) => {
+  bullets.forEach(bullet => {
+    context.save()
+    context.translate(bullet.x + bullet.width / 2, bullet.y + bullet.height / 2)
+    context.rotate(Math.atan2(bullet.direction.x, -bullet.direction.y))
+
+    context.drawImage(
+      bulletSprite,
+      0,
+      0,
+      bulletSprite.width,
+      bulletSprite.height,
+      -bulletSprite.width / 2,
+      -bulletSprite.height / 2,
+      bulletSprite.width,
+      bulletSprite.height
+    )
+
+    context.restore()
+  })
+}
+
+const bangSprite = new Image()
+const shotSprite = new Image()
+
+bangSprite.src = bangSpritePath
+shotSprite.src = shotSpritePath
+
+export const drawEffects = (
+  context: CanvasRenderingContext2D,
+  effects: Effect[]
+) => {
+  effects.forEach(effect => {
+    const spriteSettings = {
+      width: 0,
+      height: 0,
+      sourceX: 0,
+      sourceY: 0,
+    }
+    let sprite: HTMLImageElement
+
+    if (typeof effect.animation.frameCount === 'number') {
+      effect.animation.frameCount++
+
+      if (
+        effect.animation?.frameInterval &&
+        effect.animation.frameCount % effect.animation.frameInterval === 0
+      ) {
+        effect.animation.currentFrame = effect.animation.currentFrame + 1
+
+        if (
+          effect.animation.currentFrame ===
+          effect.animation.totalFrames - 1
+        ) {
+          deleteEffect(effect)
+        }
+      }
+    }
+
+    switch (effect.type) {
+      case 'shot':
+        sprite = shotSprite
+
+        break
+
+      case 'bang':
+        sprite = bangSprite
+
+        break
+
+      default:
+        sprite = bangSprite
+    }
+
+    spriteSettings.width = sprite.width / effect.animation.totalFrames
+    spriteSettings.height = sprite.height
+    spriteSettings.sourceX =
+      effect.animation.currentFrame * spriteSettings.width
+    spriteSettings.sourceY = 0
+
+    context.save()
+    context.translate(effect.x + effect.width / 2, effect.y + effect.height / 2)
+
+    if (effect.direction)
+      context.rotate(Math.atan2(effect.direction.x, -effect.direction.y))
+
+    context.drawImage(
+      sprite,
+      spriteSettings.sourceX,
+      spriteSettings.sourceY,
+      spriteSettings.width,
+      spriteSettings.height,
+      -effect.width / 2,
+      -effect.height / 2,
+      effect.width,
+      effect.height
+    )
+
+    context.restore()
   })
 }
