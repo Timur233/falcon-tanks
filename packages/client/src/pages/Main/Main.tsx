@@ -4,9 +4,11 @@ import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle
 import { Button } from '@/components/ui/Button/Button'
 import { EnemyTank } from './components/EnemyTanks/EnemyTank'
 import { useNavigate } from 'react-router-dom'
+import { userService } from '@/services/userService'
 
 export const Main = () => {
   const [isLoaded, setIsLoaded] = useState(false)
+  const userIsLogged = userService.isLoggedIn()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -33,12 +35,14 @@ export const Main = () => {
           </div>
 
           <div className="promo-page__actions">
-            <Button
-              className="promo-page__btn custom-button_blue"
-              useFixWidth
-              onClick={() => navigate('/sign-in')}
-              text="Вход / Регистрация"
-            />
+            {!userIsLogged && (
+              <Button
+                className="promo-page__btn custom-button_blue"
+                useFixWidth
+                onClick={() => navigate('/sign-in')}
+                text="Вход / Регистрация"
+              />
+            )}
             <Button
               className="promo-page__btn"
               useFixWidth
