@@ -47,7 +47,7 @@ export const clearCanvas = (context: CanvasRenderingContext2D) => {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height)
 }
 
-const darawTank = (
+const drawTank = (
   sprite: HTMLImageElement,
   context: CanvasRenderingContext2D,
   data: AbstractEntity
@@ -101,7 +101,7 @@ export const drawPlayer = (
   context: CanvasRenderingContext2D,
   player: AbstractEntity
 ) => {
-  darawTank(playerSprite, context, player)
+  drawTank(playerSprite, context, player)
 }
 
 const enemiesSprite = new Image()
@@ -113,7 +113,7 @@ export const drawEnemies = (
   enemies: Enemy[]
 ) => {
   enemies.forEach(enemy => {
-    darawTank(enemiesSprite, context, enemy)
+    drawTank(enemiesSprite, context, enemy)
   })
 }
 

@@ -3,15 +3,17 @@ import './ControllBtn.scss'
 type ControllBtnPropsType = {
   children: React.ReactNode
   className?: string
-  onClick: () => void
+  onClick?: () => void
+  onMouseDown?: () => void
+  onMouseUp?: () => void
 }
 
 export const ControllBtn = (props: ControllBtnPropsType) => {
-  const { children, className, onClick } = props
+  const { className, ...rest } = props
 
   return (
-    <button className={`controll-btn ${className}`} onClick={onClick}>
-      {children}
+    <button className={`controll-btn ${className}`} {...rest}>
+      {rest.children}
     </button>
   )
 }

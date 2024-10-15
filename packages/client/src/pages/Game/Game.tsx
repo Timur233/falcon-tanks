@@ -1,78 +1,143 @@
 import GameInfo from '@/assets/images/game-info.jpg'
-import { Game as GamePrototype } from '@/components/Game/Game'
 import { Modal } from '@/components/common/Modal/Modal'
-import { Button } from '@/components/ui/Button/Button'
+import { Game as GamePrototype } from '@/components/Game/Game'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Arrows } from './components/Arrows/Arrows'
 import { FireControll } from './components/FireControll/FireControll'
 import { KillsCounter } from './components/KillsCounter/KillsCounter'
-import { PauseHelp } from './components/PauseHelp/PauseHelp'
+import { PauseHelpFullscreen } from './components/PauseHelp/PauseHelpFullscreen'
 import './Game.scss'
+import { Icon } from '@/components/ui/Icon/Icon'
+import { BtnStates } from '@/components/Game/gameTypes'
+import { StatusScreen } from './components/StatusScreen/StatusScreen'
+import { Button } from '@/components/ui/Button/Button'
+
+interface GameState {
+  lives: number
+  isGameStarted: boolean
+  isCompanyStarted: boolean
+  isGamePaused: boolean
+  isGameOver: boolean
+  isGameWinning: boolean
+}
+
+const DEFAULT_LIVES_COUNT = 3
 
 export const Game = () => {
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false)
-  const [buttonsState, setButtonsState] = useState({
-    upButton: false,
-    downButton: false,
-    leftButton: false,
-    rightButton: false,
-    fireButton: false,
+  const [buttonsState, setButtonsState] = useState<BtnStates>({
+    up: false,
+    down: false,
+    left: false,
+    right: false,
+    fire: false,
   })
-  const [isStartedGame, setIsStartedGame] = useState(false)
+  const [gameState, setGameState] = useState<GameState>({
+    lives: DEFAULT_LIVES_COUNT,
+    isGameStarted: false,
+    isCompanyStarted: false,
+    isGamePaused: false,
+    isGameOver: false,
+    isGameWinning: false,
+  })
 
-  const pauseHandler = () => {
-    console.log('pauseHandler')
+  const startGameHandler = () => {
+    setGameState({
+      lives: DEFAULT_LIVES_COUNT,
+      isGameStarted: true,
+      isCompanyStarted: false,
+      isGamePaused: false,
+      isGameOver: false,
+      isGameWinning: false,
+    })
   }
 
-  const helpHandler = () => {
-    setIsInfoModalOpen(true)
+  const startCompanyHandler = () => {
+    setGameState({
+      lives: DEFAULT_LIVES_COUNT,
+      isGameStarted: false,
+      isCompanyStarted: true,
+      isGamePaused: false,
+      isGameOver: false,
+      isGameWinning: false,
+    })
   }
 
-  const arrowClickHandler = () => {
-    return
+  const pauseHandler = useCallback(() => {
+    setGameState(state => ({
+      ...state,
+      isGamePaused: !state.isGamePaused,
+    }))
+  }, [])
+
+  const deathHandler = useCallback((lives: number) => {
+    setGameState(state => ({
+      ...state,
+      lives,
+    }))
+  }, [])
+
+  const gameOverHandler = useCallback((isVictory: boolean) => {
+    setGameState({
+      lives: 0,
+      isGameOver: !isVictory,
+      isGameWinning: isVictory,
+      isGameStarted: false,
+      isCompanyStarted: false,
+      isGamePaused: true,
+    })
+  }, [])
+
+  const arrowClickHandler = (
+    eventName: string,
+    key: string,
+    keyCode: number
+  ) => {
+    const event = new KeyboardEvent(eventName, {
+      key,
+      code: key,
+      keyCode,
+      which: keyCode,
+      bubbles: true,
+      cancelable: true,
+    })
+
+    window.dispatchEvent(event)
   }
 
-  const toggleButton = (event: Event, buttonName: string, state: boolean) => {
-    event.preventDefault()
+  const changeButtonsState = useCallback(
+    (state: typeof buttonsState) => {
+      setButtonsState({ ...state })
+    },
+    [setButtonsState]
+  )
 
-    setButtonsState({ ...buttonsState, [buttonName]: state })
+  const getPauseIcon = () => {
+    if (
+      gameState.isGamePaused &&
+      gameState.isGameStarted &&
+      !gameState.isGameOver &&
+      !gameState.isGameWinning
+    ) {
+      return <Icon id="arrow-right" width={12} height={16} />
+    }
+    return <Icon id="pause-icon" width={16} height={17} />
   }
 
-  // TODO: Заменить на финальное решение для отслеживания кнопок
   useEffect(() => {
-    const handleKey = (event: KeyboardEvent) => {
-      const isKeydown = event.type === 'keydown'
-
-      switch (event.key) {
-        case 'ArrowUp':
-          toggleButton(event, 'upButton', isKeydown)
-          break
-        case 'ArrowDown':
-          toggleButton(event, 'downButton', isKeydown)
-          break
-        case 'ArrowLeft':
-          toggleButton(event, 'leftButton', isKeydown)
-          break
-        case 'ArrowRight':
-          toggleButton(event, 'rightButton', isKeydown)
-          break
-        case ' ':
-          toggleButton(event, 'fireButton', isKeydown)
-          break
-        default:
-          break
+    const escapeKeyDownHandler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        pauseHandler()
       }
     }
 
-    window.addEventListener('keydown', handleKey)
-    window.addEventListener('keyup', handleKey)
+    window.addEventListener('keydown', escapeKeyDownHandler)
 
     return () => {
-      window.removeEventListener('keydown', handleKey)
-      window.removeEventListener('keyup', handleKey)
+      window.removeEventListener('keydown', escapeKeyDownHandler)
     }
-  })
+  }, [pauseHandler])
 
   return (
     <section className="game-page">
@@ -85,22 +150,57 @@ export const Game = () => {
             <div className="game-page__wrapper game-wrapper">
               <div className="game-wrapper__decor-hr"></div>
               <div className="game-wrapper__decor-vr"></div>
-              <GamePrototype />
-              <div
-                style={{ display: 'none' }}
-                className={`start-screen${
-                  isStartedGame ? ' start-screen_hide' : ''
-                }`}>
+              <GamePrototype
+                lives={gameState.lives}
+                isGameStarted={gameState.isGameStarted}
+                isCompanyStarted={gameState.isCompanyStarted}
+                isGamePaused={gameState.isGamePaused}
+                onDeath={deathHandler}
+                onGameOver={gameOverHandler}
+                onKeyDownUp={changeButtonsState}
+              />
+
+              <StatusScreen
+                isVisible={
+                  !gameState.isGameStarted &&
+                  !gameState.isCompanyStarted &&
+                  !gameState.isGameOver &&
+                  !gameState.isGameWinning
+                }>
                 <Button
-                  text="Начать игру"
-                  onClick={() => setIsStartedGame(true)}
+                  text={'Начать игру'}
+                  onClick={startGameHandler}
                   useFixWidth
                 />
-              </div>
-              <div className="game-over-screen" style={{ display: 'none' }}>
-                <span className="game-over-screen__title">Game Over</span>
-                <Button text="Начать заново" useFixWidth />
-              </div>
+                <Button
+                  className={'custom-button_blue'}
+                  text={'Начать компанию'}
+                  onClick={startCompanyHandler}
+                  useFixWidth
+                />
+              </StatusScreen>
+
+              <StatusScreen
+                isVisible={gameState.isGameOver}
+                title="Game Over"
+                type="game-over">
+                <Button
+                  text={'Начать заново'}
+                  onClick={startGameHandler}
+                  useFixWidth
+                />
+              </StatusScreen>
+
+              <StatusScreen
+                isVisible={gameState.isGameWinning}
+                title="Победа!"
+                type="victory">
+                <Button
+                  text={'Начать заново'}
+                  onClick={startGameHandler}
+                  useFixWidth
+                />
+              </StatusScreen>
             </div>
           </div>
           <div className="column col-4">
@@ -109,26 +209,27 @@ export const Game = () => {
 
               <CustomPageTitle
                 className="game-controll__lives"
-                text="3"
+                text={gameState.lives.toString()}
                 tagName="span"
               />
 
-              <PauseHelp
+              <PauseHelpFullscreen
                 className="game-controll__pause-help-buttons"
+                pauseIcon={getPauseIcon()}
                 pauseHandler={pauseHandler}
-                helpHandler={helpHandler}
+                helpHandler={() => setIsInfoModalOpen(true)}
               />
 
               <Arrows
                 buttonsState={buttonsState}
                 className="game-controll__arrows"
-                clickHandler={arrowClickHandler}
+                mouseDownUpHandler={arrowClickHandler}
               />
 
               <FireControll
                 className="game-controll__fire"
-                buttonPressed={buttonsState.fireButton}
-                fireHandler={pauseHandler}
+                buttonPressed={buttonsState.fire}
+                mouseDownUpHandler={arrowClickHandler}
               />
             </div>
           </div>

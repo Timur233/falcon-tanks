@@ -1,0 +1,32 @@
+@import '../../../../scss/vars.scss';
+
+.status-screen {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  inset: 12px;
+  background-color: $overlay-color;
+  background-size: cover;
+
+  &_show {
+    display: flex;
+  }
+
+  &_game-over {
+    background-image: url('@/assets/images/game-over.png');
+  }
+
+  &_victory {
+    background-image: url('@/assets/images/win-screen.png');
+  }
+
+  &__title {
+    font-size: 40px;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+}

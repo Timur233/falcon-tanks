@@ -5,34 +5,36 @@ import './Arrows.scss'
 type ArrowsPropsType = {
   className?: string
   buttonsState: {
-    upButton: boolean
-    downButton: boolean
-    leftButton: boolean
-    rightButton: boolean
-    fireButton: boolean
+    up: boolean
+    down: boolean
+    left: boolean
+    right: boolean
+    fire: boolean
   }
-  clickHandler: () => void
+  mouseDownUpHandler: (eventName: string, key: string, keyCode: number) => void
 }
 
 export const Arrows = (props: ArrowsPropsType) => {
-  const { className, buttonsState, clickHandler } = props
+  const { className, buttonsState, mouseDownUpHandler } = props
 
   return (
     <div className={`controll-arrows ${className}`}>
       <div className="controll-arrows__horizontal horizontal-arrows">
         <ControllBtn
           className={`controll-btn_big ${
-            buttonsState.leftButton ? 'controll-btn_active' : ''
+            buttonsState.left ? 'controll-btn_active' : ''
           }`}
-          onClick={clickHandler}>
+          onMouseDown={mouseDownUpHandler.bind({}, 'keydown', 'ArrowLeft', 37)}
+          onMouseUp={mouseDownUpHandler.bind({}, 'keyup', 'ArrowLeft', 37)}>
           <Icon id="arrow-left" width={33} height={33}></Icon>
         </ControllBtn>
 
         <ControllBtn
           className={`controll-btn_big ${
-            buttonsState.rightButton ? 'controll-btn_active' : ''
+            buttonsState.right ? 'controll-btn_active' : ''
           }`}
-          onClick={clickHandler}>
+          onMouseDown={mouseDownUpHandler.bind({}, 'keydown', 'ArrowRight', 39)}
+          onMouseUp={mouseDownUpHandler.bind({}, 'keyup', 'ArrowRight', 39)}>
           <Icon id="arrow-right" width={33} height={33}></Icon>
         </ControllBtn>
       </div>
@@ -40,17 +42,19 @@ export const Arrows = (props: ArrowsPropsType) => {
       <div className="controll-arrows__vertical vertical-arrows">
         <ControllBtn
           className={`controll-btn_big ${
-            buttonsState.upButton ? 'controll-btn_active' : ''
+            buttonsState.up ? 'controll-btn_active' : ''
           }`}
-          onClick={clickHandler}>
+          onMouseDown={mouseDownUpHandler.bind({}, 'keydown', 'ArrowUp', 38)}
+          onMouseUp={mouseDownUpHandler.bind({}, 'keyup', 'ArrowUp', 38)}>
           <Icon id="arrow-up" width={33} height={33}></Icon>
         </ControllBtn>
 
         <ControllBtn
           className={`controll-btn_big ${
-            buttonsState.downButton ? 'controll-btn_active' : ''
+            buttonsState.down ? 'controll-btn_active' : ''
           }`}
-          onClick={clickHandler}>
+          onMouseDown={mouseDownUpHandler.bind({}, 'keydown', 'ArrowDown', 40)}
+          onMouseUp={mouseDownUpHandler.bind({}, 'keyup', 'ArrowDown', 40)}>
           <Icon id="arrow-down" width={33} height={33}></Icon>
         </ControllBtn>
       </div>

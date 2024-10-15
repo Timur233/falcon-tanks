@@ -1,3 +1,4 @@
+import React from 'react'
 import { getRandomEdgePosition } from './utils'
 import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
 import { createBullet } from '@/components/Game/bullet'

@@ -38,14 +38,14 @@ export const HandlePlayerHit = (
   playerRef: React.MutableRefObject<AbstractEntity>,
   enemiesRef: React.MutableRefObject<Enemy[]>,
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>,
-  handleGameOver: () => void
+  handleGameOver: () => void,
+  handleDeath: (lives: number) => void
 ) => {
   livesRef.current -= 1
 
   if (livesRef.current <= 0) {
     handleGameOver()
   } else {
-    resetPlayerPosition(playerRef)
-    respawnEnemies(enemiesRef, canvasRef)
+    handleDeath(livesRef.current)
   }
 }
