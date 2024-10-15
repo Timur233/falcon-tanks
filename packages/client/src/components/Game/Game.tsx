@@ -7,7 +7,8 @@ import {
 import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import {
-  AbstractEntity, Effect,
+  AbstractEntity,
+  Effect,
   Obstacle,
   BtnStates,
 } from '@/components/Game/gameTypes'
