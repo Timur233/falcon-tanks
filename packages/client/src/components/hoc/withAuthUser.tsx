@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { RootState, useAppDispatch } from '@/store'
 import { useSelector } from 'react-redux'
 import { userService } from '@/services/userService'
+import { Loader } from '../ui/Loader/Loader'
 
 type WithAuthUserProps = {
   userIsLogged: boolean
@@ -49,6 +50,6 @@ export default function withAuthUser<P extends object>(
       return <Component {...props} userIsLogged={userIsLogged} user={user} />
     }
 
-    return <h1>Загрузка...</h1>
+    return <Loader show={true} />
   }
 }
