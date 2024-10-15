@@ -166,26 +166,40 @@ export const Game = () => {
                   !gameState.isCompanyStarted &&
                   !gameState.isGameOver &&
                   !gameState.isGameWinning
-                }
-              >
-                <Button text={'Начать игру'} onClick={startGameHandler} useFixWidth />
-                <Button className={'custom-button_blue'} text={'Начать компанию'} onClick={startCompanyHandler} useFixWidth />
+                }>
+                <Button
+                  text={'Начать игру'}
+                  onClick={startGameHandler}
+                  useFixWidth
+                />
+                <Button
+                  className={'custom-button_blue'}
+                  text={'Начать компанию'}
+                  onClick={startCompanyHandler}
+                  useFixWidth
+                />
               </StatusScreen>
 
               <StatusScreen
                 isVisible={gameState.isGameOver}
                 title="Game Over"
-                type="game-over"
-              >
-                <Button text={'Начать заново'} onClick={startGameHandler} useFixWidth />
+                type="game-over">
+                <Button
+                  text={'Начать заново'}
+                  onClick={startGameHandler}
+                  useFixWidth
+                />
               </StatusScreen>
 
               <StatusScreen
                 isVisible={gameState.isGameWinning}
                 title="Победа!"
-                type="victory"
-              >
-                <Button text={'Начать заново'} onClick={startGameHandler} useFixWidth />
+                type="victory">
+                <Button
+                  text={'Начать заново'}
+                  onClick={startGameHandler}
+                  useFixWidth
+                />
               </StatusScreen>
             </div>
           </div>

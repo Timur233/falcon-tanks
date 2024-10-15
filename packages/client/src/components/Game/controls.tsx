@@ -55,38 +55,36 @@ const checkPressedKeys = (keys: string[]): BtnStates => {
   return btnStates
 }
 
-  export const handleKeyDownUp = (
-    type: string,
-    key: string,
-    onKeyDownUp: (state: BtnStates) => void
-  ) => {
-    const isKeydown = type === 'keydown'
-  
-    if (isKeydown) {
-      if (!pressedKeys.includes(key)) {
-        pressedKeys.push(key)
+export const handleKeyDownUp = (
+  type: string,
+  key: string,
+  onKeyDownUp: (state: BtnStates) => void
+) => {
+  const isKeydown = type === 'keydown'
 
-        if (key === ' ') {
-          shootPressed = true
-        }
-      }
-    } else {
-      pressedKeys = pressedKeys.filter(currentKey => currentKey !== key)
+  if (isKeydown) {
+    if (!pressedKeys.includes(key)) {
+      pressedKeys.push(key)
 
       if (key === ' ') {
-        shootPressed = false
+        shootPressed = true
       }
     }
-  
-    onKeyDownUp(checkPressedKeys(pressedKeys))
+  } else {
+    pressedKeys = pressedKeys.filter(currentKey => currentKey !== key)
+
+    if (key === ' ') {
+      shootPressed = false
+    }
   }
 
-  export const resetButtonsStates = () => {
-    pressedKeys = []
-    shootPressed = false
-  }
+  onKeyDownUp(checkPressedKeys(pressedKeys))
+}
 
-
+export const resetButtonsStates = () => {
+  pressedKeys = []
+  shootPressed = false
+}
 
 const getActionControlByKey = (key: string): Action | null => {
   for (const [action, keys] of Object.entries(ACTION_CONTROLS)) {
@@ -109,8 +107,6 @@ const getLastAction = (): Action | null => {
 
   return null
 }
-
-
 
 export const updatePlayerAction = (props: ControlsProps) => {
   const speed = props.playerRef.current.speed

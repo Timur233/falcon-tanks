@@ -5,7 +5,7 @@ import { ReactNode } from 'react'
 
 type PauseHelpPropsType = {
   className?: string
-  pauseIcon: ReactNode,
+  pauseIcon: ReactNode
   pauseHandler: () => void
   helpHandler: () => void
 }

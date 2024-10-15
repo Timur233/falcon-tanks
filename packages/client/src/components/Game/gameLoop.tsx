@@ -96,6 +96,8 @@ export const gameLoop = (
       // Проверка на окончание игры
       if (livesRef.current <= 0) {
         handleGameOver()
+      } else {
+        handleDeath(livesRef.current)
       }
     }
   })
@@ -105,6 +107,13 @@ export const gameLoop = (
   )
 
   if (collidedEnemy) {
-    HandlePlayerHit(livesRef, playerRef, enemiesRef, canvasRef, handleGameOver, handleDeath)
+    HandlePlayerHit(
+      livesRef,
+      playerRef,
+      enemiesRef,
+      canvasRef,
+      handleGameOver,
+      handleDeath
+    )
   }
 }

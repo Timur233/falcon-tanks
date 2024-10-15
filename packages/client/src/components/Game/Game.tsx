@@ -6,15 +6,16 @@ import {
 } from '@/components/Game/enemy'
 import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
-import { AbstractEntity, Obstacle, BtnStates } from '@/components/Game/gameTypes'
+import {
+  AbstractEntity,
+  Obstacle,
+  BtnStates,
+} from '@/components/Game/gameTypes'
 import {
   initializeCompanyMapObstacle,
   initializeRandomObstacle,
 } from '@/components/Game/obstacle'
-import {
-  handleKeyDownUp,
-  resetButtonsStates,
-} from '@/components/Game/controls'
+import { handleKeyDownUp, resetButtonsStates } from '@/components/Game/controls'
 
 type GamePropsType = {
   lives: number
@@ -140,13 +141,19 @@ export const Game = (props: GamePropsType) => {
     if (isGameRunning === false) {
       if (isGameStarted) {
         startGame()
-      } else if (isCompanyStarted) { 
+      } else if (isCompanyStarted) {
         startCompany()
       }
     }
-  }, [lives, isGameStarted, isGamePaused, isGameRunning, startGame, isCompanyStarted, startCompany])
+  }, [
+    lives,
+    isGameStarted,
+    isGamePaused,
+    isGameRunning,
+    startGame,
+    isCompanyStarted,
+    startCompany,
+  ])
 
-  return (
-     <canvas ref={canvasRef} width={800} height={600}></canvas>
-  )
+  return <canvas ref={canvasRef} width={800} height={600}></canvas>
 }
