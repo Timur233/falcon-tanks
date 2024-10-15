@@ -20,6 +20,7 @@
 ---
 
 ### Макет в [Figma](https://www.figma.com/design/eMv3lcr1Qd6j2XU3CQdZ7V/Untitled?node-id=510-62&node-type=frame&t=i29DLi5WkY4HXDji-0)
+### [Документация](docs/README.md) к игре
 
 ---
 
