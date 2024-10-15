@@ -1,13 +1,13 @@
 import GameInfo from '@/assets/images/game-info.jpg'
-import { Game as GamePrototype } from '@/components/Game/Game'
 import { Modal } from '@/components/common/Modal/Modal'
+import { Game as GamePrototype } from '@/components/Game/Game'
 import { Button } from '@/components/ui/Button/Button'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { useEffect, useState } from 'react'
 import { Arrows } from './components/Arrows/Arrows'
 import { FireControll } from './components/FireControll/FireControll'
 import { KillsCounter } from './components/KillsCounter/KillsCounter'
-import { PauseHelp } from './components/PauseHelp/PauseHelp'
+import { PauseHelpFullscreen } from './components/PauseHelp/PauseHelpFullscreen'
 import './Game.scss'
 
 export const Game = () => {
@@ -113,7 +113,7 @@ export const Game = () => {
                 tagName="span"
               />
 
-              <PauseHelp
+              <PauseHelpFullscreen
                 className="game-controll__pause-help-buttons"
                 pauseHandler={pauseHandler}
                 helpHandler={helpHandler}
