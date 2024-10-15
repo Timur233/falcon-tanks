@@ -6,12 +6,14 @@ import {
   drawEnemies,
   drawObstacles,
   drawBullets,
+  drawEffects,
 } from './utils'
 import {
   ControlsProps,
   AbstractEntity,
   Obstacle,
   Enemy,
+  Effect,
 } from '@/components/Game/gameTypes'
 import {
   detectBulletCollision,
@@ -20,6 +22,7 @@ import {
 import { updatePlayerAction } from '@/components/Game/controls'
 import { updateBullets } from '@/components/Game/bullet'
 import { handleBulletObstacleCollisions } from '@/components/Game/obstacle'
+import { createBangEffect, initEffects } from './effects'
 
 /**
  * Основной игровой цикл, который обновляет состояние игры и перерисовывает экран каждый кадр.
@@ -39,6 +42,7 @@ export const gameLoop = (
   enemiesRef: React.MutableRefObject<Enemy[]>,
   bulletsRef: React.MutableRefObject<AbstractEntity[]>,
   obstaclesRef: React.MutableRefObject<Obstacle[]>,
+  effectsRef: React.MutableRefObject<Effect[]>,
   livesRef: React.MutableRefObject<number>,
   handleDeath: (lives: number) => void,
   handleGameOver: () => void
@@ -63,6 +67,8 @@ export const gameLoop = (
   // Обработка столкновений с препятствиями
   handleBulletObstacleCollisions(bulletsRef.current, obstaclesRef.current)
 
+  initEffects(effectsRef)
+
   bulletsRef.current = updateBullets(
     bulletsRef.current,
     canvasRef.current.width,
@@ -70,9 +76,10 @@ export const gameLoop = (
   )
 
   // Отрисовка всех игровых объектов
-  drawObstacles(context, obstaclesRef.current)
   drawPlayer(context, playerRef.current)
   drawEnemies(context, enemiesRef.current)
+  drawObstacles(context, obstaclesRef.current)
+  drawEffects(context, effectsRef.current)
   drawBullets(context, bulletsRef.current) // Отрисовка пуль
 
   // Проверка на столкновения пуль с врагами
@@ -82,6 +89,11 @@ export const gameLoop = (
       if (hit) {
         // Убираем врага, если попали
         killEnemy(enemiesRef, enemy)
+        // Эффект поподания
+        createBangEffect(
+          bullet.x + bullet.width / 2,
+          bullet.y + bullet.height / 2
+        )
         // Убираем пулю, если попали
         bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
         return false
@@ -91,6 +103,11 @@ export const gameLoop = (
     if (detectBulletCollision(bullet, playerRef.current)) {
       // Уменьшаем жизни игрока
       livesRef.current -= 1
+      // Эффект поподания
+      createBangEffect(
+        bullet.x + bullet.width / 2,
+        bullet.y + bullet.height / 2
+      )
       // Удаляем пулю после попадания
       bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
       // Проверка на окончание игры

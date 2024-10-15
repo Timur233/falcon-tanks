@@ -7,7 +7,7 @@ import {
 import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import {
-  AbstractEntity,
+  AbstractEntity, Effect,
   Obstacle,
   BtnStates,
 } from '@/components/Game/gameTypes'
@@ -45,6 +45,7 @@ export const Game = (props: GamePropsType) => {
   const enemiesRef = useRef(initializeRandomEnemies(5))
   const bulletsRef = useRef<AbstractEntity[]>([])
   const obstaclesRef = useRef<Obstacle[]>(initializeRandomObstacle(20))
+  const effectsRef = useRef<Effect[]>([])
   const livesRef = useRef(lives)
   const isPausedRef = useRef(false)
   const isStartedLoopRef = useRef(false)
@@ -72,6 +73,7 @@ export const Game = (props: GamePropsType) => {
           enemiesRef,
           bulletsRef,
           obstaclesRef,
+          effectsRef,
           livesRef,
           onDeath,
           handleGameOver
