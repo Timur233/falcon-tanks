@@ -1,4 +1,10 @@
 import { AbstractEntity } from '@/components/Game/gameTypes'
+import { createShotEffect } from './effects'
+
+const bulletSize = {
+  width: 12,
+  height: 18,
+}
 
 export const createBullet = (enemy: AbstractEntity): AbstractEntity => {
   const bulletSpeed = 5 // Задайте скорость пули
@@ -10,29 +16,31 @@ export const createBullet = (enemy: AbstractEntity): AbstractEntity => {
   if (enemy.direction.y < 0) {
     // Вверх
     bulletX = enemy.x + enemy.width / 2 // Центр по X
-    bulletY = enemy.y // Верхняя часть врага
+    bulletY = enemy.y - bulletSize.height // Верхняя часть врага
   } else if (enemy.direction.y > 0) {
     // Вниз
     bulletX = enemy.x + enemy.width / 2 // Центр по X
-    bulletY = enemy.y + enemy.height // Нижняя часть врага
+    bulletY = enemy.y + enemy.height + bulletSize.height // Нижняя часть врага
   } else if (enemy.direction.x < 0) {
     // Влево
-    bulletX = enemy.x // Левый край врага
+    bulletX = enemy.x - bulletSize.height // Левый край врага
     bulletY = enemy.y + enemy.height / 2 // Центр по Y
   } else if (enemy.direction.x > 0) {
     // Вправо
-    bulletX = enemy.x + enemy.width // Правый край врага
+    bulletX = enemy.x + enemy.width + bulletSize.height // Правый край врага
     bulletY = enemy.y + enemy.height / 2 // Центр по Y
   } else {
     bulletX = enemy.x + enemy.width / 2 // По умолчанию - центр
     bulletY = enemy.y + enemy.height / 2 // По умолчанию - центр
   }
 
+  createShotEffect(bulletX, bulletY, bulletDirection)
+
   return {
-    x: bulletX,
-    y: bulletY,
-    width: 5, // Ширина пули
-    height: 5, // Высота пули
+    x: bulletX - bulletSize.width / 2,
+    y: bulletY - bulletSize.height / 2,
+    width: bulletSize.width, // Ширина пули
+    height: bulletSize.height, // Высота пули
     speed: bulletSpeed,
     direction: bulletDirection,
   }

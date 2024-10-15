@@ -1,7 +1,10 @@
 import { getRandomEdgePosition } from './utils'
 import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
 import { createBullet } from '@/components/Game/bullet'
-import { detectCollision } from '@/components/Game/collision'
+import {
+  detectCollision,
+  detectEnemyCollision,
+} from '@/components/Game/collision'
 
 const enemyParams = {
   width: 70,
@@ -37,8 +40,8 @@ export const initializeCampanyEnemies = (): Enemy[] => {
     {
       ...enemyParams,
       id: 0,
-      x: 50,
-      y: 55,
+      x: 360,
+      y: 0,
       animation: {
         currentFrame: 0,
         totalFrames: 4,
@@ -49,8 +52,8 @@ export const initializeCampanyEnemies = (): Enemy[] => {
     {
       ...enemyParams,
       id: 1,
-      x: 320,
-      y: 250,
+      x: 0,
+      y: 108,
       animation: {
         currentFrame: 0,
         totalFrames: 4,
@@ -61,8 +64,8 @@ export const initializeCampanyEnemies = (): Enemy[] => {
     {
       ...enemyParams,
       id: 2,
-      x: 715,
-      y: 60,
+      x: 720,
+      y: 108,
       animation: {
         currentFrame: 0,
         totalFrames: 4,
@@ -119,7 +122,7 @@ export const updateEnemyPositions = (
     // Проверка столкновений с другими врагами
     const hasEnemyCollision = enemiesRef.current.some(otherEnemy => {
       if (otherEnemy === enemy) return false
-      return detectCollision({ ...enemy, x: newX, y: newY }, otherEnemy)
+      return detectEnemyCollision({ ...enemy, x: newX, y: newY }, otherEnemy)
     })
 
     // Проверка коллизий с препятствиями
@@ -143,7 +146,7 @@ const isPositionOccupied = (
   enemies: AbstractEntity[]
 ) => {
   return enemies.some(enemy =>
-    detectCollision({ ...enemy, x: position.x, y: position.y }, enemy)
+    detectEnemyCollision({ ...enemy, x: position.x, y: position.y }, enemy)
   )
 }
 
