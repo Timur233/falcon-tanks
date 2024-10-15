@@ -5,11 +5,11 @@ import './FireControll.scss'
 type FireControllPropsType = {
   className?: string
   buttonPressed: boolean
-  fireHandler: () => void
+  mouseDownUpHandler: (eventName: string, key: string, code: number) => void
 }
 
 export const FireControll = (props: FireControllPropsType) => {
-  const { fireHandler, buttonPressed, className = '' } = props
+  const { mouseDownUpHandler, buttonPressed, className = '' } = props
 
   return (
     <div className={`fire-controll ${className}`}>
@@ -18,7 +18,8 @@ export const FireControll = (props: FireControllPropsType) => {
           className={`controll-btn_middle controll-btn_red ${
             buttonPressed ? 'controll-btn_active' : ''
           }`}
-          onClick={fireHandler}>
+          onMouseDown={mouseDownUpHandler.bind({}, 'keydown', ' ', 32)}
+          onMouseUp={mouseDownUpHandler.bind({}, 'keyup', ' ', 32)}>
           <Icon id="fire-icon" width={18} height={17}></Icon>
         </ControllBtn>
       </div>

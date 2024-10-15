@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './Game.scss'
 import {
   initializeCampanyEnemies,
@@ -6,43 +6,66 @@ import {
 } from '@/components/Game/enemy'
 import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
-import { handleKeyDown, handleKeyUp } from '@/components/Game/controls'
-import { AbstractEntity, Effect, Obstacle } from '@/components/Game/gameTypes'
+import {
+  AbstractEntity,
+  Effect,
+  Obstacle,
+  BtnStates,
+} from '@/components/Game/gameTypes'
 import {
   initializeCompanyMapObstacle,
   initializeRandomObstacle,
 } from '@/components/Game/obstacle'
-import { Modal } from '../common/Modal/Modal'
+import { handleKeyDownUp, resetButtonsStates } from '@/components/Game/controls'
 
-const livesUse = 3
+type GamePropsType = {
+  lives: number
+  isGameStarted: boolean
+  isCompanyStarted: boolean
+  isGamePaused: boolean
+  onDeath: (lives: number) => void
+  onGameOver: (isVictory: boolean) => void
+  onKeyDownUp: (btnStates: BtnStates) => void
+}
 
-export const Game: React.FC = () => {
+export const Game = (props: GamePropsType) => {
+  const {
+    lives,
+    isGameStarted,
+    isCompanyStarted,
+    isGamePaused,
+    onDeath,
+    onGameOver,
+    onKeyDownUp,
+  } = props
+
+  // TODO: Нужно обработать победу в игре
+
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
   const enemiesRef = useRef(initializeRandomEnemies(5))
   const bulletsRef = useRef<AbstractEntity[]>([])
   const obstaclesRef = useRef<Obstacle[]>(initializeRandomObstacle(20))
   const effectsRef = useRef<Effect[]>([])
-  const livesRef = useRef(livesUse)
-  const [gameStarted, setGameStarted] = useState(false)
-  const [isPaused, setIsPaused] = useState(false)
+  const livesRef = useRef(lives)
   const isPausedRef = useRef(false)
+  const isStartedLoopRef = useRef(false)
+
+  const [isGameRunning, setIsGameRunning] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
 
-  const togglePause = useCallback(() => {
-    setIsPaused(prev => !prev)
-    isPausedRef.current = !isPausedRef.current // Обновляем ref для паузы
-  }, [])
-
   const handleGameOver = useCallback(() => {
+    onGameOver(false)
     setIsGameOver(true)
-    setIsPaused(true)
+    setIsGameRunning(false)
+
     isPausedRef.current = true
-  }, [])
+  }, [onGameOver])
 
   const loop = useCallback(() => {
     if (!isPausedRef.current && !isGameOver && canvasRef.current) {
       const context = canvasRef.current.getContext('2d')
+
       if (context) {
         gameLoop(
           context,
@@ -53,76 +76,87 @@ export const Game: React.FC = () => {
           obstaclesRef,
           effectsRef,
           livesRef,
+          onDeath,
           handleGameOver
         )
       }
+
       requestAnimationFrame(loop)
     }
-  }, [isGameOver, handleGameOver, livesRef])
+  }, [isGameOver, onDeath, handleGameOver])
 
-  useEffect(() => {
-    const handleKeyDownWrapper = (event: KeyboardEvent) =>
-      handleKeyDown(event.key)
-    const handleKeyUpWrapper = (event: KeyboardEvent) => handleKeyUp(event.key)
-
-    window.addEventListener('keydown', handleKeyDownWrapper)
-    window.addEventListener('keyup', handleKeyUpWrapper)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDownWrapper)
-      window.removeEventListener('keyup', handleKeyUpWrapper)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (gameStarted && !isPaused) {
-      requestAnimationFrame(loop)
-    }
-  }, [gameStarted, isPaused, loop])
-
-  const startGame = () => {
-    setGameStarted(true)
-    setIsPaused(false)
-    isPausedRef.current = false
+  const startGame = useCallback(() => {
+    setIsGameRunning(true)
     setIsGameOver(false)
-    livesRef.current = livesUse
-    playerRef.current = { ...PLAYER_DEFAULT_PARAMS }
+
+    isPausedRef.current = false
+    livesRef.current = lives
+    playerRef.current = PLAYER_DEFAULT_PARAMS
     enemiesRef.current = initializeRandomEnemies(5)
     obstaclesRef.current = initializeRandomObstacle(20)
-  }
+    isStartedLoopRef.current = false
+  }, [lives])
 
-  const startCompany = () => {
-    setGameStarted(true)
-    setIsPaused(false)
-    isPausedRef.current = false
+  const startCompany = useCallback(() => {
+    setIsGameRunning(true)
     setIsGameOver(false)
-    livesRef.current = livesUse
-    playerRef.current = { ...PLAYER_DEFAULT_PARAMS }
+
+    isPausedRef.current = false
+    livesRef.current = lives
+    playerRef.current = PLAYER_DEFAULT_PARAMS
     enemiesRef.current = initializeCampanyEnemies()
     obstaclesRef.current = initializeCompanyMapObstacle()
-  }
+    isStartedLoopRef.current = false
+  }, [lives])
 
-  return (
-    <div className="game-container">
-      <div className="lives">{`Жизни: ${livesRef.current.toString()}`}</div>
-      <canvas ref={canvasRef} width={800} height={600}></canvas>
+  useEffect(() => {
+    const handleKeyDownUpWrapper = (event: KeyboardEvent) => {
+      handleKeyDownUp(event.type, event.key, onKeyDownUp)
+    }
 
-      {!gameStarted ? (
-        <>
-          <button onClick={startGame}>Начать игру</button>
-          <button onClick={startCompany}>Начать компанию</button>
-        </>
-      ) : (
-        <button onClick={togglePause}>
-          {isPaused ? 'Продолжить' : 'Пауза'}
-        </button>
-      )}
+    window.addEventListener('keydown', handleKeyDownUpWrapper)
+    window.addEventListener('keyup', handleKeyDownUpWrapper)
+    window.addEventListener('blur', resetButtonsStates)
 
-      <Modal show={isGameOver} onClose={() => setIsGameOver(false)}>
-        <h2>Игра окончена</h2>
-        <button onClick={startGame}>Новая игра</button>
-        <button onClick={startCompany}>Компания</button>
-      </Modal>
-    </div>
-  )
+    return () => {
+      window.removeEventListener('keydown', handleKeyDownUpWrapper)
+      window.removeEventListener('keyup', handleKeyDownUpWrapper)
+      window.removeEventListener('blur', resetButtonsStates)
+    }
+  }, [onKeyDownUp])
+
+  useEffect(() => {
+    if (isGameRunning && !isGamePaused && !isStartedLoopRef.current) {
+      isStartedLoopRef.current = true
+
+      requestAnimationFrame(loop)
+    }
+  }, [isGameRunning, isGamePaused, loop])
+
+  useEffect(() => {
+    livesRef.current = lives
+    isPausedRef.current = isGamePaused
+
+    if (!isGamePaused) {
+      isStartedLoopRef.current = false
+    }
+
+    if (isGameRunning === false) {
+      if (isGameStarted) {
+        startGame()
+      } else if (isCompanyStarted) {
+        startCompany()
+      }
+    }
+  }, [
+    lives,
+    isGameStarted,
+    isGamePaused,
+    isGameRunning,
+    startGame,
+    isCompanyStarted,
+    startCompany,
+  ])
+
+  return <canvas ref={canvasRef} width={800} height={600}></canvas>
 }

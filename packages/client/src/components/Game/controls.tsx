@@ -1,7 +1,14 @@
-import { ControlsProps } from '@/components/Game/gameTypes'
+import { BtnStates, ControlsProps } from '@/components/Game/gameTypes'
 import { detectCollision } from '@/components/Game/collision'
 import { createBullet } from '@/components/Game/bullet'
 
+const btnStates: BtnStates = {
+  up: false,
+  down: false,
+  left: false,
+  right: false,
+  fire: false,
+}
 let pressedKeys: string[] = []
 let shootPressed = false // Флаг для стрельбы
 let lastShotTime = 0 // Время последнего выстрела
@@ -36,24 +43,47 @@ const VECTORS: Record<Action, Vector> = {
   [Action.Shoot]: { x: 0, y: 0 },
 }
 
-export const handleKeyDown = (key: string) => {
-  if (!pressedKeys.includes(key)) {
-    pressedKeys.push(key)
-  }
+const checkPressedKeys = (keys: string[]): BtnStates => {
+  keys.forEach((key: string) => {
+    btnStates.up = ACTION_CONTROLS[Action.MoveUp].includes(key)
+    btnStates.down = ACTION_CONTROLS[Action.MoveDown].includes(key)
+    btnStates.left = ACTION_CONTROLS[Action.MoveLeft].includes(key)
+    btnStates.right = ACTION_CONTROLS[Action.MoveRight].includes(key)
+    btnStates.fire = ACTION_CONTROLS[Action.Shoot].includes(key)
+  })
 
-  // Устанавливаем флаг, если нажата клавиша пробела (стрельба)
-  if (key === ' ') {
-    shootPressed = true
-  }
+  return btnStates
 }
 
-export const handleKeyUp = (key: string) => {
-  pressedKeys = pressedKeys.filter(currentKey => currentKey !== key)
+export const handleKeyDownUp = (
+  type: string,
+  key: string,
+  onKeyDownUp: (state: BtnStates) => void
+) => {
+  const isKeydown = type === 'keydown'
 
-  // Сбрасываем флаг, если клавиша пробела отпущена
-  if (key === ' ') {
-    shootPressed = false
+  if (isKeydown) {
+    if (!pressedKeys.includes(key)) {
+      pressedKeys.push(key)
+
+      if (key === ' ') {
+        shootPressed = true
+      }
+    }
+  } else {
+    pressedKeys = pressedKeys.filter(currentKey => currentKey !== key)
+
+    if (key === ' ') {
+      shootPressed = false
+    }
   }
+
+  onKeyDownUp(checkPressedKeys(pressedKeys))
+}
+
+export const resetButtonsStates = () => {
+  pressedKeys = []
+  shootPressed = false
 }
 
 const getActionControlByKey = (key: string): Action | null => {

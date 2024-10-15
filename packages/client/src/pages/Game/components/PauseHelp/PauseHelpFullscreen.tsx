@@ -1,15 +1,17 @@
 import { Icon } from '@/components/ui/Icon/Icon'
 import { ControllBtn } from '../ControllBtn/ControllBtn'
 import './PauseHelpFullscreen.scss'
+import { ReactNode } from 'react'
 
 type PauseHelpPropsType = {
   className?: string
+  pauseIcon: ReactNode
   pauseHandler: () => void
   helpHandler: () => void
 }
 
 export const PauseHelpFullscreen = (props: PauseHelpPropsType) => {
-  const { pauseHandler, helpHandler, className = '' } = props
+  const { pauseHandler, helpHandler, pauseIcon, className = '' } = props
 
   const toggleFullscreen = () => {
     const isFullscreenMode = document.fullscreenElement
@@ -33,7 +35,7 @@ export const PauseHelpFullscreen = (props: PauseHelpPropsType) => {
         <ControllBtn
           className="controll-btn_small pause-button"
           onClick={pauseHandler}>
-          <Icon id="pause-icon" width={16} height={17}></Icon>
+          {pauseIcon}
         </ControllBtn>
 
         <ControllBtn

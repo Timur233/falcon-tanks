@@ -18,7 +18,7 @@ $border-color: #70842f;
 
 .game-wrapper {
   position: relative;
-  width: 800px;
+  width: 832px;
   height: auto;
   background-color: $c_black;
   border-radius: 8px;
@@ -140,37 +140,5 @@ $border-color: #70842f;
 
   &__fire {
     margin-right: auto;
-  }
-}
-
-.start-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  inset: 12px;
-  background-color: $overlay-color;
-
-  &_hide {
-    display: none;
-  }
-}
-
-.game-over-screen {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  inset: 12px;
-  background-color: $overlay-color;
-  background-image: url('@/assets/images/game-over.png');
-  background-size: cover;
-
-  &__title {
-    font-size: 40px;
-    font-weight: 900;
-    text-transform: uppercase;
-    margin-bottom: 16px;
   }
 }

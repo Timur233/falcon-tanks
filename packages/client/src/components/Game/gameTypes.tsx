@@ -46,6 +46,15 @@ export interface Effect {
   animation: AnimationParams
 }
 
+export interface BtnStates {
+  [key: string]: boolean
+  up: boolean
+  down: boolean
+  left: boolean
+  right: boolean
+  fire: boolean
+}
+
 export interface ControlsProps {
   playerRef: React.MutableRefObject<AbstractEntity>
   bulletsRef: React.MutableRefObject<AbstractEntity[]>

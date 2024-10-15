@@ -44,6 +44,7 @@ export const gameLoop = (
   obstaclesRef: React.MutableRefObject<Obstacle[]>,
   effectsRef: React.MutableRefObject<Effect[]>,
   livesRef: React.MutableRefObject<number>,
+  handleDeath: (lives: number) => void,
   handleGameOver: () => void
 ) => {
   clearCanvas(context)
@@ -112,6 +113,8 @@ export const gameLoop = (
       // Проверка на окончание игры
       if (livesRef.current <= 0) {
         handleGameOver()
+      } else {
+        handleDeath(livesRef.current)
       }
     }
   })
@@ -121,6 +124,13 @@ export const gameLoop = (
   )
 
   if (collidedEnemy) {
-    HandlePlayerHit(livesRef, playerRef, enemiesRef, canvasRef, handleGameOver)
+    HandlePlayerHit(
+      livesRef,
+      playerRef,
+      enemiesRef,
+      canvasRef,
+      handleGameOver,
+      handleDeath
+    )
   }
 }
