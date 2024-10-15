@@ -196,6 +196,12 @@ export const Game = () => {
                   onClick={startGameHandler}
                   useFixWidth
                 />
+                <Button
+                  className={'custom-button_blue'}
+                  text={'Начать компанию'}
+                  onClick={startCompanyHandler}
+                  useFixWidth
+                />
               </StatusScreen>
 
               <StatusScreen
@@ -205,6 +211,12 @@ export const Game = () => {
                 <Button
                   text={'Начать заново'}
                   onClick={startGameHandler}
+                  useFixWidth
+                />
+                <Button
+                  className={'custom-button_blue'}
+                  text={'Начать компанию'}
+                  onClick={startCompanyHandler}
                   useFixWidth
                 />
               </StatusScreen>
