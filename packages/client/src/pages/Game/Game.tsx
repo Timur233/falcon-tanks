@@ -42,6 +42,8 @@ export const Game = () => {
     isGameWinning: false,
   })
 
+  const [kills, setKills] = useState(0)
+
   const startGameHandler = () => {
     setGameState({
       lives: DEFAULT_LIVES_COUNT,
@@ -76,6 +78,10 @@ export const Game = () => {
       ...state,
       lives,
     }))
+  }, [])
+
+  const onKill = useCallback((newKills: number) => {
+    setKills(newKills)
   }, [])
 
   const gameOverHandler = useCallback((isVictory: boolean) => {
@@ -152,6 +158,7 @@ export const Game = () => {
               <div className="game-wrapper__decor-vr"></div>
               <GamePrototype
                 lives={gameState.lives}
+                onKill={onKill}
                 isGameStarted={gameState.isGameStarted}
                 isCompanyStarted={gameState.isCompanyStarted}
                 isGamePaused={gameState.isGamePaused}
@@ -205,7 +212,7 @@ export const Game = () => {
           </div>
           <div className="column col-4">
             <div className="game-controll">
-              <KillsCounter className="game-controll__kills" kills={0} />
+              <KillsCounter className="game-controll__kills" kills={kills} />
 
               <CustomPageTitle
                 className="game-controll__lives"

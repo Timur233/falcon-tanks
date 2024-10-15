@@ -20,6 +20,7 @@ import { handleKeyDownUp, resetButtonsStates } from '@/components/Game/controls'
 
 type GamePropsType = {
   lives: number
+  onKill: (kills: number) => void
   isGameStarted: boolean
   isCompanyStarted: boolean
   isGamePaused: boolean
@@ -31,6 +32,7 @@ type GamePropsType = {
 export const Game = (props: GamePropsType) => {
   const {
     lives,
+    onKill,
     isGameStarted,
     isCompanyStarted,
     isGamePaused,
@@ -53,6 +55,12 @@ export const Game = (props: GamePropsType) => {
 
   const [isGameRunning, setIsGameRunning] = useState(false)
   const [isGameOver, setIsGameOver] = useState(false)
+  const killsRef = useRef(0)
+
+  const handleEnemyKilled = () => {
+    killsRef.current += 1
+    onKill(killsRef.current)
+  }
 
   const handleGameOver = useCallback(() => {
     onGameOver(false)
@@ -77,7 +85,8 @@ export const Game = (props: GamePropsType) => {
           effectsRef,
           livesRef,
           onDeath,
-          handleGameOver
+          handleGameOver,
+          handleEnemyKilled
         )
       }
 

@@ -33,7 +33,10 @@ import { createBangEffect, initEffects } from './effects'
  * @param bulletsRef - Ссылка на массив пуль.
  * @param obstaclesRef - Ссылка на массив препятствий.
  * @param livesRef - Ссылка на текущее количество жизней игрока.
+ * @param effectsRef - Ссылка на массив эффектов.
+ * @param handleDeath - Обработчик события смерти игрока.
  * @param handleGameOver - Обработчик события окончания игры.
+ * @param handleEnemyKilled - Обработчик события уничтожения врага.
  */
 export const gameLoop = (
   context: CanvasRenderingContext2D,
@@ -45,7 +48,8 @@ export const gameLoop = (
   effectsRef: React.MutableRefObject<Effect[]>,
   livesRef: React.MutableRefObject<number>,
   handleDeath: (lives: number) => void,
-  handleGameOver: () => void
+  handleGameOver: () => void,
+  handleEnemyKilled: () => void
 ) => {
   clearCanvas(context)
 
@@ -89,6 +93,7 @@ export const gameLoop = (
       if (hit) {
         // Убираем врага, если попали
         killEnemy(enemiesRef, enemy)
+        handleEnemyKilled()
         // Эффект поподания
         createBangEffect(
           bullet.x + bullet.width / 2,
