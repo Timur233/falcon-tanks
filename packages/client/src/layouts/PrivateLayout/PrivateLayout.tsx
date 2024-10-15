@@ -1,12 +1,12 @@
 import { Header } from '@/components/common/Header/Header'
+import { Outlet, useNavigate } from 'react-router-dom'
+import './PrivateLayout.scss'
+import { Loader } from '@/components/ui/Loader/Loader'
+import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '@/store'
 import { actions, getUser, UserType } from '@/store/reducers/auth-reducer'
 import { useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { Outlet, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import './PrivateLayout.scss'
-import { Loader } from '@/components/ui/Loader/Loader'
 
 export default function PrivateLayout() {
   const user = useSelector<RootState, UserType>(state => state.authReducer.user)

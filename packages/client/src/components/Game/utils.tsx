@@ -28,16 +28,27 @@ export const clearCanvas = (context: CanvasRenderingContext2D) => {
 const tankSprite = new Image()
 tankSprite.src = tankSpritePath
 
+let lastPlayerDirection = { x: 0, y: 0 }
+
 export const drawPlayer = (
   context: CanvasRenderingContext2D,
   player: Player
 ) => {
-  context.save() // сохраняем текущую матрицу трансформации
+  let direction = { ...player.direction }
 
-  // Перемещаем контекст на позицию танка
+  const isPlayerIdle = direction.x === 0 && direction.y === 0
+
+  if (isPlayerIdle) {
+    direction = lastPlayerDirection
+  } else {
+    lastPlayerDirection = direction
+  }
+
+  context.save()
+
   context.translate(player.x + player.width / 2, player.y + player.height / 2)
 
-  const angle = Math.atan2(player.direction.x, player.direction.y)
+  const angle = Math.atan2(direction.x, -direction.y)
   context.rotate(angle)
 
   context.drawImage(
@@ -48,7 +59,7 @@ export const drawPlayer = (
     player.height
   )
 
-  context.restore() // восстанавливаем матрицу трансформации
+  context.restore()
 }
 
 const enemiesSprite = new Image()
@@ -70,7 +81,22 @@ export const drawObstacles = (
   context: CanvasRenderingContext2D,
   obstacles: Obstacle[]
 ) => {
+  const SPRITE_SIZE = 50
+
   obstacles.forEach(obstacle => {
-    context.drawImage(wallSprite, obstacle.x, obstacle.y)
+    const horizontalCount = Math.ceil(obstacle.width / SPRITE_SIZE)
+    const verticalCount = Math.ceil(obstacle.height / SPRITE_SIZE)
+
+    Array.from({ length: horizontalCount }).forEach((_, i) => {
+      Array.from({ length: verticalCount }).forEach((_, j) => {
+        const x = obstacle.x + i * SPRITE_SIZE
+        const y = obstacle.y + j * SPRITE_SIZE
+
+        const width = Math.min(SPRITE_SIZE, obstacle.width - i * SPRITE_SIZE)
+        const height = Math.min(SPRITE_SIZE, obstacle.height - j * SPRITE_SIZE)
+
+        context.drawImage(wallSprite, 0, 0, width, height, x, y, width, height)
+      })
+    })
   })
 }

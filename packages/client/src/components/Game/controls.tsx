@@ -1,6 +1,8 @@
 import { ControlsProps, BtnStates } from '@/components/Game/gameTypes'
 import { detectCollision } from '@/components/Game/collision'
 
+let pressedKeys: string[] = []
+
 const btnStates: BtnStates = {
   up: false,
   down: false,
@@ -9,65 +11,109 @@ const btnStates: BtnStates = {
   fire: false,
 }
 
+enum Action {
+  MoveUp = 'MoveUp',
+  MoveDown = 'MoveDown',
+  MoveLeft = 'MoveLeft',
+  MoveRight = 'MoveRight',
+  Shoot = 'Shoot',
+}
+
+type Vector = {
+  x: -1 | 0 | 1
+  y: -1 | 0 | 1
+}
+
+const MOVEMENT_CONTROLS: Record<Action, string[]> = {
+  [Action.MoveUp]: ['ArrowUp', 'w', 'ц', 'W', 'Ц'],
+  [Action.MoveDown]: ['ArrowDown', 's', 'ы', 'S', 'Ы'],
+  [Action.MoveLeft]: ['ArrowLeft', 'a', 'ф', 'A', 'Ф'],
+  [Action.MoveRight]: ['ArrowRight', 'd', 'в', 'D', 'В'],
+  [Action.Shoot]: [' '],
+}
+
+const VECTORS: Record<Action, Vector> = {
+  [Action.MoveUp]: { x: 0, y: -1 },
+  [Action.MoveDown]: { x: 0, y: 1 },
+  [Action.MoveLeft]: { x: -1, y: 0 },
+  [Action.MoveRight]: { x: 1, y: 0 },
+  [Action.Shoot]: { x: 0, y: 0 },
+}
+
+const checkPressedKeys = (keys: string[]): BtnStates => {
+  keys.forEach((key: string) => {
+    btnStates.up = MOVEMENT_CONTROLS[Action.MoveUp].includes(key)
+    btnStates.down = MOVEMENT_CONTROLS[Action.MoveDown].includes(key)
+    btnStates.left = MOVEMENT_CONTROLS[Action.MoveLeft].includes(key)
+    btnStates.right = MOVEMENT_CONTROLS[Action.MoveRight].includes(key)
+    btnStates.fire = MOVEMENT_CONTROLS[Action.Shoot].includes(key)
+  })
+
+  return btnStates
+}
+
 export const handleKeyDownUp = (
   type: string,
   key: string,
   onKeyDownUp: (state: BtnStates) => void
 ) => {
-  const checkBtnState = (
-    aliases: string[],
-    type: string,
-    prevState: boolean
-  ) => {
-    if (aliases.includes(key)) {
-      return type === 'keydown'
-    }
+  const isKeydown = type === 'keydown'
 
-    return prevState
+  if (isKeydown) {
+    if (!pressedKeys.includes(key)) {
+      pressedKeys.push(key)
+    }
+  } else {
+    pressedKeys = pressedKeys.filter(currentKey => currentKey !== key)
   }
 
-  btnStates.up = checkBtnState(['ArrowUp', 'w', 'ц'], type, btnStates.up)
-  btnStates.down = checkBtnState(['ArrowDown', 's', 'ы'], type, btnStates.down)
-  btnStates.left = checkBtnState(['ArrowLeft', 'a', 'ф'], type, btnStates.left)
-  btnStates.right = checkBtnState(
-    ['ArrowRight', 'd', 'в'],
-    type,
-    btnStates.right
-  )
-  btnStates.fire = checkBtnState([' '], type, btnStates.fire)
-
-  onKeyDownUp(btnStates)
+  onKeyDownUp(checkPressedKeys(pressedKeys))
 }
 
 export const resetButtonsStates = () => {
-  Object.keys(btnStates).forEach((key: string) => (btnStates[key] = false))
+  pressedKeys = []
 }
 
-// Функция для обновления позиции игрока на основе нажатых клавиш
+const getMovementControlByKey = (key: string): Action | null => {
+  for (const [action, keys] of Object.entries(MOVEMENT_CONTROLS)) {
+    if (keys.includes(key)) {
+      return action as Action
+    }
+  }
+
+  return null
+}
+
+const getLastMovementAction = (): Action | null => {
+  for (let i = pressedKeys.length - 1; i >= 0; i--) {
+    const action = getMovementControlByKey(pressedKeys[i])
+
+    if (action) {
+      return action
+    }
+  }
+
+  return null
+}
+
 export const updatePlayerMovement = (props: ControlsProps) => {
   const speed = props.playerRef.current.speed
   let newX = props.playerRef.current.x
   let newY = props.playerRef.current.y
 
-  // Определение направления движения
-  if (btnStates.up) {
-    props.playerRef.current.direction = { x: 0, y: 1 }
-    newY -= speed
-  }
-  if (btnStates.down) {
-    props.playerRef.current.direction = { x: 0, y: -1 }
-    newY += speed
-  }
-  if (btnStates.left) {
-    props.playerRef.current.direction = { x: -1, y: 0 }
-    newX -= speed
-  }
-  if (btnStates.right) {
-    props.playerRef.current.direction = { x: 1, y: 0 }
-    newX += speed
-  }
+  const lastMovementAction = getLastMovementAction()
 
-  // Обработка столкновений с препятствиями
+  if (!lastMovementAction) return
+
+  const vector = VECTORS[lastMovementAction]
+
+  if (!vector) return
+
+  props.playerRef.current.direction = vector
+
+  newX += vector.x * speed
+  newY += vector.y * speed
+
   const hasCollision = props.obstacles.some(obstacle => {
     return detectCollision(
       { ...props.playerRef.current, x: newX, y: newY },
@@ -75,9 +121,7 @@ export const updatePlayerMovement = (props: ControlsProps) => {
     )
   })
 
-  // Если есть столкновение, то оставить предыдущую позицию
   if (!hasCollision) {
-    // Ограничение движения по краям canvas
     newX = Math.max(
       0,
       Math.min(newX, props.canvasWidth - props.playerRef.current.width)
@@ -87,7 +131,6 @@ export const updatePlayerMovement = (props: ControlsProps) => {
       Math.min(newY, props.canvasHeight - props.playerRef.current.height)
     )
 
-    // Обновляем позицию игрока в референсе
     props.playerRef.current.x = newX
     props.playerRef.current.y = newY
   }

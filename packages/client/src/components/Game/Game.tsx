@@ -34,7 +34,7 @@ export const Game = (props: GamePropsType) => {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
-  const enemiesRef = useRef(initializeEnemies(5))
+  const enemiesRef = useRef(initializeEnemies())
   const obstaclesRef = useRef<Obstacle[]>(initializeObstacle())
   const livesRef = useRef(0)
   const isPausedRef = useRef(false)
@@ -86,7 +86,7 @@ export const Game = (props: GamePropsType) => {
     isPausedRef.current = false
     livesRef.current = lives
     playerRef.current = PLAYER_DEFAULT_PARAMS
-    enemiesRef.current = initializeEnemies(5)
+    enemiesRef.current = initializeEnemies()
     isStartedLoopRef.current = false
   }, [lives])
 

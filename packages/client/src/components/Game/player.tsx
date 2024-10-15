@@ -2,10 +2,10 @@ import { Player } from '@/components/Game/gameTypes'
 
 export const PLAYER_DEFAULT_PARAMS = {
   x: 400,
-  y: 300,
+  y: 560,
   width: 70,
   height: 70,
-  speed: 2,
+  speed: 3,
   direction: { x: 0, y: 0 },
 }
 
@@ -29,7 +29,8 @@ export const HandlePlayerHit = (
   livesRef: React.MutableRefObject<number>,
   handleGameOver: () => void,
   resetPlayerPosition: () => void,
-  respawnEnemies: () => void
+  respawnEnemies: () => void,
+  handleDeath: (lives: number) => void
 ) => {
   const newLives = livesRef.current - 1
 
@@ -37,7 +38,11 @@ export const HandlePlayerHit = (
   resetPlayerPosition() // Сбрасываем позицию игрока
   respawnEnemies() // Респавн врагов
 
-  if (newLives <= 0) {
+  if (livesRef.current <= 0) {
     handleGameOver()
+  } else {
+    resetPlayerPosition()
+    respawnEnemies()
+    handleDeath(newLives)
   }
 }

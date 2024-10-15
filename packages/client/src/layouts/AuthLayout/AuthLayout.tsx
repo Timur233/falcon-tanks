@@ -1,24 +1,7 @@
-import { Outlet, useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/store'
-import { UserType } from '@/store/reducers/auth-reducer'
-import { toast } from 'react-toastify'
-import { useEffect } from 'react'
+import { Outlet } from 'react-router-dom'
+import withAuthUser from '@/components/hoc/withAuthUser'
 
-export default function AuthLayout() {
-  const user = useSelector<RootState, UserType>(state => state.authReducer.user)
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    if (window.sessionStorage.getItem('userIsLogged') === '1') {
-      toast.success('Вы уже авторизованы', {
-        autoClose: 1500,
-        onClose: () => {
-          navigate('/game')
-        },
-      })
-    }
-  }, [user])
-
+const AuthLayout = () => {
   return <Outlet />
 }
+export default withAuthUser(AuthLayout, '/game')
