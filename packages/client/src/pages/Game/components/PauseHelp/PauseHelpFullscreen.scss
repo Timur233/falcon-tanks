@@ -4,16 +4,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 173px;
+  width: inherit;
   height: 56px;
 
-  background: url('@/assets/images/svg/pause-and-help-controll-bg.svg')
+  background: url('@/assets/images/svg/pause-help-fullscreen-controll-bg.svg')
     no-repeat center center;
   background-size: contain;
 
   &__buttons {
     width: 100%;
-    padding: 0 36.5px;
+    padding: 0 62.5px;
     display: flex;
     align-items: center;
     justify-content: space-between;

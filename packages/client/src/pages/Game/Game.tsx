@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { Arrows } from './components/Arrows/Arrows'
 import { FireControll } from './components/FireControll/FireControll'
 import { KillsCounter } from './components/KillsCounter/KillsCounter'
-import { PauseHelp } from './components/PauseHelp/PauseHelp'
+import { PauseHelpFullscreen } from './components/PauseHelp/PauseHelpFullscreen'
 import './Game.scss'
 
 export const Game = () => {
@@ -74,16 +74,6 @@ export const Game = () => {
     }
   })
 
-  const toggleFullscrean = () => {
-    const isFullscreanMode = document.fullscreenElement
-
-    if (isFullscreanMode) {
-      document.exitFullscreen()
-    } else {
-      document.documentElement.requestFullscreen()
-    }
-  }
-
   return (
     <section className="game-page">
       <Modal show={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
@@ -123,13 +113,11 @@ export const Game = () => {
                 tagName="span"
               />
 
-              <PauseHelp
+              <PauseHelpFullscreen
                 className="game-controll__pause-help-buttons"
                 pauseHandler={pauseHandler}
                 helpHandler={helpHandler}
               />
-
-              <button onClick={toggleFullscrean}>Во весь экран</button>
 
               <Arrows
                 buttonsState={buttonsState}
