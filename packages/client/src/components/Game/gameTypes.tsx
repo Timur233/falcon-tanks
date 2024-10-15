@@ -1,4 +1,4 @@
-export interface Player {
+export interface AbstractEntity {
   x: number
   y: number
   width: number
@@ -7,13 +7,9 @@ export interface Player {
   direction: { x: number; y: number }
 }
 
-export interface Enemy {
-  x: number
-  y: number
-  width: number
-  height: number
-  speed: number
-  direction: { x: number; y: number }
+export interface Enemy extends AbstractEntity {
+  id: number
+  lastShotTime?: number
 }
 
 export interface Obstacle {
@@ -24,7 +20,8 @@ export interface Obstacle {
 }
 
 export interface ControlsProps {
-  playerRef: React.MutableRefObject<Player>
+  playerRef: React.MutableRefObject<AbstractEntity>
+  bulletsRef: React.MutableRefObject<AbstractEntity[]>
   obstacles: Obstacle[]
   canvasWidth: number
   canvasHeight: number
