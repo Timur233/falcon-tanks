@@ -1,50 +1,126 @@
 import { HandlePlayerHit } from './player'
-import { updateEnemyPositions } from './enemy'
-import { clearCanvas, drawPlayer, drawEnemies, drawObstacles } from './utils'
-import { Enemy, Obstacle, Player } from '@/components/Game/gameTypes'
-import { detectEnemyCollision } from '@/components/Game/collision'
+import { updateEnemyPositions, killEnemy, handleEnemyShooting } from './enemy'
+import {
+  clearCanvas,
+  drawPlayer,
+  drawEnemies,
+  drawObstacles,
+  drawBullets,
+  drawEffects,
+} from './utils'
+import {
+  ControlsProps,
+  AbstractEntity,
+  Obstacle,
+  Enemy,
+  Effect,
+} from '@/components/Game/gameTypes'
+import {
+  detectBulletCollision,
+  detectEnemyCollision,
+} from '@/components/Game/collision'
+import { updatePlayerAction } from '@/components/Game/controls'
+import { updateBullets } from '@/components/Game/bullet'
+import { handleBulletObstacleCollisions } from '@/components/Game/obstacle'
+import { createBangEffect, initEffects } from './effects'
 
 /**
  * Основной игровой цикл, который обновляет состояние игры и перерисовывает экран каждый кадр.
  * @param context - Контекст рисования для Canvas.
+ * @param canvasRef - Ссылка на Canvas.
  * @param playerRef - Ссылка на текущего игрока.
  * @param enemiesRef - Ссылка на массив врагов.
- * @param obstacles - Массив препятствий.
+ * @param bulletsRef - Ссылка на массив пуль.
+ * @param obstaclesRef - Ссылка на массив препятствий.
  * @param livesRef - Ссылка на текущее количество жизней игрока.
  * @param handleGameOver - Обработчик события окончания игры.
  */
 export const gameLoop = (
   context: CanvasRenderingContext2D,
-  playerRef: React.MutableRefObject<Player>,
+  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>,
+  playerRef: React.MutableRefObject<AbstractEntity>,
   enemiesRef: React.MutableRefObject<Enemy[]>,
-  obstacles: Obstacle[],
+  bulletsRef: React.MutableRefObject<AbstractEntity[]>,
+  obstaclesRef: React.MutableRefObject<Obstacle[]>,
+  effectsRef: React.MutableRefObject<Effect[]>,
   livesRef: React.MutableRefObject<number>,
   handleGameOver: () => void
 ) => {
   clearCanvas(context)
 
   // Обновление позиций врагов
-  updateEnemyPositions(playerRef.current, enemiesRef)
+  updateEnemyPositions(playerRef.current, enemiesRef, obstaclesRef.current)
+  if (!canvasRef.current) return
+  const moveProps: ControlsProps = {
+    playerRef,
+    bulletsRef,
+    obstacles: obstaclesRef.current,
+    canvasWidth: canvasRef.current.width,
+    canvasHeight: canvasRef.current.height,
+  }
+  updatePlayerAction(moveProps)
+
+  // Стрельба врагов каждые 2 секунды
+  handleEnemyShooting(enemiesRef.current, bulletsRef)
+
+  // Обработка столкновений с препятствиями
+  handleBulletObstacleCollisions(bulletsRef.current, obstaclesRef.current)
+
+  initEffects(effectsRef)
+
+  bulletsRef.current = updateBullets(
+    bulletsRef.current,
+    canvasRef.current.width,
+    canvasRef.current.height
+  )
 
   // Отрисовка всех игровых объектов
-  drawObstacles(context, obstacles)
   drawPlayer(context, playerRef.current)
   drawEnemies(context, enemiesRef.current)
+  drawObstacles(context, obstaclesRef.current)
+  drawEffects(context, effectsRef.current)
+  drawBullets(context, bulletsRef.current) // Отрисовка пуль
+
+  // Проверка на столкновения пуль с врагами
+  bulletsRef.current.forEach(bullet => {
+    enemiesRef.current = enemiesRef.current.filter(enemy => {
+      const hit = detectBulletCollision(bullet, enemy)
+      if (hit) {
+        // Убираем врага, если попали
+        killEnemy(enemiesRef, enemy)
+        // Эффект поподания
+        createBangEffect(
+          bullet.x + bullet.width / 2,
+          bullet.y + bullet.height / 2
+        )
+        // Убираем пулю, если попали
+        bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
+        return false
+      }
+      return true
+    })
+    if (detectBulletCollision(bullet, playerRef.current)) {
+      // Уменьшаем жизни игрока
+      livesRef.current -= 1
+      // Эффект поподания
+      createBangEffect(
+        bullet.x + bullet.width / 2,
+        bullet.y + bullet.height / 2
+      )
+      // Удаляем пулю после попадания
+      bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
+      // Проверка на окончание игры
+      if (livesRef.current <= 0) {
+        handleGameOver()
+      }
+    }
+  })
 
   const collidedEnemy = enemiesRef.current.find(enemy =>
     detectEnemyCollision(playerRef.current, enemy)
   )
 
   if (collidedEnemy) {
-    HandlePlayerHit(
-      livesRef,
-      handleGameOver,
-      () => {
-        playerRef.current = { ...playerRef.current, x: 400, y: 560 }
-      },
-      () => {
-        enemiesRef.current = enemiesRef.current.map(e => ({ ...e }))
-      }
-    )
+    HandlePlayerHit(livesRef, playerRef, enemiesRef, canvasRef, handleGameOver)
   }
 }
