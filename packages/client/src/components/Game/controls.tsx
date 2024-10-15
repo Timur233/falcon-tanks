@@ -1,7 +1,6 @@
-import { ControlsProps, BtnStates } from '@/components/Game/gameTypes'
+import { BtnStates, ControlsProps } from '@/components/Game/gameTypes'
 import { detectCollision } from '@/components/Game/collision'
-
-let pressedKeys: string[] = []
+import { createBullet } from '@/components/Game/bullet'
 
 const btnStates: BtnStates = {
   up: false,
@@ -10,6 +9,10 @@ const btnStates: BtnStates = {
   right: false,
   fire: false,
 }
+let pressedKeys: string[] = []
+let shootPressed = false // Флаг для стрельбы
+let lastShotTime = 0 // Время последнего выстрела
+const SHOOT_DELAY = 500 // Задержка между выстрелами (в миллисекундах)
 
 enum Action {
   MoveUp = 'MoveUp',
@@ -24,7 +27,7 @@ type Vector = {
   y: -1 | 0 | 1
 }
 
-const MOVEMENT_CONTROLS: Record<Action, string[]> = {
+const ACTION_CONTROLS: Record<Action, string[]> = {
   [Action.MoveUp]: ['ArrowUp', 'w', 'ц', 'W', 'Ц'],
   [Action.MoveDown]: ['ArrowDown', 's', 'ы', 'S', 'Ы'],
   [Action.MoveLeft]: ['ArrowLeft', 'a', 'ф', 'A', 'Ф'],
@@ -42,40 +45,51 @@ const VECTORS: Record<Action, Vector> = {
 
 const checkPressedKeys = (keys: string[]): BtnStates => {
   keys.forEach((key: string) => {
-    btnStates.up = MOVEMENT_CONTROLS[Action.MoveUp].includes(key)
-    btnStates.down = MOVEMENT_CONTROLS[Action.MoveDown].includes(key)
-    btnStates.left = MOVEMENT_CONTROLS[Action.MoveLeft].includes(key)
-    btnStates.right = MOVEMENT_CONTROLS[Action.MoveRight].includes(key)
-    btnStates.fire = MOVEMENT_CONTROLS[Action.Shoot].includes(key)
+    btnStates.up = ACTION_CONTROLS[Action.MoveUp].includes(key)
+    btnStates.down = ACTION_CONTROLS[Action.MoveDown].includes(key)
+    btnStates.left = ACTION_CONTROLS[Action.MoveLeft].includes(key)
+    btnStates.right = ACTION_CONTROLS[Action.MoveRight].includes(key)
+    btnStates.fire = ACTION_CONTROLS[Action.Shoot].includes(key)
   })
 
   return btnStates
 }
 
-export const handleKeyDownUp = (
-  type: string,
-  key: string,
-  onKeyDownUp: (state: BtnStates) => void
-) => {
-  const isKeydown = type === 'keydown'
+  export const handleKeyDownUp = (
+    type: string,
+    key: string,
+    onKeyDownUp: (state: BtnStates) => void
+  ) => {
+    const isKeydown = type === 'keydown'
+  
+    if (isKeydown) {
+      if (!pressedKeys.includes(key)) {
+        pressedKeys.push(key)
 
-  if (isKeydown) {
-    if (!pressedKeys.includes(key)) {
-      pressedKeys.push(key)
+        if (key === ' ') {
+          shootPressed = true
+        }
+      }
+    } else {
+      pressedKeys = pressedKeys.filter(currentKey => currentKey !== key)
+
+      if (key === ' ') {
+        shootPressed = false
+      }
     }
-  } else {
-    pressedKeys = pressedKeys.filter(currentKey => currentKey !== key)
+  
+    onKeyDownUp(checkPressedKeys(pressedKeys))
   }
 
-  onKeyDownUp(checkPressedKeys(pressedKeys))
-}
+  export const resetButtonsStates = () => {
+    pressedKeys = []
+    shootPressed = false
+  }
 
-export const resetButtonsStates = () => {
-  pressedKeys = []
-}
 
-const getMovementControlByKey = (key: string): Action | null => {
-  for (const [action, keys] of Object.entries(MOVEMENT_CONTROLS)) {
+
+const getActionControlByKey = (key: string): Action | null => {
+  for (const [action, keys] of Object.entries(ACTION_CONTROLS)) {
     if (keys.includes(key)) {
       return action as Action
     }
@@ -84,9 +98,9 @@ const getMovementControlByKey = (key: string): Action | null => {
   return null
 }
 
-const getLastMovementAction = (): Action | null => {
+const getLastAction = (): Action | null => {
   for (let i = pressedKeys.length - 1; i >= 0; i--) {
-    const action = getMovementControlByKey(pressedKeys[i])
+    const action = getActionControlByKey(pressedKeys[i])
 
     if (action) {
       return action
@@ -96,12 +110,14 @@ const getLastMovementAction = (): Action | null => {
   return null
 }
 
-export const updatePlayerMovement = (props: ControlsProps) => {
+
+
+export const updatePlayerAction = (props: ControlsProps) => {
   const speed = props.playerRef.current.speed
   let newX = props.playerRef.current.x
   let newY = props.playerRef.current.y
 
-  const lastMovementAction = getLastMovementAction()
+  const lastMovementAction = getLastAction()
 
   if (!lastMovementAction) return
 
@@ -109,10 +125,20 @@ export const updatePlayerMovement = (props: ControlsProps) => {
 
   if (!vector) return
 
-  props.playerRef.current.direction = vector
+  const currentTime = Date.now() // Получаем текущее время
 
-  newX += vector.x * speed
-  newY += vector.y * speed
+  if (lastMovementAction === Action.Shoot) {
+    // Ограничение скорости стрельбы с помощью таймера
+    if (shootPressed && currentTime - lastShotTime >= SHOOT_DELAY) {
+      props.bulletsRef.current.push(createBullet(props.playerRef.current))
+      lastShotTime = currentTime // Обновляем время последнего выстрела
+    }
+  } else {
+    props.playerRef.current.direction = vector
+
+    newX += vector.x * speed
+    newY += vector.y * speed
+  }
 
   const hasCollision = props.obstacles.some(obstacle => {
     return detectCollision(

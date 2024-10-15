@@ -1,19 +1,25 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import './Game.scss'
-import { initializeEnemies } from '@/components/Game/enemy'
+import {
+  initializeCampanyEnemies,
+  initializeRandomEnemies,
+} from '@/components/Game/enemy'
 import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
+import { AbstractEntity, Obstacle, BtnStates } from '@/components/Game/gameTypes'
+import {
+  initializeCompanyMapObstacle,
+  initializeRandomObstacle,
+} from '@/components/Game/obstacle'
 import {
   handleKeyDownUp,
   resetButtonsStates,
-  updatePlayerMovement,
 } from '@/components/Game/controls'
-import { BtnStates, ControlsProps, Obstacle } from '@/components/Game/gameTypes'
-import { initializeObstacle } from '@/components/Game/obstacle'
 
 type GamePropsType = {
   lives: number
   isGameStarted: boolean
+  isCompanyStarted: boolean
   isGamePaused: boolean
   onDeath: (lives: number) => void
   onGameOver: (isVictory: boolean) => void
@@ -24,6 +30,7 @@ export const Game = (props: GamePropsType) => {
   const {
     lives,
     isGameStarted,
+    isCompanyStarted,
     isGamePaused,
     onDeath,
     onGameOver,
@@ -34,9 +41,10 @@ export const Game = (props: GamePropsType) => {
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
-  const enemiesRef = useRef(initializeEnemies())
-  const obstaclesRef = useRef<Obstacle[]>(initializeObstacle())
-  const livesRef = useRef(0)
+  const enemiesRef = useRef(initializeRandomEnemies(5))
+  const bulletsRef = useRef<AbstractEntity[]>([])
+  const obstaclesRef = useRef<Obstacle[]>(initializeRandomObstacle(20))
+  const livesRef = useRef(lives)
   const isPausedRef = useRef(false)
   const isStartedLoopRef = useRef(false)
 
@@ -56,19 +64,13 @@ export const Game = (props: GamePropsType) => {
       const context = canvasRef.current.getContext('2d')
 
       if (context) {
-        const moveProps: ControlsProps = {
-          playerRef,
-          obstacles: obstaclesRef.current,
-          canvasWidth: canvasRef.current.width,
-          canvasHeight: canvasRef.current.height,
-        }
-
-        updatePlayerMovement(moveProps)
         gameLoop(
           context,
+          canvasRef,
           playerRef,
           enemiesRef,
-          obstaclesRef.current,
+          bulletsRef,
+          obstaclesRef,
           livesRef,
           onDeath,
           handleGameOver
@@ -86,7 +88,20 @@ export const Game = (props: GamePropsType) => {
     isPausedRef.current = false
     livesRef.current = lives
     playerRef.current = PLAYER_DEFAULT_PARAMS
-    enemiesRef.current = initializeEnemies()
+    enemiesRef.current = initializeRandomEnemies(5)
+    obstaclesRef.current = initializeRandomObstacle(20)
+    isStartedLoopRef.current = false
+  }, [lives])
+
+  const startCompany = useCallback(() => {
+    setIsGameRunning(true)
+    setIsGameOver(false)
+
+    isPausedRef.current = false
+    livesRef.current = lives
+    playerRef.current = PLAYER_DEFAULT_PARAMS
+    enemiesRef.current = initializeCampanyEnemies()
+    obstaclesRef.current = initializeCompanyMapObstacle()
     isStartedLoopRef.current = false
   }, [lives])
 
@@ -122,8 +137,16 @@ export const Game = (props: GamePropsType) => {
       isStartedLoopRef.current = false
     }
 
-    if (isGameStarted && isGameRunning === false) startGame()
-  }, [lives, isGameStarted, isGamePaused, isGameRunning, startGame])
+    if (isGameRunning === false) {
+      if (isGameStarted) {
+        startGame()
+      } else if (isCompanyStarted) { 
+        startCompany()
+      }
+    }
+  }, [lives, isGameStarted, isGamePaused, isGameRunning, startGame, isCompanyStarted, startCompany])
 
-  return <canvas ref={canvasRef} width={800} height={600}></canvas>
+  return (
+     <canvas ref={canvasRef} width={800} height={600}></canvas>
+  )
 }

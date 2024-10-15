@@ -1,16 +1,16 @@
 import { Button } from '@/components/ui/Button/Button'
 import './StatusScreen.scss'
+import { ReactNode } from 'react'
 
 type StatusScreenType = {
   isVisible: boolean
-  buttonTitle: string
-  onButtonClick: () => void
   title?: string
   type?: string
+  children: ReactNode
 }
 
 export const StatusScreen = (props: StatusScreenType) => {
-  const { isVisible, buttonTitle, onButtonClick, title = '', type = '' } = props
+  const { isVisible, children, title = '', type = '' } = props
 
   return (
     <div
@@ -18,7 +18,7 @@ export const StatusScreen = (props: StatusScreenType) => {
         isVisible ? ' status-screen_show' : ''
       }`}>
       {title ? <span className="status-screen__title">{title}</span> : ''}
-      <Button text={buttonTitle} onClick={onButtonClick} useFixWidth />
+      {children}
     </div>
   )
 }

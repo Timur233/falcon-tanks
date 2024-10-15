@@ -1,14 +1,16 @@
-import { Header } from '@/components/common/Header/Header'
-import { Outlet, useNavigate } from 'react-router-dom'
 import './PrivateLayout.scss'
+import { Header } from '@/components/common/Header/Header'
 import { Loader } from '@/components/ui/Loader/Loader'
-import { useSelector } from 'react-redux'
 import { RootState, useAppDispatch } from '@/store'
 import { actions, getUser, UserType } from '@/store/reducers/auth-reducer'
 import { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { Outlet, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
+import withAuthUser from '@/components/hoc/withAuthUser'
+import './PrivateLayout.scss'
 
-export default function PrivateLayout() {
+export function PrivateLayout() {
   const user = useSelector<RootState, UserType>(state => state.authReducer.user)
   const navigate = useNavigate()
   const userIsLogged = window.sessionStorage.getItem('userIsLogged') === '1'
@@ -20,10 +22,10 @@ export default function PrivateLayout() {
         .unwrap()
         .then(data => {
           dispatch(actions.setUser(data))
-          window.sessionStorage.setItem('userIsLogged', '1')
+          window.sessionStorage.setItem('userIsLogged', '1') // 0
         })
         .catch(() => {
-          window.sessionStorage.setItem('userIsLogged', '0')
+          window.sessionStorage.setItem('userIsLogged', '0') // 0
 
           toast.error('Необходимо авторизоваться', {
             autoClose: 1500,
@@ -45,6 +47,7 @@ export default function PrivateLayout() {
       </div>
     )
   }
-
   return user === null ? <Loader show={true} /> : <Outlet />
 }
+
+export default withAuthUser(PrivateLayout)
