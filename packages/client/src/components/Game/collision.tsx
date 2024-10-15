@@ -8,7 +8,8 @@ export const detectCollision = (
     player.x < obstacle.x + obstacle.width &&
     player.x + player.width > obstacle.x &&
     player.y < obstacle.y + obstacle.height &&
-    player.y + player.height > obstacle.y
+    player.y + player.height > obstacle.y &&
+    obstacle.isCollide
   )
 }
 

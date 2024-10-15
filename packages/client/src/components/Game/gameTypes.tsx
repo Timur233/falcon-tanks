@@ -1,10 +1,23 @@
+interface AnimationParams {
+  currentFrame: number
+  totalFrames: number
+  frameInterval?: number
+  frameCount?: number
+}
+
+export interface Direction {
+  x: number
+  y: number
+}
+
 export interface AbstractEntity {
   x: number
   y: number
   width: number
   height: number
   speed: number
-  direction: { x: number; y: number }
+  direction: Direction
+  animation?: AnimationParams
 }
 
 export interface Enemy extends AbstractEntity {
@@ -13,10 +26,24 @@ export interface Enemy extends AbstractEntity {
 }
 
 export interface Obstacle {
+  type: string
   x: number
   y: number
   width: number
   height: number
+  hp: number
+  isCollide: boolean
+  animation: AnimationParams
+}
+
+export interface Effect {
+  type: string
+  x: number
+  y: number
+  width: number
+  height: number
+  direction?: Direction
+  animation: AnimationParams
 }
 
 export interface ControlsProps {

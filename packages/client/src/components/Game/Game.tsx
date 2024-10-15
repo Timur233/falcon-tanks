@@ -7,7 +7,7 @@ import {
 import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import { handleKeyDown, handleKeyUp } from '@/components/Game/controls'
-import { AbstractEntity, Obstacle } from '@/components/Game/gameTypes'
+import { AbstractEntity, Effect, Obstacle } from '@/components/Game/gameTypes'
 import {
   initializeCompanyMapObstacle,
   initializeRandomObstacle,
@@ -22,6 +22,7 @@ export const Game: React.FC = () => {
   const enemiesRef = useRef(initializeRandomEnemies(5))
   const bulletsRef = useRef<AbstractEntity[]>([])
   const obstaclesRef = useRef<Obstacle[]>(initializeRandomObstacle(20))
+  const effectsRef = useRef<Effect[]>([])
   const livesRef = useRef(livesUse)
   const [gameStarted, setGameStarted] = useState(false)
   const [isPaused, setIsPaused] = useState(false)
@@ -50,6 +51,7 @@ export const Game: React.FC = () => {
           enemiesRef,
           bulletsRef,
           obstaclesRef,
+          effectsRef,
           livesRef,
           handleGameOver
         )
