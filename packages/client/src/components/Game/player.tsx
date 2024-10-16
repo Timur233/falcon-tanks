@@ -16,6 +16,10 @@ export const PLAYER_DEFAULT_PARAMS = {
   },
 }
 
+export const GET_PLAYER_DEFAULT_PARAMS = () => {
+  return Object.assign({}, PLAYER_DEFAULT_PARAMS);
+}
+
 export const resetPlayerPosition = (
   playerRef: React.MutableRefObject<AbstractEntity>
 ) => {

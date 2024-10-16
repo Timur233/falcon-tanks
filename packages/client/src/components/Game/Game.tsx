@@ -4,7 +4,7 @@ import {
   initializeCampanyEnemies,
   initializeRandomEnemies,
 } from '@/components/Game/enemy'
-import { PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
+import { GET_PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import {
   AbstractEntity,
@@ -17,6 +17,8 @@ import {
   initializeRandomObstacle,
 } from '@/components/Game/obstacle'
 import { handleKeyDownUp, resetButtonsStates } from '@/components/Game/controls'
+
+let PLAYER_DEFAULT_PARAMS = GET_PLAYER_DEFAULT_PARAMS()
 
 type GamePropsType = {
   lives: number
@@ -64,6 +66,8 @@ export const Game = (props: GamePropsType) => {
       onGameOver(true)
       setIsGameOver(true)
       setIsGameRunning(false)
+
+      PLAYER_DEFAULT_PARAMS = GET_PLAYER_DEFAULT_PARAMS();
     }
 
     onKill(killsRef.current)
@@ -72,7 +76,9 @@ export const Game = (props: GamePropsType) => {
   const handleGameOver = useCallback(() => {
     onGameOver(false)
     setIsGameOver(true)
-    setIsGameRunning(false)    
+    setIsGameRunning(false)
+
+    PLAYER_DEFAULT_PARAMS = GET_PLAYER_DEFAULT_PARAMS();    
 
     isPausedRef.current = true
   }, [onGameOver])
