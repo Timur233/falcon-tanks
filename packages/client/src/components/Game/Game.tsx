@@ -59,13 +59,20 @@ export const Game = (props: GamePropsType) => {
 
   const handleEnemyKilled = () => {
     killsRef.current += 1
+
+    if (enemiesRef.current.length === 0) {
+      onGameOver(true)
+      setIsGameOver(true)
+      setIsGameRunning(false)
+    }
+
     onKill(killsRef.current)
   }
 
   const handleGameOver = useCallback(() => {
     onGameOver(false)
     setIsGameOver(true)
-    setIsGameRunning(false)
+    setIsGameRunning(false)    
 
     isPausedRef.current = true
   }, [onGameOver])
