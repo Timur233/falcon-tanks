@@ -67,7 +67,7 @@ export const Game = (props: GamePropsType) => {
       setIsGameOver(true)
       setIsGameRunning(false)
 
-      PLAYER_DEFAULT_PARAMS = GET_PLAYER_DEFAULT_PARAMS();
+      PLAYER_DEFAULT_PARAMS = GET_PLAYER_DEFAULT_PARAMS()
     }
 
     onKill(killsRef.current)
@@ -78,7 +78,7 @@ export const Game = (props: GamePropsType) => {
     setIsGameOver(true)
     setIsGameRunning(false)
 
-    PLAYER_DEFAULT_PARAMS = GET_PLAYER_DEFAULT_PARAMS();    
+    PLAYER_DEFAULT_PARAMS = GET_PLAYER_DEFAULT_PARAMS()
 
     isPausedRef.current = true
   }, [onGameOver])
