@@ -1,5 +1,5 @@
 import './Input.scss'
-import React, { ChangeEventHandler, CSSProperties } from 'react'
+import React, { ChangeEventHandler, FocusEventHandler, CSSProperties } from 'react'
 
 interface InputProps {
   placeholder?: string
@@ -10,11 +10,13 @@ interface InputProps {
   type?: string
   label?: string
   onChange?: ChangeEventHandler | undefined
+  onBlur?: FocusEventHandler | undefined
+  onFocus?: FocusEventHandler | undefined
   style?: CSSProperties | undefined
 }
 
 export const Input = (props: InputProps) => {
-  const { value, name, className, label, disabled, onChange, style } = props
+  const { value, name, className, label, disabled, onChange, onBlur, onFocus, style } = props
   return (
     <div className={'input-wrapper'}>
       {label && <label htmlFor={name}>{label}</label>}
@@ -26,6 +28,8 @@ export const Input = (props: InputProps) => {
         disabled={disabled}
         onChange={onChange}
         style={style}
+        onBlur={onBlur}
+        onFocus={onFocus}
       />
     </div>
   )

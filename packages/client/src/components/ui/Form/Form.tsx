@@ -5,12 +5,13 @@ interface FormProps {
   className?: string
   children?: React.ReactNode
   onSubmit?: () => void
+  name?: string
 }
 
 export const Form = (props: FormProps) => {
-  const { onSubmit, className, children } = props
+  const { onSubmit, className, children, name } = props
   return (
-    <form onSubmit={onSubmit} className={`form-fields ${className}`}>
+    <form name={name} onSubmit={onSubmit} className={`form-fields ${className}`}>
       {children}
     </form>
   )

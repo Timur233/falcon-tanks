@@ -1,5 +1,5 @@
 import './SignIn.scss'
-import React, { useState } from 'react'
+import React, {useEffect, useState, useRef} from 'react'
 import { useAppDispatch } from '@/store'
 import { signInUser } from '@/store/reducers/auth-reducer'
 import { Button } from '@/components/ui/Button/Button'
@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/Input/Input'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import SiteLogo from '@/assets/images/site-logo.svg'
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 
 type SignInType = {
   login: string;
@@ -18,10 +19,9 @@ type SignInType = {
 
 export const SignIn = () => {
   const [userData, setUserData] = useState({ login: '', password: '' })
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState<string | null>()
   const navigate = useNavigate()
   const dispatch = useAppDispatch()
-
   const handleInputChange =
     (field: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setUserData(prevData => ({
@@ -30,47 +30,58 @@ export const SignIn = () => {
       }))
     }
 
-  const handleSubmit = () => {
-    // dispatch(signInUser({ form: userData }))
-    //   .unwrap()
-    //   .then(() => {
-    //     navigate('/game')
-    //   })
-    //   .catch((_error?: any, _code?: any) => {
-    //     setError('Ошибка входа в аккаунт!')
-    //   })
-    // formik.handleSubmit()
-  }
+
+  const SignInSchema = Yup.object().shape({
+    login: Yup.string()
+      .min(3, 'Минимум 3 символа')
+      .max(20, 'Максимум 20 символов')
+      .matches(/^(?![\d+_@.-]+$)[a-zA-Zа-яА-Я0-9+_@.-]*$/g, 'Логин не должен содержать спецсимволы или состоять только из цифп')
+      .required('Обязательно для заполнения'),
+    password: Yup.string()
+      .min(8, 'Минимум 8 символов')
+      .max(40, 'Максимум 40 символов')
+      .matches(/[a-z]/g , 'Необходим один заглавный символ')
+      .required('Обязательно для заполнения'),
+  })
+
   const validate = (values: SignInType) => {
-    let errors = {
-      login: null
-    };
+    type validateError = {
+      login: null | string,
+      password: null | string
+    } | unknown
+
+    let errors:validateError = null as unknown;
+
     if (!values.login) {
-      errors.login = 'Required';
-    } else if (values.login.length > 15) {
-      errors.login = 'Must be 15 characters or less';
+      errors['login']= 'Обязательно для заполнения';
+    } else if (values.login.match(/^[0-9!@#\$%\^\&*\)\(+=.]+$/g)) {
+      errors.login = 'Логин не должен содержать спецсимволы';
+    } else if (values.login.length >= 20) {
+      errors.login = 'Максимум 20 символов';
+    } else if (values.login.length <= 3) {
+      errors.login = 'Минимум 3 символа';
     }
 
     if (!values.password) {
-      errors.password = 'Required';
-    } else if (values.password.length > 20) {
-      errors.password = 'Must be 20 characters or less';
+      errors.password = 'Обязательно для заполнения';
+    } else if (values.password.length <= 8) {
+      errors.password = 'Минимум 8 символов';
+    } else if (!values.password.match(/[A-Z]/)) {
+      errors.password = 'Необходим один заглавный символ';
+    } else if (values.password.length >= 40) {
+      errors.password = 'Не более 40 символов';
     }
-
-    // if (!values.email) {
-    //   errors.email = 'Required';
-    // } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    //   errors.email = 'Invalid email address';
-    // }
 
     return errors;
   };
 
   const formik = useFormik({
     initialValues: userData,
+    enableReinitialize: true,
     // validate,
+    validationSchema: SignInSchema,
     onSubmit: values => {
-      // alert(JSON.stringify(values, null, 2));
+      console.log('onSubmit', userData)
       dispatch(signInUser({ form: userData }))
         .unwrap()
         .then(() => {
@@ -81,6 +92,10 @@ export const SignIn = () => {
         })
     },
   });
+
+  useEffect(() => {
+    console.log(userData)
+  }, [userData])
 
   return (
     <div className={'login-page'}>
@@ -96,14 +111,17 @@ export const SignIn = () => {
         <div className={'row'}>
           <div className={'column col-6'}>
             <CustomPageTitle className={'login-page__title'} text={'Вход'} />
-            <Form className={'login-page__login-form'} onSubmit={formik.handleSubmit}>
+            <Form name={'userLogin'} className={'login-page__login-form'} onSubmit={formik.handleSubmit}>
               <Input
                 className={'login'}
                 name={'login'}
                 placeholder={'Логин'}
                 onChange={handleInputChange('login')}
+                onBlur={formik.handleBlur}
+                value={userData.login}
+                onFocus={!!userData.login ? formik.handleBlur : () => {}}
               />
-              {formik.touched.login && formik.errors.login ? (
+              {formik.touched.login && !!formik.errors.login ? (
                 <div className={'login-page__error-message'}>{formik.errors.login}</div>
               ) : null}
               <Input
@@ -112,14 +130,18 @@ export const SignIn = () => {
                 type={'password'}
                 placeholder={'Пароль'}
                 onChange={handleInputChange('password')}
+                onBlur={formik.handleBlur}
+                value={userData.password}
+                onFocus={!!userData.password ? formik.handleBlur : () => {}}
               />
-              {formik.touched.password && formik.errors.password ? (
+              {formik.touched.password && !!formik.errors.password ? (
                 <div className={'login-page__error-message'}>{formik.errors.password}</div>
               ) : null}
+
               {error && (
                 <div className={'login-page__error-message'}>{error}</div>
               )}
-              <Button text={'Войти'} useFixWidth={true} />
+              <Button text={'Войти'} useFixWidth={true} type={'submit'} />
 
             </Form>
             {/*<Button text={'Войти'} useFixWidth={true} onClick={handleSubmit} />*/}

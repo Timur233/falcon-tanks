@@ -7,10 +7,12 @@ export const Button = (props: {
   className?: string | undefined
   useFixWidth?: boolean | undefined
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>
+  type?: 'button' | 'submit'
 }) => {
-  const { text, className = '', useFixWidth = false, onClick } = props
+  const { text, className = '', useFixWidth = false, onClick, type = 'button' } = props
   return (
     <button
+      type={type}
       className={`custom-button ${className} ${
         useFixWidth ? 'custom-button_fix-width' : ''
       }`}
