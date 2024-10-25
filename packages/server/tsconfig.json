@@ -5,6 +5,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "jsx": "react",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
