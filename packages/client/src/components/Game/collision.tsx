@@ -1,4 +1,5 @@
 import { Obstacle, AbstractEntity, Bullet } from '@/components/Game/gameTypes'
+import { killEnemy } from '@/components/Game/enemy'
 
 export const detectCollision = (
   player: AbstractEntity,
@@ -47,4 +48,69 @@ export const detectObstacleCollision = (
     obstacle1.y < obstacle2.y + obstacle2.height &&
     obstacle1.y + obstacle1.height > obstacle2.y
   )
+}
+
+export const bulletsCollisions = (
+  bulletsRef: React.MutableRefObject<Bullet[]>,
+  playerRef: React.MutableRefObject<AbstractEntity>,
+  enemiesRef: React.MutableRefObject<AbstractEntity[]>,
+  livesRef: React.MutableRefObject<number>,
+  handleEnemyKilled: () => void,
+  createBangEffect: (x: number, y: number) => void,
+  handleGameOver: () => void,
+  handleDeath: (lives: number) => void
+) => {
+  // Проверка на столкновения пуль с врагами
+  bulletsRef.current.forEach(bullet => {
+    enemiesRef.current = enemiesRef.current.filter(enemy => {
+      const hit = detectBulletCollision(bullet, enemy)
+      if (hit) {
+        // Убираем врага, если попали
+        killEnemy(enemiesRef, enemy)
+        if (bullet.isPlayer) {
+          handleEnemyKilled()
+        }
+        // Эффект попадания
+        createBangEffect(
+          bullet.x + bullet.width / 2,
+          bullet.y + bullet.height / 2
+        )
+        // Убираем пулю, если попали
+        bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
+        return false
+      }
+      return true
+    })
+    bulletsRef.current.forEach(bullet2 => {
+      if (bullet === bullet2) return
+      const hit = detectBulletCollision(bullet, bullet2)
+      if (hit) {
+        // Эффект попадания
+        createBangEffect(
+          bullet.x + bullet.width / 2,
+          bullet.y + bullet.height / 2
+        )
+        // Убираем пулю, если попали
+        bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
+        bulletsRef.current = bulletsRef.current.filter(b => b !== bullet2)
+      }
+    })
+    if (detectBulletCollision(bullet, playerRef.current)) {
+      // Уменьшаем жизни игрока
+      livesRef.current -= 1
+      // Эффект поподания
+      createBangEffect(
+        bullet.x + bullet.width / 2,
+        bullet.y + bullet.height / 2
+      )
+      // Удаляем пулю после попадания
+      bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
+      // Проверка на окончание игры
+      if (livesRef.current <= 0) {
+        handleGameOver()
+      } else {
+        handleDeath(livesRef.current)
+      }
+    }
+  })
 }

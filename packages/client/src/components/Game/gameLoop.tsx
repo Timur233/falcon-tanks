@@ -1,5 +1,5 @@
 import { HandlePlayerHit } from './player'
-import { updateEnemyPositions, killEnemy, handleEnemyShooting } from './enemy'
+import { updateEnemyPositions, handleEnemyShooting } from './enemy'
 import {
   clearCanvas,
   drawPlayer,
@@ -17,7 +17,7 @@ import {
   Bullet,
 } from '@/components/Game/gameTypes'
 import {
-  detectBulletCollision,
+  bulletsCollisions,
   detectEnemyCollision,
 } from '@/components/Game/collision'
 import { updatePlayerAction } from '@/components/Game/controls'
@@ -87,45 +87,16 @@ export const gameLoop = (
   drawEffects(context, effectsRef.current)
   drawBullets(context, bulletsRef.current) // Отрисовка пуль
 
-  // Проверка на столкновения пуль с врагами
-  bulletsRef.current.forEach(bullet => {
-    enemiesRef.current = enemiesRef.current.filter(enemy => {
-      const hit = detectBulletCollision(bullet, enemy)
-      if (hit) {
-        // Убираем врага, если попали
-        killEnemy(enemiesRef, enemy)
-        if (bullet.isPlayer) {
-          handleEnemyKilled()
-        }
-        // Эффект попадания
-        createBangEffect(
-          bullet.x + bullet.width / 2,
-          bullet.y + bullet.height / 2
-        )
-        // Убираем пулю, если попали
-        bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
-        return false
-      }
-      return true
-    })
-    if (detectBulletCollision(bullet, playerRef.current)) {
-      // Уменьшаем жизни игрока
-      livesRef.current -= 1
-      // Эффект поподания
-      createBangEffect(
-        bullet.x + bullet.width / 2,
-        bullet.y + bullet.height / 2
-      )
-      // Удаляем пулю после попадания
-      bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
-      // Проверка на окончание игры
-      if (livesRef.current <= 0) {
-        handleGameOver()
-      } else {
-        handleDeath(livesRef.current)
-      }
-    }
-  })
+  bulletsCollisions(
+    bulletsRef,
+    playerRef,
+    enemiesRef,
+    livesRef,
+    handleEnemyKilled,
+    createBangEffect,
+    handleGameOver,
+    handleDeath
+  )
 
   const collidedEnemy = enemiesRef.current.find(enemy =>
     detectEnemyCollision(playerRef.current, enemy)
