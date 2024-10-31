@@ -1,4 +1,4 @@
-FROM --platform=linux/amd64 node:latest AS base
+FROM --platform=linux/amd64 node:20 AS base
 
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app

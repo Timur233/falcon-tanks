@@ -36,7 +36,7 @@ async function createServer() {
     const url = req.originalUrl
     try {
       // Создаём переменные
-      let renderHtml: Record<string, any>
+      let renderHtmlModule: Record<string, any>
       let template: string
 
       if (vite) {
@@ -47,7 +47,7 @@ async function createServer() {
         // Применяем встроенные HTML-преобразования vite и плагинов
         template = await vite?.transformIndexHtml(url, template)
         // Загружаем модуль клиента, он будет рендерить HTML-код
-        renderHtml = await vite?.ssrLoadModule(
+        renderHtmlModule = await vite?.ssrLoadModule(
           path.join(clientPath, '/src/entry-server.tsx')
         )
       } else {
@@ -63,10 +63,10 @@ async function createServer() {
         )
 
         // Импортируем этот модуль и вызываем с инишиал стейтом
-        renderHtml = await import(pathToServer)
+        renderHtmlModule = await import(pathToServer)
       }
       // Получаем HTML-строку из JSX
-      const appHtml = await renderHtml.default(req)
+      const appHtml = await renderHtmlModule.default(req)
       // Заменяем комментарий на сгенерированную HTML-строку
 
       const html = template?.replace('<!--ssr-outlet-->', appHtml)
