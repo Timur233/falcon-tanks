@@ -1,4 +1,4 @@
-import { Obstacle, AbstractEntity } from '@/components/Game/gameTypes'
+import { Obstacle, AbstractEntity, Bullet } from '@/components/Game/gameTypes'
 
 export const detectCollision = (
   player: AbstractEntity,
@@ -26,7 +26,7 @@ export const detectEnemyCollision = (
 }
 
 export const detectBulletCollision = (
-  bullet: AbstractEntity,
+  bullet: Bullet,
   entity: AbstractEntity
 ): boolean => {
   return (

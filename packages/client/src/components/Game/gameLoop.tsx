@@ -14,6 +14,7 @@ import {
   Obstacle,
   Enemy,
   Effect,
+  Bullet,
 } from '@/components/Game/gameTypes'
 import {
   detectBulletCollision,
@@ -43,7 +44,7 @@ export const gameLoop = (
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>,
   playerRef: React.MutableRefObject<AbstractEntity>,
   enemiesRef: React.MutableRefObject<Enemy[]>,
-  bulletsRef: React.MutableRefObject<AbstractEntity[]>,
+  bulletsRef: React.MutableRefObject<Bullet[]>,
   obstaclesRef: React.MutableRefObject<Obstacle[]>,
   effectsRef: React.MutableRefObject<Effect[]>,
   livesRef: React.MutableRefObject<number>,
@@ -93,8 +94,10 @@ export const gameLoop = (
       if (hit) {
         // Убираем врага, если попали
         killEnemy(enemiesRef, enemy)
-        handleEnemyKilled()
-        // Эффект поподания
+        if (bullet.isPlayer) {
+          handleEnemyKilled()
+        }
+        // Эффект попадания
         createBangEffect(
           bullet.x + bullet.width / 2,
           bullet.y + bullet.height / 2
@@ -129,13 +132,6 @@ export const gameLoop = (
   )
 
   if (collidedEnemy) {
-    HandlePlayerHit(
-      livesRef,
-      playerRef,
-      enemiesRef,
-      canvasRef,
-      handleGameOver,
-      handleDeath
-    )
+    HandlePlayerHit(livesRef, handleGameOver, handleDeath)
   }
 }

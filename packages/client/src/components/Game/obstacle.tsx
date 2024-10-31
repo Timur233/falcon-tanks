@@ -1,4 +1,4 @@
-import { AbstractEntity, Obstacle } from '@/components/Game/gameTypes'
+import { Bullet, Obstacle } from '@/components/Game/gameTypes'
 import { getRandomPosition } from '@/components/Game/utils'
 import {
   detectCollision,
@@ -82,29 +82,19 @@ export const initializeCompanyMapObstacle = (): Obstacle[] => {
     { type: Types.Tree, x: 612, y: 504, width: 180, height: 72 },
   ])
   return createMap([
-    //  /{ type: Types.Steel, x: 0, y: 0, width: 120, height: 50 },
     { type: Types.Steel, x: 200, y: 0, width: 70, height: 36 },
     { type: Types.Steel, x: 350, y: 0, width: 70, height: 36 },
     { type: Types.Steel, x: 500, y: 0, width: 120, height: 36 },
-    // { type: Types.Wall, x: 700, y: 0, width: 100, height: 50 },
-
-    // { type: Types.Wall, x: 0, y: 130, width: 50, height: 120 },
     { type: Types.Wall, x: 130, y: 130, width: 50, height: 70 },
-    // { type: Types.Wall, x: 260, y: 130, width: 50, height: 200 },
     { type: Types.Wall, x: 390, y: 130, width: 50, height: 70 },
     { type: Types.Wall, x: 520, y: 130, width: 50, height: 120 },
-    // { type: Types.Wall, x: 650, y: 130, width: 50, height: 125 },
-
-    // { type: Types.Wall, x: 0, y: 330, width: 120, height: 50 },
     { type: Types.Wall, x: 200, y: 330, width: 150, height: 36 },
     { type: Types.Wall, x: 350, y: 330, width: 70, height: 36 },
     { type: Types.Wall, x: 500, y: 330, width: 120, height: 36 },
-    // { type: Types.Wall, x: 700, y: 330, width: 100, height: 100 },
 
     { type: Types.Wall, x: 0, y: 460, width: 50, height: 140 },
     { type: Types.Wall, x: 130, y: 530, width: 50, height: 70 },
     { type: Types.Wall, x: 260, y: 480, width: 50, height: 120 },
-    //{ type: Types.Wall, x: 390, y: 460, width: 50, height: 70 },
     { type: Types.Wall, x: 520, y: 490, width: 50, height: 120 },
     { type: Types.Wall, x: 650, y: 480, width: 50, height: 120 },
   ])
@@ -193,7 +183,7 @@ export const initializeRandomObstacle = (
 }
 
 export const handleBulletObstacleCollisions = (
-  bullets: AbstractEntity[],
+  bullets: Bullet[],
   obstacles: Obstacle[]
 ) => {
   bullets.forEach(bullet => {

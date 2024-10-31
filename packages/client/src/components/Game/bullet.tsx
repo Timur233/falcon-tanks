@@ -1,4 +1,4 @@
-import { AbstractEntity } from '@/components/Game/gameTypes'
+import { AbstractEntity, Bullet } from '@/components/Game/gameTypes'
 import { createShotEffect } from './effects'
 
 const bulletSize = {
@@ -6,7 +6,10 @@ const bulletSize = {
   height: 18,
 }
 
-export const createBullet = (enemy: AbstractEntity): AbstractEntity => {
+export const createBullet = (
+  enemy: AbstractEntity,
+  isPlayer: boolean
+): Bullet => {
   const bulletSpeed = 5 // Задайте скорость пули
   const bulletDirection = { x: enemy.direction.x, y: enemy.direction.y }
 
@@ -43,14 +46,15 @@ export const createBullet = (enemy: AbstractEntity): AbstractEntity => {
     height: bulletSize.height, // Высота пули
     speed: bulletSpeed,
     direction: bulletDirection,
+    isPlayer: isPlayer,
   }
 }
 
 export const updateBullets = (
-  bullets: AbstractEntity[],
+  bullets: Bullet[],
   canvasWidth: number,
   canvasHeight: number
-) => {
+): Bullet[] => {
   return bullets.filter(bullet => {
     bullet.x += bullet.direction.x * bullet.speed
     bullet.y += bullet.direction.y * bullet.speed

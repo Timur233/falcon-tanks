@@ -7,10 +7,10 @@ import {
 import { GET_PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import {
-  AbstractEntity,
   Effect,
   Obstacle,
   BtnStates,
+  Bullet,
 } from '@/components/Game/gameTypes'
 import {
   initializeCompanyMapObstacle,
@@ -48,7 +48,7 @@ export const Game = (props: GamePropsType) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
   const enemiesRef = useRef(initializeRandomEnemies(5))
-  const bulletsRef = useRef<AbstractEntity[]>([])
+  const bulletsRef = useRef<Bullet[]>([])
   const obstaclesRef = useRef<Obstacle[]>(initializeRandomObstacle(20))
   const effectsRef = useRef<Effect[]>([])
   const livesRef = useRef(lives)
