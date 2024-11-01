@@ -15,6 +15,9 @@ export const userService = {
   },
 
   isLoggedIn() {
-    return window.sessionStorage.getItem('userIsLogged') === '1'
+    if (typeof window !== 'undefined') {
+      return window.sessionStorage.getItem('userIsLogged') === '1'
+    }
+    return false
   },
 }
