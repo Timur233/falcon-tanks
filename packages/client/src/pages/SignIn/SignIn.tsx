@@ -1,14 +1,13 @@
-import './SignIn.scss'
-import React, { useState } from 'react'
-import { useAppDispatch } from '@/store'
-import { signInUser } from '@/store/reducers/auth-reducer'
+import SiteLogo from '@/assets/images/site-logo.svg'
 import { Button } from '@/components/ui/Button/Button'
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { Form } from '@/components/ui/Form/Form'
 import { Input } from '@/components/ui/Input/Input'
-import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
-import SiteLogo from '@/assets/images/site-logo.svg'
+import { useAppDispatch } from '@/store'
+import { signInUser } from '@/store/reducers/auth-reducer'
+import React, { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import './SignIn.scss'
 
 export const SignIn = () => {
   const [userData, setUserData] = useState({ login: '', password: '' })

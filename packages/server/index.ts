@@ -1,10 +1,11 @@
-import express from 'express'
 import cors from 'cors'
-import path from 'path'
-import fs from 'fs'
-import { createClientAndConnect } from './db'
-import { createServer as createViteServer, ViteDevServer } from 'vite'
 import dotenv from 'dotenv'
+import express from 'express'
+import fs from 'fs'
+import path from 'path'
+import { createServer as createViteServer, ViteDevServer } from 'vite'
+import { createClientAndConnect } from './db'
+
 dotenv.config()
 
 const port = process.env.SERVER_PORT || 3000
@@ -33,6 +34,24 @@ async function createServer() {
   }
 
   app.get('*', async (req, res, next) => {
+    // @ts-ignore
+    global.Image = class Mock {
+      constructor() {
+        return
+      }
+    }
+
+    // @ts-ignore
+    global.window = {
+      sessionStorage: {
+        setItem: () => undefined,
+        getItem: () => undefined,
+        clear: undefined,
+        key: undefined,
+        removeItem: undefined,
+        length: 0,
+      },
+    }
     const url = req.originalUrl
     try {
       // Создаём переменные
@@ -68,8 +87,14 @@ async function createServer() {
       // Получаем HTML-строку из JSX
       const appHtml = await renderHtmlModule.default(req)
       // Заменяем комментарий на сгенерированную HTML-строку
-
-      const html = template?.replace('<!--ssr-outlet-->', appHtml)
+      const html = template
+        ?.replace('<!--ssr-outlet-->', appHtml.html)
+        .replace(
+          '<!--ssr-initial-state-->',
+          `<script>window.APP_INITIAL_STATE = ${JSON.stringify(
+            appHtml.initialState
+          )}</script>`
+        )
       // Завершаем запрос и отдаём HTML-страницу
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {

@@ -1,5 +1,5 @@
-import './PrivateLayout.scss'
 import { Header } from '@/components/common/Header/Header'
+import withAuthUser from '@/components/hoc/withAuthUser'
 import { Loader } from '@/components/ui/Loader/Loader'
 import { RootState, useAppDispatch } from '@/store'
 import { actions, getUser, UserType } from '@/store/reducers/auth-reducer'
@@ -7,7 +7,6 @@ import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
-import withAuthUser from '@/components/hoc/withAuthUser'
 import './PrivateLayout.scss'
 
 export function PrivateLayout() {

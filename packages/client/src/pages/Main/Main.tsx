@@ -1,10 +1,10 @@
-import './Main.scss'
-import { useEffect, useState } from 'react'
-import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { Button } from '@/components/ui/Button/Button'
-import { EnemyTank } from './components/EnemyTanks/EnemyTank'
-import { useNavigate } from 'react-router-dom'
+import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { userService } from '@/services/userService'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { EnemyTank } from './components/EnemyTanks/EnemyTank'
+import './Main.scss'
 
 export const Main = () => {
   const [isLoaded, setIsLoaded] = useState(false)
