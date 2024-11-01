@@ -1,4 +1,4 @@
-import { AbstractEntity, Obstacle } from '@/components/Game/gameTypes'
+import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
 import { getRandomPosition } from '@/components/Game/utils'
 import {
   detectCollision,
@@ -165,7 +165,9 @@ export const createObstacle = (
 }
 
 export const initializeRandomObstacle = (
-  numberOfObstacles: number
+  numberOfObstacles: number,
+  playerRef: React.MutableRefObject<AbstractEntity>,
+  enemiesRef: React.MutableRefObject<Enemy[]>
 ): Obstacle[] => {
   const obstacles: Obstacle[] = []
 
@@ -180,11 +182,16 @@ export const initializeRandomObstacle = (
     )[0]
 
     // Проверяем, нет ли коллизий с существующими препятствиями
-    const hasCollision = obstacles.some(existingObstacle =>
-      detectObstacleCollision(obstacle, existingObstacle)
+    const hasObstacleCollision = obstacles.some(
+      existingObstacle =>
+        detectObstacleCollision(obstacle, existingObstacle) &&
+        detectCollision(playerRef.current, existingObstacle) &&
+        enemiesRef.current.some(enemy =>
+          detectCollision(enemy, existingObstacle)
+        ) // Проверяем, нет ли коллизий с существующими препятствиями
     )
 
-    if (!hasCollision) {
+    if (!hasObstacleCollision) {
       obstacles.push(obstacle) // Добавляем препятствие, если нет коллизий
     }
   }

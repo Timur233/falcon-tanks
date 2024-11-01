@@ -43,13 +43,13 @@ export const Game = (props: GamePropsType) => {
     onKeyDownUp,
   } = props
 
-  // TODO: Нужно обработать победу в игре
-
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
   const enemiesRef = useRef(initializeRandomEnemies(5))
   const bulletsRef = useRef<AbstractEntity[]>([])
-  const obstaclesRef = useRef<Obstacle[]>(initializeRandomObstacle(20))
+  const obstaclesRef = useRef<Obstacle[]>(
+    initializeRandomObstacle(20, playerRef, enemiesRef)
+  )
   const effectsRef = useRef<Effect[]>([])
   const livesRef = useRef(lives)
   const isPausedRef = useRef(false)
@@ -115,7 +115,7 @@ export const Game = (props: GamePropsType) => {
     livesRef.current = lives
     playerRef.current = PLAYER_DEFAULT_PARAMS
     enemiesRef.current = initializeRandomEnemies(5)
-    obstaclesRef.current = initializeRandomObstacle(20)
+    obstaclesRef.current = initializeRandomObstacle(20, playerRef, enemiesRef)
     isStartedLoopRef.current = false
   }, [lives])
 
