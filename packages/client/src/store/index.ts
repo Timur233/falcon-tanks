@@ -11,18 +11,18 @@ export const store = configureStore({
   reducer: rootReducer,
 })
 
-const g =
+const g: (typeof globalThis & Record<string, unknown>) | null =
   typeof globalThis === 'object'
     ? globalThis
     : typeof window === 'object'
     ? window
     : typeof global === 'object'
     ? global
-    : null // Causes an error on the next line
+    : null;
 
-// @ts-ignore
-g.store = store
-
+if (g !== null) {
+  g.store = store;
+}
 declare global {
   interface Window {
     store: typeof store

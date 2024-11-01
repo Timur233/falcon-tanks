@@ -26,19 +26,14 @@ export default function createFetchRequest(req: Request, res?: Response) {
 
   const headers = new Headers()
 
-  for (const [key, values] of Object.entries(req.headers)) {
-    if (values) {
-      if (Array.isArray(values)) {
-        for (const value of values) {
-          headers.append(key, value)
-        }
-      } else {
-        if (typeof values === 'string') {
-          headers.set(key, values)
-        }
-      }
+  Object.entries(req.headers).forEach(([key, values]) => {
+    if (Array.isArray(values)) {
+      values.forEach(value => headers.append(key, value));
+    } else if (typeof values === 'string') {
+      headers.set(key, values);
     }
-  }
+  });
+  
 
   const init = {
     method: req.method,
