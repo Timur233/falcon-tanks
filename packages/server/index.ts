@@ -36,7 +36,7 @@ async function createServer() {
 
   app.get('*', async (req, res, next) => {
     // @ts-ignore
-    global.Image = class Mock {
+    global.Image = class {
       constructor() {
         return
       }
