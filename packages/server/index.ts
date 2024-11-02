@@ -53,9 +53,9 @@ async function createServer() {
         length: 0,
       },
     }
+
     const url = req.originalUrl
     try {
-      // Создаём переменные
       let renderHtmlModule: Record<string, any>
       let template: string
 
@@ -64,9 +64,7 @@ async function createServer() {
           path.resolve(clientPath, 'index.html'),
           'utf-8'
         )
-        // Применяем встроенные HTML-преобразования vite и плагинов
         template = await vite?.transformIndexHtml(url, template)
-        // Загружаем модуль клиента, он будет рендерить HTML-код
         renderHtmlModule = await vite?.ssrLoadModule(
           path.join(clientPath, '/src/entry-server.tsx')
         )
@@ -76,18 +74,14 @@ async function createServer() {
           'utf-8'
         )
 
-        // Получаем путь до собранного модуля клиента, чтобы не тащить средства сборки клиента на сервер
         const pathToServer = path.join(
           clientPath,
           'dist/server/entry-server.cjs'
         )
 
-        // Импортируем этот модуль и вызываем с инишиал стейтом
         renderHtmlModule = await import(pathToServer)
       }
-      // Получаем HTML-строку из JSX
       const appHtml = await renderHtmlModule.default(req)
-      // Заменяем комментарий на сгенерированную HTML-строку
       const html = template
         ?.replace('<!--ssr-outlet-->', appHtml.html)
         .replace(
@@ -97,7 +91,6 @@ async function createServer() {
             { isJSON: true }
           )}</script>`
         )
-      // Завершаем запрос и отдаём HTML-страницу
       res.status(200).set({ 'Content-Type': 'text/html' }).end(html)
     } catch (e) {
       vite?.ssrFixStacktrace(e as Error)
