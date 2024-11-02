@@ -13,11 +13,7 @@ import { Profile } from '@/pages/Profile/Profile'
 import { SignIn } from '@/pages/SignIn/SignIn'
 import { SignUp } from '@/pages/SignUp/SignUp'
 import { Thread } from '@/pages/Thread/Thread'
-// import { lazy } from 'react'
 
-// const Game = lazy(() =>
-//   import('@/pages/Game/Game').then(({ Game }) => ({ default: Game }))
-// )
 const routes = [
   {
     element: <RootLayout />,
