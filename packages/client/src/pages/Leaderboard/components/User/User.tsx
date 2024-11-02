@@ -29,40 +29,39 @@ interface UserProps {
   rank: number
 }
 
+interface Medal {
+  icon: string
+  alt: string
+}
+
 export const User = ({ user, rank }: UserProps) => {
-  const getMedalIcon = (rank: number): string => {
-    switch (rank) {
-      case 1:
-        return GoldMedal
-      case 2:
-        return SilverMedal
-      case 3:
-        return BronzeMedal
-      default:
-        return DefaultMedal
-    }
+  const MEDALS: Record<number, Medal> = {
+    1: {
+      icon: GoldMedal,
+      alt: 'Золотая медаль',
+    },
+    2: {
+      icon: SilverMedal,
+      alt: 'Серебряная медаль',
+    },
+    3: {
+      icon: BronzeMedal,
+      alt: 'Бронзовая медаль',
+    },
+  } as const
+
+  const DEFAULT_MEDAL: Medal = {
+    icon: DefaultMedal,
+    alt: 'Медаль участника',
   }
 
-  const getMedalAlt = (rank: number): string => {
-    switch (rank) {
-      case 1:
-        return 'Золотая медаль'
-      case 2:
-        return 'Серебряная медаль'
-      case 3:
-        return 'Бронзовая медаль'
-      default:
-        return 'Медаль участника'
-    }
-  }
-
-  const medalIcon = getMedalIcon(rank)
-  const medalAlt = getMedalAlt(rank)
+  const getMedal = (rank: number): Medal => MEDALS[rank] || DEFAULT_MEDAL
+  const { icon, alt } = getMedal(rank)
 
   return (
     <div
       className={`records__item-wrapper ${
-        rank <= 3 ? `records__item-wrapper--rank-${rank}` : ''
+        rank <= 3 ? `records__item-wrapper__rank-${rank}` : ''
       }`}>
       <div className="records__item">
         <div className="records__item-info">
@@ -84,7 +83,7 @@ export const User = ({ user, rank }: UserProps) => {
             <span className="records__item-label">Рекорд</span>
             <h2 className="records__item-value">{user.score}</h2>
           </div>
-          <img className="records__item-medal" src={medalIcon} alt={medalAlt} />
+          <img className="records__item-medal" src={icon} alt={alt} />
         </div>
       </div>
     </div>

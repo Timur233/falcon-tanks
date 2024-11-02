@@ -1,4 +1,5 @@
 import backendApi from '@/api/backendApi'
+import { LeaderboardUser } from '@/pages/Leaderboard/components/User/User'
 
 export interface LeaderboardNewLeaderRequest {
   data: {
@@ -25,12 +26,7 @@ const BASE_URL = '/leaderboard'
 
 export const leaderboardApi = {
   // Добавление нового результата
-  async addScore(userData: {
-    id: string
-    login: string
-    avatar?: string
-    score: number
-  }): Promise<void> {
+  async addScore(userData: LeaderboardUser): Promise<void> {
     const request: LeaderboardNewLeaderRequest = {
       data: userData,
       ratingFieldName: 'score',

@@ -3,14 +3,14 @@ import React, { useEffect, useState, useCallback } from 'react'
 import { Button } from '@/components/ui/Button/Button'
 import { Loader } from '@/components/ui/Loader/Loader'
 import PromoLogo from '@/assets/images/svg/FT-promo.svg'
-import { User } from './components/User/User'
+import { User, LeaderboardData } from './components/User/User'
 import { leaderboardApi } from '@/store/reducers/leaderbord-reducer'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 
 const USERS_PER_PAGE = 6
 
 export const Leaderboard = () => {
-  const [users, setUsers] = useState<any[]>([])
+  const [users, setUsers] = useState<LeaderboardData[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [currentPage, setCurrentPage] = useState(0)

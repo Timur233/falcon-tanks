@@ -21,7 +21,7 @@ $c_item-border-secondary-color: #474747;
 
       // Медальные рамки
       @each $rank, $color in $medal-colors {
-        &--rank-#{$rank} {
+        &__rank-#{$rank} {
           background: linear-gradient(90deg, $color 52.5%, darken($color, 20%) 100%);
         }
       }
@@ -104,7 +104,7 @@ $c_item-border-secondary-color: #474747;
 
     // Специальные стили для призовых мест
     @each $rank, $color in $medal-colors {
-      .records__item-wrapper--rank-#{$rank} {
+      .records__item-wrapper__rank-#{$rank} {
         .records__item-rank,
         .records__item-value {
           color: $color;
