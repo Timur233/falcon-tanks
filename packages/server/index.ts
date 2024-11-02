@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import express from 'express'
 import fs from 'fs'
 import path from 'path'
+import serialize from 'serialize-javascript'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 import { createClientAndConnect } from './db'
 
@@ -91,8 +92,9 @@ async function createServer() {
         ?.replace('<!--ssr-outlet-->', appHtml.html)
         .replace(
           '<!--ssr-initial-state-->',
-          `<script>window.APP_INITIAL_STATE = ${JSON.stringify(
-            appHtml.initialState
+          `<script>window.APP_INITIAL_STATE = ${serialize(
+            appHtml.initialState,
+            { isJSON: true }
           )}</script>`
         )
       // Завершаем запрос и отдаём HTML-страницу
