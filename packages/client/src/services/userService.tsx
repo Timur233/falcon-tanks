@@ -1,5 +1,5 @@
-import { actions, UserType, getUser } from '@/store/reducers/auth-reducer'
 import { useAppDispatch } from '@/store'
+import { actions, getUser, UserType } from '@/store/reducers/auth-reducer'
 
 export const userService = {
   async fetchUser(dispatch: ReturnType<typeof useAppDispatch>) {

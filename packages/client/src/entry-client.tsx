@@ -1,11 +1,11 @@
+import App from '@/app/App'
+import { store } from '@/store'
 import React from 'react'
 import { hydrateRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
-import { store } from '@/store'
-import { registerServiceWorker } from './registerServiceWorker'
-import App from '@/app/App'
 
 import '@/scss/styles.scss'
+import { registerServiceWorker } from './registerServiceWorker'
 
 hydrateRoot(
   document.getElementById('root') as HTMLElement,

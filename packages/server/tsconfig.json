@@ -21,6 +21,7 @@
     "lib": ["es2019", "esnext.asynciterable"],
     "types": ["node", "jest"],
     "baseUrl": ".",
+    "skipLibCheck": true,
     "paths": {
       "*": ["types/*"]
     },
