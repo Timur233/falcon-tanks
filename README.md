@@ -61,3 +61,12 @@ VITE_AUTH_PATHNAMES='/sign-in, /sign-up'
 - `yarn run format` - Автоматическое форматирование
 
 ---
+
+### Для работы с докером
+
+1. Скопировать .env.sample в .env
+2. Проверить режим сборки сервиса client (preview, init, dev)
+3. Установить зависимости docker compose build
+4. Смонтировать контейнер docker compose up -d, приложение будет доступно по порту сервера env.SERVER_PORT
+5. Размонтировать docker compose down --remove-orphans
+6. Для работы с traefik добавить в .env `COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml`

@@ -67,7 +67,6 @@ export const ChangePassword = () => {
         state: { successMessage: 'Пароль успешно изменен!' },
       })
     } catch (err) {
-      console.log(err)
       setError('Ошибка при смене пароля')
     }
   }

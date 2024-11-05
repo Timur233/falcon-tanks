@@ -6,20 +6,13 @@ networks:
     external: true
 
 services:
-  node:
+  client:
     build:
-      context: .
-      dockerfile: .docker/nodejs/Dockerfile
       target: dev
+    restart: always
+    networks:
+      - traefik
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.tanks.rule=Host(`tanks.docker`)"
       - "traefik.docker.network=${TRAEFIK_NETWORK_NAME}"
-    volumes:
-      - ./:/usr/src/app
-    ports:
-      - "${CLIENT_PORT}:${CLIENT_PORT}"
-      - "${SERVER_PORT}:${SERVER_PORT}"
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
-    networks:
-      - traefik

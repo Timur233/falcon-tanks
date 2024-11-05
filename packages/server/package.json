@@ -3,8 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "tsc --p ./tsconfig.prod.json",
-    "preview": "node ./dist/index.js",
     "dev": "cross-env NODE_ENV=development nodemon index.ts",
     "lint": "eslint .",
     "format": "prettier --write .",
@@ -29,7 +27,7 @@
     "babel-jest": "^29.0.1",
     "eslint": "^8.23.0",
     "jest": "^28",
-    "nodemon": "^2.0.19",
+    "nodemon": "^3.1.7",
     "prettier": "^2.7.1",
     "ts-jest": "^28.0.8",
     "ts-node": "^10.9.1",
