@@ -1,3 +1,5 @@
+'use client'
+
 import GameInfo from '@/assets/images/game-info.jpg'
 import { Modal } from '@/components/common/Modal/Modal'
 import { Game as GamePrototype } from '@/components/Game/Game'
@@ -12,7 +14,8 @@ import { Icon } from '@/components/ui/Icon/Icon'
 import { BtnStates } from '@/components/Game/gameTypes'
 import { StatusScreen } from './components/StatusScreen/StatusScreen'
 import { Button } from '@/components/ui/Button/Button'
-
+import { Suspense } from 'react'
+import { Loader } from '@/components/ui/Loader/Loader'
 interface GameState {
   lives: number
   isGameStarted: boolean
@@ -146,114 +149,116 @@ export const Game = () => {
   }, [pauseHandler])
 
   return (
-    <section className="game-page">
-      <Modal show={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
-        <img src={GameInfo} alt="Инструкция к игре" />
-      </Modal>
-      <div className="container-fluid game-page__container">
-        <div className="row">
-          <div className="column col-8">
-            <div className="game-page__wrapper game-wrapper">
-              <div className="game-wrapper__decor-hr"></div>
-              <div className="game-wrapper__decor-vr"></div>
-              <GamePrototype
-                lives={gameState.lives}
-                onKill={onKill}
-                isGameStarted={gameState.isGameStarted}
-                isCompanyStarted={gameState.isCompanyStarted}
-                isGamePaused={gameState.isGamePaused}
-                onDeath={deathHandler}
-                onGameOver={gameOverHandler}
-                onKeyDownUp={changeButtonsState}
-              />
+    <Suspense fallback={<Loader show={true} />}>
+      <section className="game-page">
+        <Modal show={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
+          <img src={GameInfo} alt="Инструкция к игре" />
+        </Modal>
+        <div className="container-fluid game-page__container">
+          <div className="row">
+            <div className="column col-8">
+              <div className="game-page__wrapper game-wrapper">
+                <div className="game-wrapper__decor-hr"></div>
+                <div className="game-wrapper__decor-vr"></div>
+                <GamePrototype
+                  lives={gameState.lives}
+                  onKill={onKill}
+                  isGameStarted={gameState.isGameStarted}
+                  isCompanyStarted={gameState.isCompanyStarted}
+                  isGamePaused={gameState.isGamePaused}
+                  onDeath={deathHandler}
+                  onGameOver={gameOverHandler}
+                  onKeyDownUp={changeButtonsState}
+                />
 
-              <StatusScreen
-                isVisible={
-                  !gameState.isGameStarted &&
-                  !gameState.isCompanyStarted &&
-                  !gameState.isGameOver &&
-                  !gameState.isGameWinning
-                }>
-                <Button
-                  text={'Начать игру'}
-                  onClick={startGameHandler}
-                  useFixWidth
-                />
-                <Button
-                  className={'custom-button_blue'}
-                  text={'Начать компанию'}
-                  onClick={startCompanyHandler}
-                  useFixWidth
-                />
-              </StatusScreen>
+                <StatusScreen
+                  isVisible={
+                    !gameState.isGameStarted &&
+                    !gameState.isCompanyStarted &&
+                    !gameState.isGameOver &&
+                    !gameState.isGameWinning
+                  }>
+                  <Button
+                    text={'Начать игру'}
+                    onClick={startGameHandler}
+                    useFixWidth
+                  />
+                  <Button
+                    className={'custom-button_blue'}
+                    text={'Начать компанию'}
+                    onClick={startCompanyHandler}
+                    useFixWidth
+                  />
+                </StatusScreen>
 
-              <StatusScreen
-                isVisible={gameState.isGameOver}
-                title="Game Over"
-                type="game-over">
-                <Button
-                  text={'Начать заново'}
-                  onClick={startGameHandler}
-                  useFixWidth
-                />
-                <Button
-                  className={'custom-button_blue'}
-                  text={'Начать компанию'}
-                  onClick={startCompanyHandler}
-                  useFixWidth
-                />
-              </StatusScreen>
+                <StatusScreen
+                  isVisible={gameState.isGameOver}
+                  title="Game Over"
+                  type="game-over">
+                  <Button
+                    text={'Начать заново'}
+                    onClick={startGameHandler}
+                    useFixWidth
+                  />
+                  <Button
+                    className={'custom-button_blue'}
+                    text={'Начать компанию'}
+                    onClick={startCompanyHandler}
+                    useFixWidth
+                  />
+                </StatusScreen>
 
-              <StatusScreen
-                isVisible={gameState.isGameWinning}
-                title="Победа!"
-                type="victory">
-                <Button
-                  text={'Начать заново'}
-                  onClick={startGameHandler}
-                  useFixWidth
-                />
-                <Button
-                  className={'custom-button_blue'}
-                  text={'Начать компанию'}
-                  onClick={startCompanyHandler}
-                  useFixWidth
-                />
-              </StatusScreen>
+                <StatusScreen
+                  isVisible={gameState.isGameWinning}
+                  title="Победа!"
+                  type="victory">
+                  <Button
+                    text={'Начать заново'}
+                    onClick={startGameHandler}
+                    useFixWidth
+                  />
+                  <Button
+                    className={'custom-button_blue'}
+                    text={'Начать компанию'}
+                    onClick={startCompanyHandler}
+                    useFixWidth
+                  />
+                </StatusScreen>
+              </div>
             </div>
-          </div>
-          <div className="column col-4">
-            <div className="game-controll">
-              <KillsCounter className="game-controll__kills" kills={kills} />
+            <div className="column col-4">
+              <div className="game-controll">
+                <KillsCounter className="game-controll__kills" kills={kills} />
 
-              <CustomPageTitle
-                className="game-controll__lives"
-                text={gameState.lives.toString()}
-                tagName="span"
-              />
+                <CustomPageTitle
+                  className="game-controll__lives"
+                  text={gameState.lives.toString()}
+                  tagName="span"
+                />
 
-              <PauseHelpFullscreen
-                className="game-controll__pause-help-buttons"
-                pauseIcon={getPauseIcon()}
-                pauseHandler={pauseHandler}
-                helpHandler={() => setIsInfoModalOpen(true)}
-              />
+                <PauseHelpFullscreen
+                  className="game-controll__pause-help-buttons"
+                  pauseIcon={getPauseIcon()}
+                  pauseHandler={pauseHandler}
+                  helpHandler={() => setIsInfoModalOpen(true)}
+                />
 
-              <Arrows
-                buttonsState={buttonsState}
-                className="game-controll__arrows"
-                mouseDownUpHandler={arrowClickHandler}
-              />
+                <Arrows
+                  buttonsState={buttonsState}
+                  className="game-controll__arrows"
+                  mouseDownUpHandler={arrowClickHandler}
+                />
 
-              <FireControll
-                className="game-controll__fire"
-                buttonPressed={buttonsState.fire}
-                mouseDownUpHandler={arrowClickHandler}
-              />
+                <FireControll
+                  className="game-controll__fire"
+                  buttonPressed={buttonsState.fire}
+                  mouseDownUpHandler={arrowClickHandler}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </Suspense>
   )
 }

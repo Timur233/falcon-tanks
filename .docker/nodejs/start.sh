@@ -1,2 +1,2 @@
-npm install
-npm bootstrap
+#npm install
+npm run preview

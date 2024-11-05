@@ -1,10 +1,10 @@
-import { ComponentType, useEffect } from 'react'
-import { UserType } from '@/store/reducers/auth-reducer'
-import { toast } from 'react-toastify'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { RootState, useAppDispatch } from '@/store'
-import { useSelector } from 'react-redux'
 import { userService } from '@/services/userService'
+import { RootState, useAppDispatch } from '@/store'
+import { UserType } from '@/store/reducers/auth-reducer'
+import { ComponentType, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { Loader } from '../ui/Loader/Loader'
 
 type WithAuthUserProps = {
