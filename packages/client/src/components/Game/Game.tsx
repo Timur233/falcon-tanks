@@ -117,6 +117,7 @@ export const Game = (props: GamePropsType) => {
     playerRef.current = PLAYER_DEFAULT_PARAMS
     enemiesRef.current = initializeRandomEnemies(5)
     obstaclesRef.current = initializeRandomObstacle(20)
+    bulletsRef.current = []
     isStartedLoopRef.current = false
   }, [lives])
 
@@ -129,6 +130,7 @@ export const Game = (props: GamePropsType) => {
     playerRef.current = PLAYER_DEFAULT_PARAMS
     enemiesRef.current = initializeCampanyEnemies()
     obstaclesRef.current = initializeCompanyMapObstacle()
+    bulletsRef.current = []
     isStartedLoopRef.current = false
   }, [lives])
 
