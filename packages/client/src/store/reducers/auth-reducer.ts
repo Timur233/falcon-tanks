@@ -1,6 +1,6 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { InferAppActions } from '@/store'
 import backendApi from '@/api/backendApi'
+import { InferAppActions } from '@/store'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 export type UserType = {
   avatar: string | null
@@ -40,7 +40,6 @@ export const getUser = createAsyncThunk('AuthUser/getUser', async thunkAPI => {
       method: 'get',
       url: '/auth/user',
     })
-
     return response.data
   } catch (err: any) {
     if (!err.response) {

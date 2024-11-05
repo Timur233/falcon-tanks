@@ -3,7 +3,12 @@
     "composite": true,
     "module": "ESNext",
     "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
-  "include": ["vite.config.ts"]
+  "include": ["vite.config.ts"],
+  "references": [
+    { "path": "../server/tsconfig.prod.json" },
+    { "path": "../server/tsconfig.server.json" }
+  ]
 }

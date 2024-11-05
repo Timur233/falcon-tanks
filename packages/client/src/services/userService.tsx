@@ -1,5 +1,5 @@
-import { actions, UserType, getUser } from '@/store/reducers/auth-reducer'
 import { useAppDispatch } from '@/store'
+import { actions, getUser, UserType } from '@/store/reducers/auth-reducer'
 
 export const userService = {
   async fetchUser(dispatch: ReturnType<typeof useAppDispatch>) {
@@ -15,6 +15,9 @@ export const userService = {
   },
 
   isLoggedIn() {
-    return window.sessionStorage.getItem('userIsLogged') === '1'
+    if (typeof window !== 'undefined') {
+      return window.sessionStorage.getItem('userIsLogged') === '1'
+    }
+    return false
   },
 }

@@ -1,3 +1,4 @@
+'use client'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import './Game.scss'
 import { initializeCampanyEnemies } from '@/components/Game/enemy'
