@@ -7,6 +7,7 @@ import {
 import { detectCollision } from '@/components/Game/collision'
 import { createBangEffect } from './effects'
 import { OBSTACLE_SIZE, ObstacleSettings } from '@/components/Game/constants'
+import { GameMap } from '@/components/Game/gameMap'
 
 export const initializeCompany1MapObstacle = (): ObstacleParams[] => {
   return [
@@ -77,11 +78,11 @@ export const createObstacle = (
 
 export const handleBulletObstacleCollisions = (
   bullets: AbstractEntity[],
-  obstacles: Obstacle[]
+  gameMap: React.MutableRefObject<GameMap>
 ) => {
   bullets.forEach(bullet => {
     // Проверка коллизий с препятствиями
-    obstacles.forEach(obstacle => {
+    gameMap.current.obstacles.forEach(obstacle => {
       if (detectCollision(bullet, obstacle)) {
         // Логика для уничтожения пули, если она попала в препятствие
         bullets.splice(bullets.indexOf(bullet), 1) // Пример, удаляем пулю, если попала в препятствие
@@ -89,13 +90,16 @@ export const handleBulletObstacleCollisions = (
           bullet.x + bullet.width / 2,
           bullet.y + bullet.height / 2
         )
-        killObstacle(obstacles, obstacle)
+        killObstacle(gameMap, obstacle)
       }
     })
   })
 }
 
-const killObstacle = (obstacles: Obstacle[], obstacle: Obstacle) => {
+const killObstacle = (
+  gameMap: React.MutableRefObject<GameMap>,
+  obstacle: Obstacle
+) => {
   const settings = ObstacleSettings[obstacle.type as obstacleTypes]
   const { frames } = settings
 
@@ -110,6 +114,9 @@ const killObstacle = (obstacles: Obstacle[], obstacle: Obstacle) => {
   }
 
   if (obstacle.hp === 0) {
-    obstacles.splice(obstacles.indexOf(obstacle), 1)
+    gameMap.current.obstacles.splice(
+      gameMap.current.obstacles.indexOf(obstacle),
+      1
+    )
   }
 }

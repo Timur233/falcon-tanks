@@ -1,3 +1,5 @@
+import { GameMap } from '@/components/Game/gameMap'
+
 interface AnimationParams {
   currentFrame: number
   totalFrames: number
@@ -56,9 +58,8 @@ export interface BtnStates {
 }
 
 export interface ControlsProps {
-  playerRef: React.MutableRefObject<AbstractEntity>
+  gameMap: React.MutableRefObject<GameMap>
   bulletsRef: React.MutableRefObject<AbstractEntity[]>
-  obstacles: Obstacle[]
   canvasWidth: number
   canvasHeight: number
 }

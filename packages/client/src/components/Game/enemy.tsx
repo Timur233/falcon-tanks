@@ -1,11 +1,12 @@
 import React from 'react'
-import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
+import { AbstractEntity, Enemy } from '@/components/Game/gameTypes'
 import { createBullet } from '@/components/Game/bullet'
 import {
   detectCollision,
   detectEnemyCollision,
 } from '@/components/Game/collision'
 import { DefaultEnemy } from '@/components/Game/constants'
+import { GameMap } from '@/components/Game/gameMap'
 
 export const initializeCampanyEnemies = (): Enemy[] => {
   return [
@@ -49,14 +50,12 @@ export const initializeCampanyEnemies = (): Enemy[] => {
 }
 
 export const updateEnemyPositions = (
-  player: AbstractEntity,
-  enemiesRef: React.MutableRefObject<Enemy[]>,
-  obstacles: Obstacle[]
+  gameMap: React.MutableRefObject<GameMap>
 ) => {
-  enemiesRef.current = enemiesRef.current.map(enemy => {
+  gameMap.current.enemies = gameMap.current.enemies.map(enemy => {
     // Определяем разницу по X и Y
-    const directionX = player.x - enemy.x
-    const directionY = player.y - enemy.y
+    const directionX = gameMap.current.player.x - enemy.x
+    const directionY = gameMap.current.player.y - enemy.y
 
     // Выбираем ближайшую ось для начала движения
     const moveAlongX = Math.abs(directionX) > Math.abs(directionY)
@@ -92,13 +91,13 @@ export const updateEnemyPositions = (
     const newY = enemy.y + stepY
 
     // Проверка столкновений с другими врагами
-    const hasEnemyCollision = enemiesRef.current.some(otherEnemy => {
+    const hasEnemyCollision = gameMap.current.enemies.some(otherEnemy => {
       if (otherEnemy === enemy) return false
       return detectEnemyCollision({ ...enemy, x: newX, y: newY }, otherEnemy)
     })
 
     // Проверка коллизий с препятствиями
-    const hasObstacleCollision = obstacles.some(obstacle => {
+    const hasObstacleCollision = gameMap.current.obstacles.some(obstacle => {
       return detectCollision({ ...enemy, x: newX, y: newY }, obstacle)
     })
 
@@ -113,61 +112,20 @@ export const updateEnemyPositions = (
   })
 }
 
-const isPositionOccupied = (
-  position: { x: number; y: number },
-  enemies: AbstractEntity[]
-) => {
-  return enemies.some(enemy =>
-    detectEnemyCollision({ ...enemy, x: position.x, y: position.y }, enemy)
-  )
-}
-
-const respawnEnemy = (
-  enemy: Enemy,
-  enemies: Enemy[],
-  canvasWidth: number,
-  canvasHeight: number
-) => {
-  let newPosition
-  do {
-    newPosition = {
-      x: Math.random() * canvasWidth, // Предполагается, что canvasWidth доступен
-      y: Math.random() * canvasHeight, // Предполагается, что canvasHeight доступен
-    }
-  } while (isPositionOccupied(newPosition, enemies))
-
-  return { ...enemy, ...newPosition } // Возвращаем врага с новой позицией
-}
-
-// Пример использования respawnEnemy в вашем коде
-export const respawnEnemies = (
-  enemiesRef: React.MutableRefObject<Enemy[]>,
-  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>
-) => {
-  if (!canvasRef.current) {
-    return
-  }
-  const { width: canvasWidth, height: canvasHeight } =
-    canvasRef.current.getBoundingClientRect()
-  enemiesRef.current = enemiesRef.current.map(enemy =>
-    respawnEnemy(enemy, enemiesRef.current, canvasWidth, canvasHeight)
-  )
-}
-
 export const killEnemy = (
-  enemiesRef: React.MutableRefObject<AbstractEntity[]>,
+  gameMap: React.MutableRefObject<GameMap>,
   enemy: AbstractEntity
 ) => {
-  enemiesRef.current = enemiesRef.current.filter(e => e !== enemy)
+  gameMap.current.enemies = gameMap.current.enemies.filter(e => e !== enemy)
 }
 
 export const handleEnemyShooting = (
-  enemies: Enemy[],
+  gameMap: React.MutableRefObject<GameMap>,
   bulletsRef: React.MutableRefObject<AbstractEntity[]>
 ) => {
   const currentTime = Date.now() // Текущее время в миллисекундах
 
-  enemies.forEach(enemy => {
+  gameMap.current.enemies.forEach(enemy => {
     // Проверяем, если прошло больше 2 секунд (2000 миллисекунд) с последнего выстрела
     if (!enemy.lastShotTime || currentTime - enemy.lastShotTime >= 2000) {
       bulletsRef.current.push(createBullet(enemy)) // Создаём новую пулю для врага

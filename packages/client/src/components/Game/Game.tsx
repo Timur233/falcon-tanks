@@ -1,17 +1,13 @@
 'use client'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import './Game.scss'
 import { initializeCampanyEnemies } from '@/components/Game/enemy'
-import {
-  GET_PLAYER_DEFAULT_PARAMS,
-  PLAYER_DEFAULT_PARAMS,
-} from '@/components/Game/player'
+import { GET_PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import {
   AbstractEntity,
   Effect,
   GamePropsType,
-  Obstacle,
   RandomPosition,
 } from '@/components/Game/gameTypes'
 import { initializeCompany1MapObstacle } from '@/components/Game/obstacle'
@@ -19,6 +15,7 @@ import { handleKeyDownUp, resetButtonsStates } from '@/components/Game/controls'
 import { GameMap } from '@/components/Game/gameMap'
 import {
   GRID_SIZE,
+  PLAYER_DEFAULT_PARAMS,
   WINDOW_HEIGHT,
   WINDOW_WIDTH,
 } from '@/components/Game/constants'
@@ -34,23 +31,18 @@ export const Game = (props: GamePropsType) => {
     onGameOver,
     onKeyDownUp,
   } = props
-  const gameMap = useMemo(
-    () =>
-      new GameMap({
-        window_width: WINDOW_WIDTH,
-        window_height: WINDOW_HEIGHT,
-        grid_size: GRID_SIZE,
-        player: GET_PLAYER_DEFAULT_PARAMS(),
-        enemies: [],
-        obstacles: [],
-      }),
-    []
+  const gameMap = useRef<GameMap>(
+    new GameMap({
+      window_width: WINDOW_WIDTH,
+      window_height: WINDOW_HEIGHT,
+      grid_size: GRID_SIZE,
+      player: GET_PLAYER_DEFAULT_PARAMS(),
+      enemies: [],
+      obstacles: [],
+    })
   )
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const playerRef = useRef(gameMap.player)
-  const enemiesRef = useRef(gameMap.enemies)
   const bulletsRef = useRef<AbstractEntity[]>([])
-  const obstaclesRef = useRef<Obstacle[]>(gameMap.obstacles)
   const effectsRef = useRef<Effect[]>([])
   const livesRef = useRef(lives)
   const isPausedRef = useRef(false)
@@ -63,7 +55,7 @@ export const Game = (props: GamePropsType) => {
   const handleEnemyKilled = () => {
     killsRef.current += 1
 
-    if (enemiesRef.current.length === 0) {
+    if (gameMap.current.enemies.length === 0) {
       onGameOver(true)
       setIsGameOver(true)
       setIsGameRunning(false)
@@ -88,10 +80,8 @@ export const Game = (props: GamePropsType) => {
         gameLoop(
           context,
           canvasRef,
-          playerRef,
-          enemiesRef,
+          gameMap,
           bulletsRef,
-          obstaclesRef,
           effectsRef,
           livesRef,
           onDeath,
@@ -102,12 +92,12 @@ export const Game = (props: GamePropsType) => {
 
       requestAnimationFrame(loop)
     }
-  }, [isGameOver, onDeath, handleGameOver])
+  }, [])
 
   const startGame = useCallback(() => {
     setIsGameRunning(true)
     setIsGameOver(false)
-    gameMap.clearMap()
+    gameMap.current.clearMap()
     const randomPositions: RandomPosition = {
       playerPosition: {
         x: PLAYER_DEFAULT_PARAMS.x,
@@ -117,21 +107,18 @@ export const Game = (props: GamePropsType) => {
       obstacleCount: 80,
     }
 
-    gameMap.getRandomPositions(randomPositions)
+    gameMap.current.getRandomPositions(randomPositions)
 
     isPausedRef.current = false
     livesRef.current = lives
-    playerRef.current = gameMap.player
-    enemiesRef.current = gameMap.enemies
-    obstaclesRef.current = gameMap.obstacles
     isStartedLoopRef.current = false
   }, [lives, gameMap])
 
   const startCompany = useCallback(() => {
     setIsGameRunning(true)
     setIsGameOver(false)
-    gameMap.clearMap()
-    gameMap.initializeCompanyMap(
+    gameMap.current.clearMap()
+    gameMap.current.initializeCompanyMap(
       PLAYER_DEFAULT_PARAMS,
       initializeCampanyEnemies(),
       initializeCompany1MapObstacle()
@@ -139,9 +126,6 @@ export const Game = (props: GamePropsType) => {
 
     isPausedRef.current = false
     livesRef.current = lives
-    playerRef.current = gameMap.player
-    enemiesRef.current = gameMap.enemies
-    obstaclesRef.current = gameMap.obstacles
     isStartedLoopRef.current = false
   }, [lives, gameMap])
 

@@ -101,9 +101,9 @@ const getLastAction = (): Action | null => {
 }
 
 export const updatePlayerAction = (props: ControlsProps) => {
-  const speed = props.playerRef.current.speed
-  let newX = props.playerRef.current.x
-  let newY = props.playerRef.current.y
+  const speed = props.gameMap.current.player.speed
+  let newX = props.gameMap.current.player.x
+  let newY = props.gameMap.current.player.y
 
   const lastMovementAction = getLastAction()
 
@@ -118,19 +118,19 @@ export const updatePlayerAction = (props: ControlsProps) => {
   if (lastMovementAction === Action.Shoot) {
     // Ограничение скорости стрельбы с помощью таймера
     if (shootPressed && currentTime - lastShotTime >= SHOOT_DELAY) {
-      props.bulletsRef.current.push(createBullet(props.playerRef.current))
+      props.bulletsRef.current.push(createBullet(props.gameMap.current.player))
       lastShotTime = currentTime // Обновляем время последнего выстрела
     }
   } else {
-    props.playerRef.current.direction = vector
+    props.gameMap.current.player.direction = vector
 
     newX += vector.x * speed
     newY += vector.y * speed
   }
 
-  const hasCollision = props.obstacles.some(obstacle => {
+  const hasCollision = props.gameMap.current.obstacles.some(obstacle => {
     return detectCollision(
-      { ...props.playerRef.current, x: newX, y: newY },
+      { ...props.gameMap.current.player, x: newX, y: newY },
       obstacle
     )
   })
@@ -138,14 +138,14 @@ export const updatePlayerAction = (props: ControlsProps) => {
   if (!hasCollision) {
     newX = Math.max(
       0,
-      Math.min(newX, props.canvasWidth - props.playerRef.current.width)
+      Math.min(newX, props.canvasWidth - props.gameMap.current.player.width)
     )
     newY = Math.max(
       0,
-      Math.min(newY, props.canvasHeight - props.playerRef.current.height)
+      Math.min(newY, props.canvasHeight - props.gameMap.current.player.height)
     )
 
-    props.playerRef.current.x = newX
-    props.playerRef.current.y = newY
+    props.gameMap.current.player.x = newX
+    props.gameMap.current.player.y = newY
   }
 }

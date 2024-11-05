@@ -10,10 +10,14 @@ import {
   PositionType,
   RandomPosition,
 } from './gameTypes'
-import { GET_PLAYER_DEFAULT_PARAMS, PLAYER_DEFAULT_PARAMS } from './player'
+import { GET_PLAYER_DEFAULT_PARAMS } from './player'
 import { createObstacle } from '@/components/Game/obstacle'
 
-import { DefaultEnemy, ObstacleSettings } from '@/components/Game/constants'
+import {
+  DefaultEnemy,
+  ObstacleSettings,
+  PLAYER_DEFAULT_PARAMS,
+} from '@/components/Game/constants'
 
 export class GameMap {
   window_width: number
