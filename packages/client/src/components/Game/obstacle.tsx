@@ -1,136 +1,47 @@
-import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
-import { getRandomPosition } from '@/components/Game/utils'
 import {
-  detectCollision,
-  detectObstacleCollision,
-} from '@/components/Game/collision'
+  AbstractEntity,
+  Obstacle,
+  ObstacleParams,
+  obstacleTypes,
+} from '@/components/Game/gameTypes'
+import { detectCollision } from '@/components/Game/collision'
 import { createBangEffect } from './effects'
+import { OBSTACLE_SIZE, ObstacleSettings } from '@/components/Game/constants'
 
-enum Types {
-  Wall = 'wall',
-  Steel = 'steel',
-  Tree = 'tree',
-}
+export const initializeCompany1MapObstacle = (): ObstacleParams[] => {
+  return [
+    { type: obstacleTypes.Steel, x: 72, y: 108, width: 72, height: 72 },
+    { type: obstacleTypes.Steel, x: 648, y: 108, width: 72, height: 72 },
 
-export const OBSTACLE_SIZE = 36
+    { type: obstacleTypes.Steel, x: 144, y: 360, width: 72, height: 72 },
+    { type: obstacleTypes.Steel, x: 576, y: 360, width: 72, height: 72 },
+    { type: obstacleTypes.Steel, x: 360, y: 360, width: 72, height: 72 },
 
-const ObstacleSettings = {
-  [Types.Wall]: {
-    hp: 2,
-    isCollide: true,
-    frames: [
-      {
-        hp: 1,
-        index: 1,
-      },
-      {
-        hp: 2,
-        index: 0,
-      },
-    ],
-  },
-  [Types.Steel]: {
-    hp: 1000,
-    isCollide: true,
-    frames: [
-      {
-        hp: 1000,
-        index: 0,
-      },
-    ],
-  },
-  [Types.Tree]: {
-    hp: 1000,
-    isCollide: false,
-    frames: [
-      {
-        hp: 1000,
-        index: 0,
-      },
-    ],
-  },
-}
+    { type: obstacleTypes.Wall, x: 252, y: 72, width: 108, height: 36 },
+    { type: obstacleTypes.Wall, x: 324, y: 108, width: 36, height: 144 },
+    { type: obstacleTypes.Wall, x: 252, y: 216, width: 72, height: 36 },
+    { type: obstacleTypes.Wall, x: 252, y: 144, width: 72, height: 36 },
+    { type: obstacleTypes.Wall, x: 252, y: 108, width: 36, height: 36 },
 
-export const initializeCompanyMapObstacle = (): Obstacle[] => {
-  return createMap([
-    { type: Types.Steel, x: 72, y: 108, width: 72, height: 72 },
-    { type: Types.Steel, x: 648, y: 108, width: 72, height: 72 },
+    { type: obstacleTypes.Wall, x: 432, y: 72, width: 108, height: 36 },
+    { type: obstacleTypes.Wall, x: 504, y: 108, width: 36, height: 108 },
+    { type: obstacleTypes.Wall, x: 432, y: 108, width: 36, height: 108 },
+    { type: obstacleTypes.Wall, x: 432, y: 216, width: 108, height: 36 },
 
-    { type: Types.Steel, x: 144, y: 360, width: 72, height: 72 },
-    { type: Types.Steel, x: 576, y: 360, width: 72, height: 72 },
-    { type: Types.Steel, x: 360, y: 360, width: 72, height: 72 },
+    { type: obstacleTypes.Wall, x: 72, y: 324, width: 72, height: 180 },
+    { type: obstacleTypes.Wall, x: 216, y: 324, width: 72, height: 180 },
+    { type: obstacleTypes.Wall, x: 504, y: 324, width: 72, height: 180 },
+    { type: obstacleTypes.Wall, x: 648, y: 324, width: 72, height: 180 },
 
-    { type: Types.Wall, x: 252, y: 72, width: 108, height: 36 },
-    { type: Types.Wall, x: 324, y: 108, width: 36, height: 144 },
-    { type: Types.Wall, x: 252, y: 216, width: 72, height: 36 },
-    { type: Types.Wall, x: 252, y: 144, width: 72, height: 36 },
-    { type: Types.Wall, x: 252, y: 108, width: 36, height: 36 },
-
-    { type: Types.Wall, x: 432, y: 72, width: 108, height: 36 },
-    { type: Types.Wall, x: 504, y: 108, width: 36, height: 108 },
-    { type: Types.Wall, x: 432, y: 108, width: 36, height: 108 },
-    { type: Types.Wall, x: 432, y: 216, width: 108, height: 36 },
-
-    { type: Types.Wall, x: 72, y: 324, width: 72, height: 180 },
-    { type: Types.Wall, x: 216, y: 324, width: 72, height: 180 },
-    { type: Types.Wall, x: 504, y: 324, width: 72, height: 180 },
-    { type: Types.Wall, x: 648, y: 324, width: 72, height: 180 },
-
-    { type: Types.Tree, x: 0, y: 324, width: 72, height: 180 },
-    { type: Types.Tree, x: 720, y: 324, width: 72, height: 180 },
-    { type: Types.Tree, x: 0, y: 504, width: 180, height: 72 },
-    { type: Types.Tree, x: 612, y: 504, width: 180, height: 72 },
-  ])
-  return createMap([
-    //  /{ type: Types.Steel, x: 0, y: 0, width: 120, height: 50 },
-    { type: Types.Steel, x: 200, y: 0, width: 70, height: 36 },
-    { type: Types.Steel, x: 350, y: 0, width: 70, height: 36 },
-    { type: Types.Steel, x: 500, y: 0, width: 120, height: 36 },
-    // { type: Types.Wall, x: 700, y: 0, width: 100, height: 50 },
-
-    // { type: Types.Wall, x: 0, y: 130, width: 50, height: 120 },
-    { type: Types.Wall, x: 130, y: 130, width: 50, height: 70 },
-    // { type: Types.Wall, x: 260, y: 130, width: 50, height: 200 },
-    { type: Types.Wall, x: 390, y: 130, width: 50, height: 70 },
-    { type: Types.Wall, x: 520, y: 130, width: 50, height: 120 },
-    // { type: Types.Wall, x: 650, y: 130, width: 50, height: 125 },
-
-    // { type: Types.Wall, x: 0, y: 330, width: 120, height: 50 },
-    { type: Types.Wall, x: 200, y: 330, width: 150, height: 36 },
-    { type: Types.Wall, x: 350, y: 330, width: 70, height: 36 },
-    { type: Types.Wall, x: 500, y: 330, width: 120, height: 36 },
-    // { type: Types.Wall, x: 700, y: 330, width: 100, height: 100 },
-
-    { type: Types.Wall, x: 0, y: 460, width: 50, height: 140 },
-    { type: Types.Wall, x: 130, y: 530, width: 50, height: 70 },
-    { type: Types.Wall, x: 260, y: 480, width: 50, height: 120 },
-    //{ type: Types.Wall, x: 390, y: 460, width: 50, height: 70 },
-    { type: Types.Wall, x: 520, y: 490, width: 50, height: 120 },
-    { type: Types.Wall, x: 650, y: 480, width: 50, height: 120 },
-  ])
-}
-
-export const createMap = (
-  params: {
-    type: Types
-    x: number
-    y: number
-    width: number
-    height: number
-  }[]
-) => {
-  let obstacles: Obstacle[] = []
-
-  params.forEach(obstacle => {
-    const { type, x, y, width, height } = obstacle
-    obstacles = [...obstacles, ...createObstacle(type, x, y, width, height)]
-  })
-
-  return obstacles
+    { type: obstacleTypes.Tree, x: 0, y: 324, width: 72, height: 180 },
+    { type: obstacleTypes.Tree, x: 720, y: 324, width: 72, height: 180 },
+    { type: obstacleTypes.Tree, x: 0, y: 504, width: 180, height: 72 },
+    { type: obstacleTypes.Tree, x: 612, y: 504, width: 180, height: 72 },
+  ]
 }
 
 export const createObstacle = (
-  type: Types,
+  type: obstacleTypes,
   x: number,
   y: number,
   width: number,
@@ -164,41 +75,6 @@ export const createObstacle = (
   return obstacles
 }
 
-export const initializeRandomObstacle = (
-  numberOfObstacles: number,
-  playerRef: React.MutableRefObject<AbstractEntity>,
-  enemiesRef: React.MutableRefObject<Enemy[]>
-): Obstacle[] => {
-  const obstacles: Obstacle[] = []
-
-  while (obstacles.length < numberOfObstacles) {
-    const { x, y } = getRandomPosition(800, 600)
-    const obstacle: Obstacle = createObstacle(
-      Types.Wall,
-      x,
-      y,
-      OBSTACLE_SIZE,
-      OBSTACLE_SIZE
-    )[0]
-
-    // Проверяем, нет ли коллизий с существующими препятствиями
-    const hasObstacleCollision = obstacles.some(
-      existingObstacle =>
-        detectObstacleCollision(obstacle, existingObstacle) &&
-        detectCollision(playerRef.current, existingObstacle) &&
-        enemiesRef.current.some(enemy =>
-          detectCollision(enemy, existingObstacle)
-        ) // Проверяем, нет ли коллизий с существующими препятствиями
-    )
-
-    if (!hasObstacleCollision) {
-      obstacles.push(obstacle) // Добавляем препятствие, если нет коллизий
-    }
-  }
-
-  return obstacles
-}
-
 export const handleBulletObstacleCollisions = (
   bullets: AbstractEntity[],
   obstacles: Obstacle[]
@@ -220,7 +96,7 @@ export const handleBulletObstacleCollisions = (
 }
 
 const killObstacle = (obstacles: Obstacle[], obstacle: Obstacle) => {
-  const settings = ObstacleSettings[obstacle.type as Types]
+  const settings = ObstacleSettings[obstacle.type as obstacleTypes]
   const { frames } = settings
 
   obstacle.hp = obstacle.hp - 1

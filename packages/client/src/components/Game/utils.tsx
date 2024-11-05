@@ -14,35 +14,6 @@ import {
 } from '@/components/Game/gameTypes'
 import { deleteEffect } from './effects'
 
-export const getRandomEdgePosition = (
-  canvasWidth: number,
-  canvasHeight: number
-): { x: number; y: number } => {
-  const edge: 0 | 1 | 2 | 3 = Math.floor(Math.random() * 4) as 0 | 1 | 2 | 3
-
-  switch (edge) {
-    case 0: // Верхний край
-      return { x: Math.random() * canvasWidth, y: 0 }
-    case 1: // Правый край
-      return { x: canvasWidth, y: Math.random() * canvasHeight }
-    case 2: // Нижний край
-      return { x: Math.random() * canvasWidth, y: canvasHeight }
-    case 3: // Левый край
-      return { x: 0, y: Math.random() * canvasHeight }
-  }
-}
-
-export const getRandomPosition = (
-  canvasWidth: number,
-  canvasHeight: number,
-  obstacleWidth = 50, // Ширина препятствия
-  obstacleHeight = 50 // Высота препятствия
-): { x: number; y: number } => {
-  const x = Math.random() * (canvasWidth - obstacleWidth) // Генерируем случайное X
-  const y = Math.random() * (canvasHeight - obstacleHeight) // Генерируем случайное Y
-  return { x, y }
-}
-
 export const clearCanvas = (context: CanvasRenderingContext2D) => {
   context.clearRect(0, 0, context.canvas.width, context.canvas.height)
 }

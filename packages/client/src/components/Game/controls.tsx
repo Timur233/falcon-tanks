@@ -1,6 +1,12 @@
-import { BtnStates, ControlsProps } from '@/components/Game/gameTypes'
+import {
+  Action,
+  BtnStates,
+  ControlsProps,
+  Vector,
+} from '@/components/Game/gameTypes'
 import { detectCollision } from '@/components/Game/collision'
 import { createBullet } from '@/components/Game/bullet'
+import { SHOOT_DELAY } from '@/components/Game/constants'
 
 const btnStates: BtnStates = {
   up: false,
@@ -12,20 +18,6 @@ const btnStates: BtnStates = {
 let pressedKeys: string[] = []
 let shootPressed = false // Флаг для стрельбы
 let lastShotTime = 0 // Время последнего выстрела
-const SHOOT_DELAY = 500 // Задержка между выстрелами (в миллисекундах)
-
-enum Action {
-  MoveUp = 'MoveUp',
-  MoveDown = 'MoveDown',
-  MoveLeft = 'MoveLeft',
-  MoveRight = 'MoveRight',
-  Shoot = 'Shoot',
-}
-
-type Vector = {
-  x: -1 | 0 | 1
-  y: -1 | 0 | 1
-}
 
 const ACTION_CONTROLS: Record<Action, string[]> = {
   [Action.MoveUp]: ['ArrowUp', 'w', 'ц', 'W', 'Ц'],

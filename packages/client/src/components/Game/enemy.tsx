@@ -1,45 +1,16 @@
 import React from 'react'
-import { getRandomEdgePosition } from './utils'
 import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
 import { createBullet } from '@/components/Game/bullet'
 import {
   detectCollision,
   detectEnemyCollision,
 } from '@/components/Game/collision'
-
-const enemyParams = {
-  width: 70,
-  height: 70,
-  speed: 1,
-  direction: { x: 0, y: 0 },
-}
-
-export const initializeRandomEnemies = (numberOfEnemies: number) => {
-  const initialEnemies: Enemy[] = []
-  for (let i = 0; i < numberOfEnemies; i++) {
-    // количество врагов
-    const { x, y } = getRandomEdgePosition(800, 600)
-    const enemy: Enemy = {
-      ...enemyParams,
-      id: i,
-      x,
-      y,
-      animation: {
-        currentFrame: 0,
-        totalFrames: 4,
-        frameInterval: 10,
-        frameCount: 0,
-      },
-    }
-    initialEnemies.push(enemy)
-  }
-  return initialEnemies as Enemy[]
-}
+import { DefaultEnemy } from '@/components/Game/constants'
 
 export const initializeCampanyEnemies = (): Enemy[] => {
   return [
     {
-      ...enemyParams,
+      ...DefaultEnemy,
       id: 0,
       x: 360,
       y: 0,
@@ -51,7 +22,7 @@ export const initializeCampanyEnemies = (): Enemy[] => {
       },
     },
     {
-      ...enemyParams,
+      ...DefaultEnemy,
       id: 1,
       x: 0,
       y: 108,
@@ -63,7 +34,7 @@ export const initializeCampanyEnemies = (): Enemy[] => {
       },
     },
     {
-      ...enemyParams,
+      ...DefaultEnemy,
       id: 2,
       x: 720,
       y: 108,

@@ -1,9 +1,8 @@
 import { AbstractEntity, Enemy } from '@/components/Game/gameTypes'
-import { respawnEnemies } from '@/components/Game/enemy'
 
 export const PLAYER_DEFAULT_PARAMS = {
   x: 400,
-  y: 560,
+  y: 500,
   width: 70,
   height: 70,
   speed: 3,
@@ -20,15 +19,6 @@ export const GET_PLAYER_DEFAULT_PARAMS = () => {
   return Object.assign({}, PLAYER_DEFAULT_PARAMS)
 }
 
-export const resetPlayerPosition = (
-  playerRef: React.MutableRefObject<AbstractEntity>
-) => {
-  playerRef.current = {
-    ...playerRef.current,
-    x: PLAYER_DEFAULT_PARAMS.x,
-    y: PLAYER_DEFAULT_PARAMS.y,
-  }
-}
 /**
  * Функция для обработки столкновения игрока с врагом.
  * @param livesRef - Ссылка на текущее количество жизней игрока.

@@ -1,10 +1,6 @@
 import { AbstractEntity } from '@/components/Game/gameTypes'
 import { createShotEffect } from './effects'
-
-const bulletSize = {
-  width: 12,
-  height: 18,
-}
+import { bulletSize } from '@/components/Game/constants'
 
 export const createBullet = (enemy: AbstractEntity): AbstractEntity => {
   const bulletSpeed = 5 // Задайте скорость пули
