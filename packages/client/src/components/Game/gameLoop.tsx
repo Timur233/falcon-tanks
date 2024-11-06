@@ -25,6 +25,10 @@ import { handleBulletObstacleCollisions } from '@/components/Game/obstacle'
 import { createBangEffect, initEffects } from './effects'
 import { GameMap } from '@/components/Game/gameMap'
 
+const MAX_FPS = 60
+const FRAME_DURATION = 1000 / MAX_FPS
+let lastFrameTime = 0
+
 /**
  * Основной игровой цикл, который обновляет состояние игры и перерисовывает экран каждый кадр.
  * @param context - Контекст рисования для Canvas.
@@ -48,6 +52,30 @@ export const gameLoop = (
   handleGameOver: () => void,
   handleEnemyKilled: () => void
 ) => {
+  const now = performance.now()
+  const deltaTime = now - lastFrameTime
+
+  if (deltaTime < FRAME_DURATION) {
+    requestAnimationFrame(() =>
+      gameLoop(
+        context,
+        canvasRef,
+        playerRef,
+        enemiesRef,
+        bulletsRef,
+        obstaclesRef,
+        effectsRef,
+        livesRef,
+        handleDeath,
+        handleGameOver,
+        handleEnemyKilled
+      )
+    )
+    return
+  }
+
+  lastFrameTime = now
+
   clearCanvas(context)
 
   // Обновление позиций врагов
