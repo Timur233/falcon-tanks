@@ -118,7 +118,9 @@ export const updatePlayerAction = (props: ControlsProps) => {
   if (lastMovementAction === Action.Shoot) {
     // Ограничение скорости стрельбы с помощью таймера
     if (shootPressed && currentTime - lastShotTime >= SHOOT_DELAY) {
-      props.bulletsRef.current.push(createBullet(props.gameMap.current.player))
+      props.bulletsRef.current.push(
+        createBullet(props.gameMap.current.player, true)
+      )
       lastShotTime = currentTime // Обновляем время последнего выстрела
     }
   } else {

@@ -8,14 +8,7 @@ import {
   drawBullets,
   drawEffects,
 } from './utils'
-import {
-  ControlsProps,
-  AbstractEntity,
-  Obstacle,
-  Enemy,
-  Effect,
-  Bullet,
-} from '@/components/Game/gameTypes'
+import { ControlsProps, Effect, Bullet } from '@/components/Game/gameTypes'
 import {
   bulletsCollisions,
   detectEnemyCollision,
@@ -46,7 +39,7 @@ export const gameLoop = (
   context: CanvasRenderingContext2D,
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>,
   gameMap: React.MutableRefObject<GameMap>,
-  bulletsRef: React.MutableRefObject<AbstractEntity[]>,
+  bulletsRef: React.MutableRefObject<Bullet[]>,
   effectsRef: React.MutableRefObject<Effect[]>,
   livesRef: React.MutableRefObject<number>,
   handleDeath: (lives: number) => void,
@@ -61,10 +54,8 @@ export const gameLoop = (
       gameLoop(
         context,
         canvasRef,
-        playerRef,
-        enemiesRef,
+        gameMap,
         bulletsRef,
-        obstaclesRef,
         effectsRef,
         livesRef,
         handleDeath,
@@ -113,8 +104,7 @@ export const gameLoop = (
 
   bulletsCollisions(
     bulletsRef,
-    playerRef,
-    enemiesRef,
+    gameMap,
     livesRef,
     handleEnemyKilled,
     createBangEffect,
@@ -122,8 +112,8 @@ export const gameLoop = (
     handleDeath
   )
 
-  const collidedEnemy = enemiesRef.current.find(enemy =>
-    detectEnemyCollision(playerRef.current, enemy)
+  const collidedEnemy = gameMap.current.enemies.find(enemy =>
+    detectEnemyCollision(gameMap.current.player, enemy)
   )
 
   if (collidedEnemy) {
