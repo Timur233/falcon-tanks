@@ -1,10 +1,6 @@
 import { AbstractEntity, Bullet } from '@/components/Game/gameTypes'
 import { createShotEffect } from './effects'
-
-const bulletSize = {
-  width: 12,
-  height: 18,
-}
+import { bulletSize } from '@/components/Game/constants'
 
 export const createBullet = (
   enemy: AbstractEntity,
@@ -12,6 +8,11 @@ export const createBullet = (
 ): Bullet => {
   const bulletSpeed = 5 // Задайте скорость пули
   const bulletDirection = { x: enemy.direction.x, y: enemy.direction.y }
+
+  if (bulletDirection.x === 0 && bulletDirection.y === 0) {
+    // Если направление врага не задано, выставляет направление врага вниз
+    bulletDirection.y = 1
+  }
 
   // Начальная позиция пули в зависимости от направления врага
   let bulletX, bulletY

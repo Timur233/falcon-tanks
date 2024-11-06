@@ -1,36 +1,27 @@
 'use client'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import './Game.scss'
-import {
-  initializeCampanyEnemies,
-  initializeRandomEnemies,
-} from '@/components/Game/enemy'
+import { initializeCampanyEnemies } from '@/components/Game/enemy'
 import { GET_PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import {
+  AbstractEntity,
   Effect,
   Obstacle,
   BtnStates,
   Bullet,
+  GamePropsType,
+  RandomPosition,
 } from '@/components/Game/gameTypes'
-import {
-  initializeCompanyMapObstacle,
-  initializeRandomObstacle,
-} from '@/components/Game/obstacle'
+import { initializeCompany1MapObstacle } from '@/components/Game/obstacle'
 import { handleKeyDownUp, resetButtonsStates } from '@/components/Game/controls'
-
-let PLAYER_DEFAULT_PARAMS = GET_PLAYER_DEFAULT_PARAMS()
-
-type GamePropsType = {
-  lives: number
-  onKill: (kills: number) => void
-  isGameStarted: boolean
-  isCompanyStarted: boolean
-  isGamePaused: boolean
-  onDeath: (lives: number) => void
-  onGameOver: (isVictory: boolean) => void
-  onKeyDownUp: (btnStates: BtnStates) => void
-}
+import { GameMap } from '@/components/Game/gameMap'
+import {
+  GRID_SIZE,
+  PLAYER_DEFAULT_PARAMS,
+  WINDOW_HEIGHT,
+  WINDOW_WIDTH,
+} from '@/components/Game/constants'
 
 export const Game = (props: GamePropsType) => {
   const {
@@ -43,14 +34,18 @@ export const Game = (props: GamePropsType) => {
     onGameOver,
     onKeyDownUp,
   } = props
-
-  // TODO: Нужно обработать победу в игре
-
+  const gameMap = useRef<GameMap>(
+    new GameMap({
+      window_width: WINDOW_WIDTH,
+      window_height: WINDOW_HEIGHT,
+      grid_size: GRID_SIZE,
+      player: GET_PLAYER_DEFAULT_PARAMS(),
+      enemies: [],
+      obstacles: [],
+    })
+  )
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const playerRef = useRef(PLAYER_DEFAULT_PARAMS)
-  const enemiesRef = useRef(initializeRandomEnemies(5))
-  const bulletsRef = useRef<Bullet[]>([])
-  const obstaclesRef = useRef<Obstacle[]>(initializeRandomObstacle(20))
+  const bulletsRef = useRef<AbstractEntity[]>([])
   const effectsRef = useRef<Effect[]>([])
   const livesRef = useRef(lives)
   const isPausedRef = useRef(false)
@@ -63,12 +58,10 @@ export const Game = (props: GamePropsType) => {
   const handleEnemyKilled = () => {
     killsRef.current += 1
 
-    if (enemiesRef.current.length === 0) {
+    if (gameMap.current.enemies.length === 0) {
       onGameOver(true)
       setIsGameOver(true)
       setIsGameRunning(false)
-
-      PLAYER_DEFAULT_PARAMS = GET_PLAYER_DEFAULT_PARAMS()
     }
 
     onKill(killsRef.current)
@@ -78,8 +71,6 @@ export const Game = (props: GamePropsType) => {
     onGameOver(false)
     setIsGameOver(true)
     setIsGameRunning(false)
-
-    PLAYER_DEFAULT_PARAMS = GET_PLAYER_DEFAULT_PARAMS()
 
     isPausedRef.current = true
   }, [onGameOver])
@@ -92,10 +83,8 @@ export const Game = (props: GamePropsType) => {
         gameLoop(
           context,
           canvasRef,
-          playerRef,
-          enemiesRef,
+          gameMap,
           bulletsRef,
-          obstaclesRef,
           effectsRef,
           livesRef,
           onDeath,
@@ -106,31 +95,42 @@ export const Game = (props: GamePropsType) => {
 
       requestAnimationFrame(loop)
     }
-  }, [isGameOver, onDeath, handleGameOver])
+  }, [])
 
   const startGame = useCallback(() => {
     setIsGameRunning(true)
     setIsGameOver(false)
+    gameMap.current.clearMap()
+    const randomPositions: RandomPosition = {
+      playerPosition: {
+        x: PLAYER_DEFAULT_PARAMS.x,
+        y: PLAYER_DEFAULT_PARAMS.y,
+      },
+      enemyCount: 5,
+      obstacleCount: 80,
+    }
+
+    gameMap.current.getRandomPositions(randomPositions)
 
     isPausedRef.current = false
     livesRef.current = lives
-    playerRef.current = PLAYER_DEFAULT_PARAMS
-    enemiesRef.current = initializeRandomEnemies(5)
-    obstaclesRef.current = initializeRandomObstacle(20)
     isStartedLoopRef.current = false
-  }, [lives])
+  }, [lives, gameMap])
 
   const startCompany = useCallback(() => {
     setIsGameRunning(true)
     setIsGameOver(false)
+    gameMap.current.clearMap()
+    gameMap.current.initializeCompanyMap(
+      PLAYER_DEFAULT_PARAMS,
+      initializeCampanyEnemies(),
+      initializeCompany1MapObstacle()
+    )
 
     isPausedRef.current = false
     livesRef.current = lives
-    playerRef.current = PLAYER_DEFAULT_PARAMS
-    enemiesRef.current = initializeCampanyEnemies()
-    obstaclesRef.current = initializeCompanyMapObstacle()
     isStartedLoopRef.current = false
-  }, [lives])
+  }, [lives, gameMap])
 
   useEffect(() => {
     const handleKeyDownUpWrapper = (event: KeyboardEvent) => {
@@ -164,7 +164,7 @@ export const Game = (props: GamePropsType) => {
       isStartedLoopRef.current = false
     }
 
-    if (isGameRunning === false) {
+    if (!isGameRunning) {
       if (isGameStarted) {
         startGame()
       } else if (isCompanyStarted) {
@@ -181,5 +181,10 @@ export const Game = (props: GamePropsType) => {
     startCompany,
   ])
 
-  return <canvas ref={canvasRef} width={800} height={600}></canvas>
+  return (
+    <canvas
+      ref={canvasRef}
+      width={WINDOW_WIDTH}
+      height={WINDOW_HEIGHT}></canvas>
+  )
 }

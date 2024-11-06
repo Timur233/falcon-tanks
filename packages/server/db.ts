@@ -1,6 +1,7 @@
 import { Client } from 'pg'
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } = process.env
+const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
+  process.env
 
 export const createClientAndConnect = async (): Promise<Client | null> => {
   try {
@@ -18,7 +19,7 @@ export const createClientAndConnect = async (): Promise<Client | null> => {
      * This we will communicate with db
      * for Example
      * const res = await client.query('SELECT NOW()')
-     */ 
+     */
 
     await client.end()
 

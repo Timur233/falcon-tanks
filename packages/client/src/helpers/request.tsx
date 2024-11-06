@@ -28,12 +28,11 @@ export default function createFetchRequest(req: Request, res?: Response) {
 
   Object.entries(req.headers).forEach(([key, values]) => {
     if (Array.isArray(values)) {
-      values.forEach(value => headers.append(key, value));
+      values.forEach(value => headers.append(key, value))
     } else if (typeof values === 'string') {
-      headers.set(key, values);
+      headers.set(key, values)
     }
-  });
-  
+  })
 
   const init = {
     method: req.method,

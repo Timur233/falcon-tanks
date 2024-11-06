@@ -1,4 +1,9 @@
-import { Obstacle, AbstractEntity, Bullet } from '@/components/Game/gameTypes'
+import {
+  Obstacle,
+  AbstractEntity,
+  Bullet,
+  Enemy,
+} from '@/components/Game/gameTypes'
 import { killEnemy } from '@/components/Game/enemy'
 
 export const detectCollision = (
@@ -113,4 +118,31 @@ export const bulletsCollisions = (
       }
     }
   })
+}
+
+// Проверка столкновений с игроком
+export const detectPlayerCollision = (
+  obstacle: Obstacle,
+  player: AbstractEntity
+): boolean => {
+  return (
+    obstacle.x < player.x + player.width &&
+    obstacle.x + obstacle.width > player.x &&
+    obstacle.y < player.y + player.height &&
+    obstacle.y + obstacle.height > player.y
+  )
+}
+
+// Проверка столкновений с врагами
+export const detectEnemiesCollision = (
+  obstacle: Obstacle,
+  enemies: Enemy[]
+): boolean => {
+  return enemies.some(
+    enemy =>
+      obstacle.x < enemy.x + enemy.width &&
+      obstacle.x + obstacle.width > enemy.x &&
+      obstacle.y < enemy.y + enemy.height &&
+      obstacle.y + obstacle.height > enemy.y
+  )
 }

@@ -24,15 +24,18 @@ import { updatePlayerAction } from '@/components/Game/controls'
 import { updateBullets } from '@/components/Game/bullet'
 import { handleBulletObstacleCollisions } from '@/components/Game/obstacle'
 import { createBangEffect, initEffects } from './effects'
+import { GameMap } from '@/components/Game/gameMap'
+
+const MAX_FPS = 60
+const FRAME_DURATION = 1000 / MAX_FPS
+let lastFrameTime = 0
 
 /**
  * Основной игровой цикл, который обновляет состояние игры и перерисовывает экран каждый кадр.
  * @param context - Контекст рисования для Canvas.
  * @param canvasRef - Ссылка на Canvas.
- * @param playerRef - Ссылка на текущего игрока.
- * @param enemiesRef - Ссылка на массив врагов.
+ * @param gameMap - Объект GameMap.
  * @param bulletsRef - Ссылка на массив пуль.
- * @param obstaclesRef - Ссылка на массив препятствий.
  * @param livesRef - Ссылка на текущее количество жизней игрока.
  * @param effectsRef - Ссылка на массив эффектов.
  * @param handleDeath - Обработчик события смерти игрока.
@@ -42,35 +45,56 @@ import { createBangEffect, initEffects } from './effects'
 export const gameLoop = (
   context: CanvasRenderingContext2D,
   canvasRef: React.MutableRefObject<HTMLCanvasElement | null>,
-  playerRef: React.MutableRefObject<AbstractEntity>,
-  enemiesRef: React.MutableRefObject<Enemy[]>,
-  bulletsRef: React.MutableRefObject<Bullet[]>,
-  obstaclesRef: React.MutableRefObject<Obstacle[]>,
+  gameMap: React.MutableRefObject<GameMap>,
+  bulletsRef: React.MutableRefObject<AbstractEntity[]>,
   effectsRef: React.MutableRefObject<Effect[]>,
   livesRef: React.MutableRefObject<number>,
   handleDeath: (lives: number) => void,
   handleGameOver: () => void,
   handleEnemyKilled: () => void
 ) => {
+  const now = performance.now()
+  const deltaTime = now - lastFrameTime
+
+  if (deltaTime < FRAME_DURATION) {
+    requestAnimationFrame(() =>
+      gameLoop(
+        context,
+        canvasRef,
+        playerRef,
+        enemiesRef,
+        bulletsRef,
+        obstaclesRef,
+        effectsRef,
+        livesRef,
+        handleDeath,
+        handleGameOver,
+        handleEnemyKilled
+      )
+    )
+    return
+  }
+
+  lastFrameTime = now
+
   clearCanvas(context)
 
   // Обновление позиций врагов
-  updateEnemyPositions(playerRef.current, enemiesRef, obstaclesRef.current)
+  updateEnemyPositions(gameMap)
   if (!canvasRef.current) return
   const moveProps: ControlsProps = {
-    playerRef,
+    gameMap,
     bulletsRef,
-    obstacles: obstaclesRef.current,
     canvasWidth: canvasRef.current.width,
     canvasHeight: canvasRef.current.height,
   }
   updatePlayerAction(moveProps)
 
   // Стрельба врагов каждые 2 секунды
-  handleEnemyShooting(enemiesRef.current, bulletsRef)
+  handleEnemyShooting(gameMap, bulletsRef)
 
   // Обработка столкновений с препятствиями
-  handleBulletObstacleCollisions(bulletsRef.current, obstaclesRef.current)
+  handleBulletObstacleCollisions(bulletsRef.current, gameMap)
 
   initEffects(effectsRef)
 
@@ -81,9 +105,9 @@ export const gameLoop = (
   )
 
   // Отрисовка всех игровых объектов
-  drawPlayer(context, playerRef.current)
-  drawEnemies(context, enemiesRef.current)
-  drawObstacles(context, obstaclesRef.current)
+  drawPlayer(context, gameMap.current.player)
+  drawEnemies(context, gameMap.current.enemies)
+  drawObstacles(context, gameMap.current.obstacles)
   drawEffects(context, effectsRef.current)
   drawBullets(context, bulletsRef.current) // Отрисовка пуль
 
