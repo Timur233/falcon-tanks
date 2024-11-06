@@ -5,8 +5,8 @@ import { initializeCampanyEnemies } from '@/components/Game/enemy'
 import { GET_PLAYER_DEFAULT_PARAMS } from '@/components/Game/player'
 import { gameLoop } from '@/components/Game/gameLoop'
 import {
-  AbstractEntity,
   Effect,
+  Bullet,
   GamePropsType,
   RandomPosition,
 } from '@/components/Game/gameTypes'
@@ -42,7 +42,7 @@ export const Game = (props: GamePropsType) => {
     })
   )
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
-  const bulletsRef = useRef<AbstractEntity[]>([])
+  const bulletsRef = useRef<Bullet[]>([])
   const effectsRef = useRef<Effect[]>([])
   const livesRef = useRef(lives)
   const isPausedRef = useRef(false)

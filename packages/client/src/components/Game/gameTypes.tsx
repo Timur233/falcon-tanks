@@ -22,6 +22,10 @@ export interface AbstractEntity {
   animation?: AnimationParams
 }
 
+export interface Bullet extends AbstractEntity {
+  isPlayer: boolean
+}
+
 export interface Enemy extends AbstractEntity {
   id: number
   lastShotTime?: number
@@ -59,7 +63,7 @@ export interface BtnStates {
 
 export interface ControlsProps {
   gameMap: React.MutableRefObject<GameMap>
-  bulletsRef: React.MutableRefObject<AbstractEntity[]>
+  bulletsRef: React.MutableRefObject<Bullet[]>
   canvasWidth: number
   canvasHeight: number
 }

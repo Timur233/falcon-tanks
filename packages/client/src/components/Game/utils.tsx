@@ -8,6 +8,7 @@ import bangSpritePath from '@/assets/images/sprites/bang.png'
 import shotSpritePath from '@/assets/images/sprites/shot.png'
 import {
   AbstractEntity,
+  Bullet,
   Effect,
   Enemy,
   Obstacle,
@@ -145,7 +146,7 @@ bulletSprite.src = bulletSpritePath
 
 export const drawBullets = (
   context: CanvasRenderingContext2D,
-  bullets: AbstractEntity[]
+  bullets: Bullet[]
 ) => {
   bullets.forEach(bullet => {
     context.save()

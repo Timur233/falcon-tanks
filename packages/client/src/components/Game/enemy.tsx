@@ -1,5 +1,10 @@
 import React from 'react'
-import { AbstractEntity, Enemy } from '@/components/Game/gameTypes'
+import {
+  AbstractEntity,
+  Bullet,
+  Enemy,
+  Obstacle,
+} from '@/components/Game/gameTypes'
 import { createBullet } from '@/components/Game/bullet'
 import {
   detectCollision,
@@ -128,7 +133,7 @@ export const handleEnemyShooting = (
   gameMap.current.enemies.forEach(enemy => {
     // Проверяем, если прошло больше 2 секунд (2000 миллисекунд) с последнего выстрела
     if (!enemy.lastShotTime || currentTime - enemy.lastShotTime >= 2000) {
-      bulletsRef.current.push(createBullet(enemy)) // Создаём новую пулю для врага
+      bulletsRef.current.push(createBullet(enemy, false)) // Создаём новую пулю для врага
 
       // Обновляем время последнего выстрела
       enemy.lastShotTime = currentTime

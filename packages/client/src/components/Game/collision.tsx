@@ -1,4 +1,6 @@
-import { Obstacle, AbstractEntity, Enemy } from '@/components/Game/gameTypes'
+import { Obstacle, AbstractEntity, Bullet } from '@/components/Game/gameTypes'
+import { killEnemy } from '@/components/Game/enemy'
+import { GameMap } from '@/components/Game/gameMap'
 
 export const detectCollision = (
   player: AbstractEntity,
@@ -26,7 +28,7 @@ export const detectEnemyCollision = (
 }
 
 export const detectBulletCollision = (
-  bullet: AbstractEntity,
+  bullet: Bullet,
   entity: AbstractEntity
 ): boolean => {
   return (
@@ -37,41 +39,66 @@ export const detectBulletCollision = (
   )
 }
 
-export const detectObstacleCollision = (
-  obstacle1: Obstacle,
-  obstacle2: Obstacle
-): boolean => {
-  return (
-    obstacle1.x < obstacle2.x + obstacle2.width &&
-    obstacle1.x + obstacle1.width > obstacle2.x &&
-    obstacle1.y < obstacle2.y + obstacle2.height &&
-    obstacle1.y + obstacle1.height > obstacle2.y
-  )
-}
-
-// Проверка столкновений с игроком
-export const detectPlayerCollision = (
-  obstacle: Obstacle,
-  player: AbstractEntity
-): boolean => {
-  return (
-    obstacle.x < player.x + player.width &&
-    obstacle.x + obstacle.width > player.x &&
-    obstacle.y < player.y + player.height &&
-    obstacle.y + obstacle.height > player.y
-  )
-}
-
-// Проверка столкновений с врагами
-export const detectEnemiesCollision = (
-  obstacle: Obstacle,
-  enemies: Enemy[]
-): boolean => {
-  return enemies.some(
-    enemy =>
-      obstacle.x < enemy.x + enemy.width &&
-      obstacle.x + obstacle.width > enemy.x &&
-      obstacle.y < enemy.y + enemy.height &&
-      obstacle.y + obstacle.height > enemy.y
-  )
+export const bulletsCollisions = (
+  bulletsRef: React.MutableRefObject<Bullet[]>,
+  gameMap: React.MutableRefObject<GameMap>,
+  livesRef: React.MutableRefObject<number>,
+  handleEnemyKilled: () => void,
+  createBangEffect: (x: number, y: number) => void,
+  handleGameOver: () => void,
+  handleDeath: (lives: number) => void
+) => {
+  // Проверка на столкновения пуль с врагами
+  bulletsRef.current.forEach(bullet => {
+    gameMap.current.enemies = gameMap.current.enemies.filter(enemy => {
+      const hit = detectBulletCollision(bullet, enemy)
+      if (hit) {
+        // Убираем врага, если попали
+        killEnemy(gameMap, enemy)
+        if (bullet.isPlayer) {
+          handleEnemyKilled()
+        }
+        // Эффект попадания
+        createBangEffect(
+          bullet.x + bullet.width / 2,
+          bullet.y + bullet.height / 2
+        )
+        // Убираем пулю, если попали
+        bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
+        return false
+      }
+      return true
+    })
+    bulletsRef.current.forEach(bullet2 => {
+      if (bullet === bullet2) return
+      const hit = detectBulletCollision(bullet, bullet2)
+      if (hit) {
+        // Эффект попадания
+        createBangEffect(
+          bullet.x + bullet.width / 2,
+          bullet.y + bullet.height / 2
+        )
+        // Убираем пулю, если попали
+        bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
+        bulletsRef.current = bulletsRef.current.filter(b => b !== bullet2)
+      }
+    })
+    if (detectBulletCollision(bullet, gameMap.current.player)) {
+      // Уменьшаем жизни игрока
+      livesRef.current -= 1
+      // Эффект поподания
+      createBangEffect(
+        bullet.x + bullet.width / 2,
+        bullet.y + bullet.height / 2
+      )
+      // Удаляем пулю после попадания
+      bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
+      // Проверка на окончание игры
+      if (livesRef.current <= 0) {
+        handleGameOver()
+      } else {
+        handleDeath(livesRef.current)
+      }
+    }
+  })
 }

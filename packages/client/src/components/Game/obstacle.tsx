@@ -1,5 +1,5 @@
 import {
-  AbstractEntity,
+  Bullet,
   Obstacle,
   ObstacleParams,
   obstacleTypes,
@@ -77,7 +77,7 @@ export const createObstacle = (
 }
 
 export const handleBulletObstacleCollisions = (
-  bullets: AbstractEntity[],
+  bullets: Bullet[],
   gameMap: React.MutableRefObject<GameMap>
 ) => {
   bullets.forEach(bullet => {
