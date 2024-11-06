@@ -1,4 +1,4 @@
-import { Obstacle, AbstractEntity } from '@/components/Game/gameTypes'
+import { Obstacle, AbstractEntity, Enemy } from '@/components/Game/gameTypes'
 
 export const detectCollision = (
   player: AbstractEntity,
@@ -46,5 +46,32 @@ export const detectObstacleCollision = (
     obstacle1.x + obstacle1.width > obstacle2.x &&
     obstacle1.y < obstacle2.y + obstacle2.height &&
     obstacle1.y + obstacle1.height > obstacle2.y
+  )
+}
+
+// Проверка столкновений с игроком
+export const detectPlayerCollision = (
+  obstacle: Obstacle,
+  player: AbstractEntity
+): boolean => {
+  return (
+    obstacle.x < player.x + player.width &&
+    obstacle.x + obstacle.width > player.x &&
+    obstacle.y < player.y + player.height &&
+    obstacle.y + obstacle.height > player.y
+  )
+}
+
+// Проверка столкновений с врагами
+export const detectEnemiesCollision = (
+  obstacle: Obstacle,
+  enemies: Enemy[]
+): boolean => {
+  return enemies.some(
+    enemy =>
+      obstacle.x < enemy.x + enemy.width &&
+      obstacle.x + obstacle.width > enemy.x &&
+      obstacle.y < enemy.y + enemy.height &&
+      obstacle.y + obstacle.height > enemy.y
   )
 }
