@@ -1,38 +1,8 @@
 import { Direction, Effect } from '@/components/Game/gameTypes'
 import { MutableRefObject } from 'react'
-
-interface EffectSettings {
-  [key: string]: {
-    width: number
-    height: number
-    animation: Effect['animation']
-  }
-}
+import { effectSettings } from '@/components/Game/constants'
 
 let effectsRef: MutableRefObject<Effect[]>
-
-const effectSettings: EffectSettings = {
-  bang: {
-    width: 60,
-    height: 60,
-    animation: {
-      frameInterval: 5,
-      frameCount: 0,
-      totalFrames: 8,
-      currentFrame: 0,
-    },
-  },
-  shot: {
-    width: 40,
-    height: 40,
-    animation: {
-      frameInterval: 5,
-      frameCount: 0,
-      totalFrames: 4,
-      currentFrame: 0,
-    },
-  },
-}
 
 export const initEffects = (effects: MutableRefObject<Effect[]>) => {
   effectsRef = effects
