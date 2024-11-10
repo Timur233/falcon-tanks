@@ -31,6 +31,7 @@ let lastFrameTime = 0
  * @param bulletsRef - Ссылка на массив пуль.
  * @param livesRef - Ссылка на текущее количество жизней игрока.
  * @param effectsRef - Ссылка на массив эффектов.
+ * @param isPausedRef - Ссылка на состояние паузы.
  * @param handleDeath - Обработчик события смерти игрока.
  * @param handleGameOver - Обработчик события окончания игры.
  * @param handleEnemyKilled - Обработчик события уничтожения врага.
@@ -42,6 +43,7 @@ export const gameLoop = (
   bulletsRef: React.MutableRefObject<Bullet[]>,
   effectsRef: React.MutableRefObject<Effect[]>,
   livesRef: React.MutableRefObject<number>,
+  isPausedRef: React.MutableRefObject<boolean>,
   handleDeath: (lives: number) => void,
   handleGameOver: () => void,
   handleEnemyKilled: () => void
@@ -49,7 +51,7 @@ export const gameLoop = (
   const now = performance.now()
   const deltaTime = now - lastFrameTime
 
-  if (deltaTime < FRAME_DURATION) {
+  if (deltaTime < FRAME_DURATION && livesRef.current > 0) {
     requestAnimationFrame(() =>
       gameLoop(
         context,
@@ -58,6 +60,7 @@ export const gameLoop = (
         bulletsRef,
         effectsRef,
         livesRef,
+        isPausedRef,
         handleDeath,
         handleGameOver,
         handleEnemyKilled
@@ -116,7 +119,7 @@ export const gameLoop = (
     detectEnemyCollision(gameMap.current.player, enemy)
   )
 
-  if (collidedEnemy) {
+  if (collidedEnemy && livesRef.current > 0) {
     HandlePlayerHit(livesRef, handleGameOver, handleDeath)
   }
 }

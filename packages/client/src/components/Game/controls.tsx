@@ -7,6 +7,9 @@ import {
 import { detectCollision } from '@/components/Game/collision'
 import { createBullet } from '@/components/Game/bullet'
 import { SHOOT_DELAY } from '@/components/Game/constants'
+import { shootSoundHowl } from '@/components/Game/sound/shoot'
+import { playShotSound } from '@/components/Game/sound/surround'
+import { tankMovingHowl } from '@/components/Game/sound/moving'
 
 const btnStates: BtnStates = {
   up: false,
@@ -67,6 +70,8 @@ export const handleKeyDownUp = (
 
     if (key === ' ') {
       shootPressed = false
+    } else {
+      tankMovingHowl.stop()
     }
   }
 
@@ -121,11 +126,22 @@ export const updatePlayerAction = (props: ControlsProps) => {
       props.bulletsRef.current.push(
         createBullet(props.gameMap.current.player, true)
       )
+      playShotSound(
+        shootSoundHowl,
+        props.gameMap.current.player,
+        props.canvasWidth,
+        props.canvasHeight
+      )
       lastShotTime = currentTime // Обновляем время последнего выстрела
     }
   } else {
     props.gameMap.current.player.direction = vector
-
+    playShotSound(
+      tankMovingHowl,
+      props.gameMap.current.player,
+      props.canvasWidth,
+      props.canvasHeight
+    )
     newX += vector.x * speed
     newY += vector.y * speed
   }

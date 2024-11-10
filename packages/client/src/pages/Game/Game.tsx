@@ -16,6 +16,11 @@ import { StatusScreen } from './components/StatusScreen/StatusScreen'
 import { Button } from '@/components/ui/Button/Button'
 import { Suspense } from 'react'
 import { Loader } from '@/components/ui/Loader/Loader'
+import Pobeda from '@/assets/sounds/pobeda.mp3'
+import Proigrish from '@/assets/sounds/retreat-battle.mp3'
+import { showNotificationWithSound } from '@/components/Game/sound/showNotification'
+import { startBattleSound } from '@/components/Game/sound/battle'
+
 interface GameState {
   lives: number
   isGameStarted: boolean
@@ -96,6 +101,20 @@ export const Game = () => {
       isCompanyStarted: false,
       isGamePaused: true,
     })
+    startBattleSound.stop()
+    if (isVictory) {
+      showNotificationWithSound(
+        'Победа!',
+        { body: 'Вы уничтожили врагов!' },
+        Pobeda
+      )
+    } else {
+      showNotificationWithSound(
+        'Поражение',
+        { body: 'Вы потерпели поражение!' },
+        Proigrish
+      )
+    }
   }, [])
 
   const arrowClickHandler = (

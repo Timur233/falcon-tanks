@@ -83,7 +83,10 @@ export const bulletsCollisions = (
         bulletsRef.current = bulletsRef.current.filter(b => b !== bullet2)
       }
     })
-    if (detectBulletCollision(bullet, gameMap.current.player)) {
+    if (
+      detectBulletCollision(bullet, gameMap.current.player) &&
+      livesRef.current > 0
+    ) {
       // Уменьшаем жизни игрока
       livesRef.current -= 1
       // Эффект поподания
@@ -94,7 +97,7 @@ export const bulletsCollisions = (
       // Удаляем пулю после попадания
       bulletsRef.current = bulletsRef.current.filter(b => b !== bullet)
       // Проверка на окончание игры
-      if (livesRef.current <= 0) {
+      if (livesRef.current === 0) {
         handleGameOver()
       } else {
         handleDeath(livesRef.current)

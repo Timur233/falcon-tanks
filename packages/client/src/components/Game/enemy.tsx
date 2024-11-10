@@ -1,10 +1,5 @@
 import React from 'react'
-import {
-  AbstractEntity,
-  Bullet,
-  Enemy,
-  Obstacle,
-} from '@/components/Game/gameTypes'
+import { AbstractEntity, Enemy } from '@/components/Game/gameTypes'
 import { createBullet } from '@/components/Game/bullet'
 import {
   detectCollision,
@@ -12,6 +7,8 @@ import {
 } from '@/components/Game/collision'
 import { DefaultEnemy } from '@/components/Game/constants'
 import { GameMap } from '@/components/Game/gameMap'
+import { enemyShootSound } from '@/components/Game/sound/shoot'
+import { playShotSound } from '@/components/Game/sound/surround'
 
 export const initializeCampanyEnemies = (): Enemy[] => {
   return [
@@ -134,7 +131,12 @@ export const handleEnemyShooting = (
     // Проверяем, если прошло больше 2 секунд (2000 миллисекунд) с последнего выстрела
     if (!enemy.lastShotTime || currentTime - enemy.lastShotTime >= 2000) {
       bulletsRef.current.push(createBullet(enemy, false)) // Создаём новую пулю для врага
-
+      playShotSound(
+        enemyShootSound,
+        enemy,
+        gameMap.current.window_width,
+        gameMap.current.window_height
+      )
       // Обновляем время последнего выстрела
       enemy.lastShotTime = currentTime
     }
