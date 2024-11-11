@@ -5,6 +5,8 @@ import { Modal } from '@/components/common/Modal/Modal'
 import { Game as GamePrototype } from '@/components/Game/Game'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 import { Arrows } from './components/Arrows/Arrows'
 import { FireControll } from './components/FireControll/FireControll'
 import { KillsCounter } from './components/KillsCounter/KillsCounter'
@@ -16,6 +18,9 @@ import { StatusScreen } from './components/StatusScreen/StatusScreen'
 import { Button } from '@/components/ui/Button/Button'
 import { Suspense } from 'react'
 import { Loader } from '@/components/ui/Loader/Loader'
+import { toast } from 'react-toastify'
+import { leaderboardApi } from '@/store/reducers/leaderbord-reducer'
+
 interface GameState {
   lives: number
   isGameStarted: boolean
@@ -46,6 +51,7 @@ export const Game = () => {
   })
 
   const [kills, setKills] = useState(0)
+  const user = useSelector((state: RootState) => state.authReducer.user)
 
   const startGameHandler = () => {
     setGameState({
@@ -69,6 +75,25 @@ export const Game = () => {
     })
   }
 
+  const saveScore = useCallback(async () => {
+    if (user?.id && kills > 0) {
+      try {
+        await leaderboardApi.addScore({
+          id: user.id,
+          login: user.login || 'Неизвестный игрок',
+          avatar: user.avatar || undefined,
+          score: kills,
+        })
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : 'Ошибка сохранения результата'
+        )
+      }
+    }
+  }, [kills, user])
+
   const pauseHandler = useCallback(() => {
     setGameState(state => ({
       ...state,
@@ -87,16 +112,21 @@ export const Game = () => {
     setKills(newKills)
   }, [])
 
-  const gameOverHandler = useCallback((isVictory: boolean) => {
-    setGameState({
-      lives: 0,
-      isGameOver: !isVictory,
-      isGameWinning: isVictory,
-      isGameStarted: false,
-      isCompanyStarted: false,
-      isGamePaused: true,
-    })
-  }, [])
+  const gameOverHandler = useCallback(
+    (isVictory: boolean) => {
+      setGameState({
+        lives: 0,
+        isGameOver: !isVictory,
+        isGameWinning: isVictory,
+        isGameStarted: false,
+        isCompanyStarted: false,
+        isGamePaused: true,
+      })
+
+      saveScore()
+    },
+    [saveScore]
+  )
 
   const arrowClickHandler = (
     eventName: string,
