@@ -1,4 +1,5 @@
 import { AbstractEntity } from '@/components/Game/gameTypes'
+import { MAX_DISTANCE } from '@/components/Game/constants'
 
 // Функция для проигрывания звука с учётом центра карты
 export const playShotSound = (
@@ -15,8 +16,7 @@ export const playShotSound = (
     sourcePosition.y - centerY
   )
 
-  const maxDistance = 300 // Максимальное расстояние для громкости
-  const volume = Math.max(0, 1 - distance / maxDistance)
+  const volume = Math.max(0, 1 - distance / MAX_DISTANCE)
 
   // Рассчитываем панорамирование (-1 — левый край, 1 — правый)
   const pan = Math.max(

@@ -43,6 +43,8 @@ export const WINDOW_WIDTH = 800
 export const WINDOW_HEIGHT = 600
 export const GRID_SIZE = 36
 export const OBSTACLE_SIZE = 36
+export const NOTIFICATION_DELAY = 3000
+export const MAX_DISTANCE = 300 // Максимальное расстояние для громкости
 export const ObstacleSettings = {
   [obstacleTypes.Wall]: {
     hp: 2,

@@ -1,3 +1,5 @@
+import { NOTIFICATION_DELAY } from '@/components/Game/constants'
+
 export const showNotificationWithSound = (
   title: string,
   options: NotificationOptions,
@@ -11,6 +13,6 @@ export const showNotificationWithSound = (
 
     setTimeout(() => {
       notification.close()
-    }, 3000)
+    }, NOTIFICATION_DELAY)
   }
 }
