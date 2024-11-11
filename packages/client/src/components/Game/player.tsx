@@ -17,7 +17,7 @@ export const HandlePlayerHit = (
 ) => {
   livesRef.current -= 1
 
-  if (livesRef.current <= 0) {
+  if (livesRef.current === 0) {
     handleGameOver()
   } else {
     handleDeath(livesRef.current)

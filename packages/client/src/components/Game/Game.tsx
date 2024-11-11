@@ -19,6 +19,11 @@ import {
   WINDOW_HEIGHT,
   WINDOW_WIDTH,
 } from '@/components/Game/constants'
+import { requestNotificationPermission } from '@/permissions/permission'
+
+import { playShotSound } from '@/components/Game/sound/surround'
+import { enemyExplosionSound } from '@/components/Game/sound/killSound'
+import { startBattleSound } from '@/components/Game/sound/battle'
 
 export const Game = (props: GamePropsType) => {
   const {
@@ -31,6 +36,9 @@ export const Game = (props: GamePropsType) => {
     onGameOver,
     onKeyDownUp,
   } = props
+  useEffect(() => {
+    requestNotificationPermission()
+  }, [])
   const gameMap = useRef<GameMap>(
     new GameMap({
       window_width: WINDOW_WIDTH,
@@ -54,7 +62,12 @@ export const Game = (props: GamePropsType) => {
 
   const handleEnemyKilled = () => {
     killsRef.current += 1
-
+    playShotSound(
+      enemyExplosionSound,
+      gameMap.current.player,
+      gameMap.current.window_width,
+      gameMap.current.window_height
+    )
     if (gameMap.current.enemies.length === 0) {
       onGameOver(true)
       setIsGameOver(true)
@@ -68,7 +81,6 @@ export const Game = (props: GamePropsType) => {
     onGameOver(false)
     setIsGameOver(true)
     setIsGameRunning(false)
-
     isPausedRef.current = true
   }, [onGameOver])
 
@@ -84,6 +96,7 @@ export const Game = (props: GamePropsType) => {
           bulletsRef,
           effectsRef,
           livesRef,
+          isPausedRef,
           onDeath,
           handleGameOver,
           handleEnemyKilled
@@ -95,6 +108,7 @@ export const Game = (props: GamePropsType) => {
   }, [])
 
   const startGame = useCallback(() => {
+    startBattleSound.play()
     setIsGameRunning(true)
     setIsGameOver(false)
     gameMap.current.clearMap()
@@ -115,6 +129,7 @@ export const Game = (props: GamePropsType) => {
   }, [lives, gameMap])
 
   const startCompany = useCallback(() => {
+    startBattleSound.play()
     setIsGameRunning(true)
     setIsGameOver(false)
     gameMap.current.clearMap()
