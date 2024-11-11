@@ -19,7 +19,7 @@ import {
   WINDOW_HEIGHT,
   WINDOW_WIDTH,
 } from '@/components/Game/constants'
-import { requestNotificationPermission } from '@/components/Game/sound/permission'
+import { requestNotificationPermission } from '@/permissions/permission'
 
 import { playShotSound } from '@/components/Game/sound/surround'
 import { killEnemySound } from '@/components/Game/sound/killSound'
