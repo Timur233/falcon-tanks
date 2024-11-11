@@ -1,4 +1,3 @@
-// Функция для уведомлений с аудио
 export const showNotificationWithSound = (
   title: string,
   options: NotificationOptions,

@@ -22,7 +22,7 @@ import {
 import { requestNotificationPermission } from '@/permissions/permission'
 
 import { playShotSound } from '@/components/Game/sound/surround'
-import { killEnemySound } from '@/components/Game/sound/killSound'
+import { enemyExplosionSound } from '@/components/Game/sound/killSound'
 import { startBattleSound } from '@/components/Game/sound/battle'
 
 export const Game = (props: GamePropsType) => {
@@ -63,7 +63,7 @@ export const Game = (props: GamePropsType) => {
   const handleEnemyKilled = () => {
     killsRef.current += 1
     playShotSound(
-      killEnemySound,
+      enemyExplosionSound,
       gameMap.current.player,
       gameMap.current.window_width,
       gameMap.current.window_height

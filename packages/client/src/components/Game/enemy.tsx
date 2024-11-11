@@ -7,7 +7,7 @@ import {
 } from '@/components/Game/collision'
 import { DefaultEnemy } from '@/components/Game/constants'
 import { GameMap } from '@/components/Game/gameMap'
-import { enemyShootSound } from '@/components/Game/sound/shoot'
+import { enemyTankShootSound } from '@/components/Game/sound/shoot'
 import { playShotSound } from '@/components/Game/sound/surround'
 
 export const initializeCampanyEnemies = (): Enemy[] => {
@@ -132,7 +132,7 @@ export const handleEnemyShooting = (
     if (!enemy.lastShotTime || currentTime - enemy.lastShotTime >= 2000) {
       bulletsRef.current.push(createBullet(enemy, false)) // Создаём новую пулю для врага
       playShotSound(
-        enemyShootSound,
+        enemyTankShootSound,
         enemy,
         gameMap.current.window_width,
         gameMap.current.window_height

@@ -1,9 +1,8 @@
 import { Howl } from 'howler'
-import tankMoving from '@/assets/sounds/tyajelyiy-tank-leopard.ogg'
+import tankMoving from '@/assets/sounds/tank-moving.ogg'
 
-// Инициализируем звуковой эффект для выстрела
-export const tankMovingHowl = new Howl({
-  src: [tankMoving], // укажите путь к файлу звука
+export const tankMovingSound = new Howl({
+  src: [tankMoving],
   volume: 1,
   loop: true,
 })

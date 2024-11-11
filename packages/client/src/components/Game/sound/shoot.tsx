@@ -1,14 +1,13 @@
 import { Howl } from 'howler'
-import shootSound from '@/assets/sounds/tankovyiy-vyistrel.ogg'
-import zvukVistrelaIzOrudiyaTanka from '@/assets/sounds/audio-editor-output.wav'
+import tankShoot from '@/assets/sounds/tank-shoot.ogg'
+import enemyTankShoot from '@/assets/sounds/enemy-tank-shoot.wav'
 
-// Инициализируем звуковой эффект для выстрела
-export const shootSoundHowl = new Howl({
-  src: [shootSound], // укажите путь к файлу звука
+export const tankShootSound = new Howl({
+  src: [tankShoot],
   volume: 1,
 })
 
-export const enemyShootSound = new Howl({
-  src: [zvukVistrelaIzOrudiyaTanka], // укажите путь к файлу звука
+export const enemyTankShootSound = new Howl({
+  src: [enemyTankShoot],
   volume: 1,
 })

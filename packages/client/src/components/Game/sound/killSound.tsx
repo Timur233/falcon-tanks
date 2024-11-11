@@ -1,7 +1,7 @@
 import { Howl } from 'howler'
-import killSound from '@/assets/sounds/kill.mp3'
+import enemyExplosion from '@/assets/sounds/enemy-explosion.mp3'
 
-export const killEnemySound = new Howl({
-  src: [killSound], // укажите путь к файлу звука
+export const enemyExplosionSound = new Howl({
+  src: [enemyExplosion],
   volume: 0.5,
 })

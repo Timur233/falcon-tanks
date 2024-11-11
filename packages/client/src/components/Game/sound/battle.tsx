@@ -1,8 +1,8 @@
 import { Howl } from 'howler'
-import StartBattle from '@/assets/sounds/marching-on-20240607-022753.ogg'
+import startBattle from '@/assets/sounds/start-battle.ogg'
 
 export const startBattleSound = new Howl({
-  src: [StartBattle], // укажите путь к файлу звука
+  src: [startBattle],
   volume: 0.5,
   loop: true,
 })
