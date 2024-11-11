@@ -5,6 +5,8 @@ import { Modal } from '@/components/common/Modal/Modal'
 import { Game as GamePrototype } from '@/components/Game/Game'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 import { Arrows } from './components/Arrows/Arrows'
 import { FireControll } from './components/FireControll/FireControll'
 import { KillsCounter } from './components/KillsCounter/KillsCounter'
@@ -20,6 +22,9 @@ import Pobeda from '@/assets/sounds/pobeda.mp3'
 import Proigrish from '@/assets/sounds/retreat-battle.mp3'
 import { showNotificationWithSound } from '@/components/Game/sound/showNotification'
 import { startBattleSound } from '@/components/Game/sound/battle'
+
+import { toast } from 'react-toastify'
+import { leaderboardApi } from '@/store/reducers/leaderbord-reducer'
 
 interface GameState {
   lives: number
@@ -51,6 +56,7 @@ export const Game = () => {
   })
 
   const [kills, setKills] = useState(0)
+  const user = useSelector((state: RootState) => state.authReducer.user)
 
   const startGameHandler = () => {
     setGameState({
@@ -74,6 +80,25 @@ export const Game = () => {
     })
   }
 
+  const saveScore = useCallback(async () => {
+    if (user?.id && kills > 0) {
+      try {
+        await leaderboardApi.addScore({
+          id: user.id,
+          login: user.login || 'Неизвестный игрок',
+          avatar: user.avatar || undefined,
+          score: kills,
+        })
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : 'Ошибка сохранения результата'
+        )
+      }
+    }
+  }, [kills, user])
+
   const pauseHandler = useCallback(() => {
     setGameState(state => ({
       ...state,
@@ -92,30 +117,35 @@ export const Game = () => {
     setKills(newKills)
   }, [])
 
-  const gameOverHandler = useCallback((isVictory: boolean) => {
-    setGameState({
-      lives: 0,
-      isGameOver: !isVictory,
-      isGameWinning: isVictory,
-      isGameStarted: false,
-      isCompanyStarted: false,
-      isGamePaused: true,
-    })
-    startBattleSound.stop()
-    if (isVictory) {
-      showNotificationWithSound(
-        'Победа!',
-        { body: 'Вы уничтожили врагов!' },
-        Pobeda
-      )
-    } else {
-      showNotificationWithSound(
-        'Поражение',
-        { body: 'Вы потерпели поражение!' },
-        Proigrish
-      )
-    }
-  }, [])
+  const gameOverHandler = useCallback(
+    (isVictory: boolean) => {
+      setGameState({
+        lives: 0,
+        isGameOver: !isVictory,
+        isGameWinning: isVictory,
+        isGameStarted: false,
+        isCompanyStarted: false,
+        isGamePaused: true,
+      })
+      startBattleSound.stop()
+      if (isVictory) {
+        showNotificationWithSound(
+          'Победа!',
+          { body: 'Вы уничтожили врагов!' },
+          Pobeda
+        )
+      } else {
+        showNotificationWithSound(
+          'Поражение',
+          { body: 'Вы потерпели поражение!' },
+          Proigrish
+        )
+      }
+
+      saveScore()
+    },
+    [saveScore]
+  )
 
   const arrowClickHandler = (
     eventName: string,
