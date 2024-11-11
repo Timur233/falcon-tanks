@@ -1,7 +1,4 @@
-import { Howl } from 'howler'
 import enemyExplosion from '@/assets/sounds/enemy-explosion.mp3'
+import { createSound } from '@/components/Game/sound/createSound'
 
-export const enemyExplosionSound = new Howl({
-  src: [enemyExplosion],
-  volume: 0.5,
-})
+export const enemyExplosionSound = createSound([enemyExplosion], 0.5)
