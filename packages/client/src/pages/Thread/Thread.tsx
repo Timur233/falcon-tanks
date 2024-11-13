@@ -7,6 +7,7 @@ import { Icon } from '@/components/ui/Icon/Icon'
 import { PageTitle } from '@/components/ui/PageTitle/PageTitle'
 import { Pagination } from '@/components/ui/Pagination/Pagination'
 import './Thread.scss'
+import { Reaction } from '@/components/common/Reaction/Reaction'
 
 const breadCrumbs = [
   { title: 'Главная', href: '/' },
@@ -15,6 +16,7 @@ const breadCrumbs = [
 ]
 
 const COMMENT_COUNT = 3
+const TEST_THREAD_ID = 1 // Позже заменим на реальный ID из БД/API
 
 export const Thread = () => (
   <div className="thread-page container">
@@ -41,6 +43,7 @@ export const Thread = () => (
               <span className="author__login">Timur233</span>
               <span className="author__date">22.03.2025</span>
               <div className="author__controlls controlls">
+                <Reaction topicId={TEST_THREAD_ID} />
                 <button className="controlls__item">
                   <Icon id="message-icon" width={12} height={12}></Icon>
                 </button>
