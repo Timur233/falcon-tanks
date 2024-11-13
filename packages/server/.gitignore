@@ -2,6 +2,10 @@ db.js
 index.js
 tsconfig.server.tsbuildinfo
 types/reaction.js
+types/reaction.d.ts
 data/emoji.js
+data/emoji.d.ts
 controllers/reaction.js
+controllers/reaction.d.ts
 models/reaction.js
+models/reaction.d.ts
