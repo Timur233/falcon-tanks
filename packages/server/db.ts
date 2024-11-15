@@ -1,4 +1,10 @@
 import { Client } from 'pg'
+import dotenv from 'dotenv'
+import path from 'path'
+
+dotenv.config({
+  path: path.resolve(__dirname, '../../.env'), // Путь к корневому .env файлу
+})
 
 const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT } =
   process.env
@@ -15,18 +21,9 @@ export const createClientAndConnect = async (): Promise<Client | null> => {
 
     await client.connect()
 
-    /**
-     * This we will communicate with db
-     * for Example
-     * const res = await client.query('SELECT NOW()')
-     */
-
-    await client.end()
-
     return client
   } catch (e) {
-    console.error(e)
+    console.error('Database connection error:', e)
+    return null
   }
-
-  return null
 }

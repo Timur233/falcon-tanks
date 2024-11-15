@@ -8,5 +8,12 @@
     "lib": ["es2019", "DOM"],
     "skipLibCheck": true
   },
-  "include": ["index.ts", "db.ts"]
+  "include": [
+    "index.ts",
+    "db.ts",
+    "models/**/*.ts",
+    "controllers/**/*.ts",
+    "types/**/*.ts",
+    "data/**/*.ts"
+  ]
 }
