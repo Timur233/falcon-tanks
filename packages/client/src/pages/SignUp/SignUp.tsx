@@ -8,6 +8,9 @@ import { Button } from '@/components/ui/Button/Button'
 import SiteLogo from '@/assets/images/site-logo.svg'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { Input } from '@/components/ui/Input/Input'
+import { YandexOAuth } from '@/services/o-auth/YandexOAuth'
+import { Icon } from '@/components/ui/Icon/Icon'
+import { OauthLinks } from '@/components/ui/OauthLinks/OauthLinks'
 
 type UserType = {
   first_name: string | null
@@ -106,6 +109,13 @@ export const SignUp = () => {
                 navigate('/sign-in')
               }}
             />
+            <OauthLinks>
+              <button
+                className="oauth-buttons__item"
+                onClick={YandexOAuth.redirect}>
+                <Icon id="yandex-icon" width={32} height={32}></Icon>
+              </button>
+            </OauthLinks>
           </div>
         </div>
       </div>
