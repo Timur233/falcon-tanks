@@ -1,11 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import {
-  fetchThreadById,
-  createComment,
-  fetchComments,
-  uploadFile,
-} from '@/api/forumApi'
+import { fetchThreadById, fetchComments, uploadFile } from '@/api/forumApi'
 import { Thread as ThreadType, Comment } from '@/types/forum'
 import { Button } from '@/components/ui/Button/Button'
 import { Card } from '@/components/ui/Card/Card'
@@ -29,7 +24,6 @@ const breadCrumbs = [
 export const Thread = () => {
   const { id } = useParams<{ id: string }>()
   const [thread, setThread] = useState<ThreadType | null>(null)
-  const [newComment, setNewComment] = useState<string>('')
   const [comments, setComments] = useState<Comment[]>([])
   const [currentPage, setCurrentPage] = useState<number>(1)
   const [totalPages, setTotalPages] = useState<number>(1)
@@ -145,7 +139,7 @@ export const Thread = () => {
               <span className="author__login">{comment.author}</span>
               <span className="author__date">{comment.date}</span>
               <div className="author__controlls controlls">
-                <Reaction topicId={TEST_THREAD_ID} />
+                <Reaction topicId={comment.id} />
                 <button className="controlls__item">
                   <Icon id="message-icon" width={12} height={12}></Icon>
                 </button>
