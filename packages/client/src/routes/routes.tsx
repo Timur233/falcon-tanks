@@ -40,7 +40,7 @@ const routes = [
             element: <Game />,
           },
           {
-            path: '/forum/:threadId',
+            path: '/forum/:id',
             element: <Thread />,
           },
           {

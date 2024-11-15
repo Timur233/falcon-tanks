@@ -1,4 +1,4 @@
-import { Thread } from '../src/types/forum'
+import { Thread } from '@/types/forum'
 
 export const mockForumThreads: Thread[] = [
   {
