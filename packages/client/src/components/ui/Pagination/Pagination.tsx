@@ -1,42 +1,70 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '../Button/Button'
 import './Pagination.scss'
 
 interface PaginationProps {
-  total: number
+  currentPage: number
+  totalPages: number
+  onPageChange: (page: number) => void
   className?: string
 }
 
 export const Pagination = (props: PaginationProps) => {
-  const { total, className = '' } = props
+  const { currentPage, totalPages, onPageChange, className = '' } = props
 
   const navigate = useNavigate()
+  const location = useLocation()
 
-  const getClassName = (index: number) => {
-    // TODO: Реализовать эту логику основываясь на query в URL`е.
-    // Какая страница активна, такая кнопка и подсвечивается.
+  const getClassName = (pageIndex: number) => {
     return `pagination__item compact-button${
-      index !== 0 ? ' compact-button_white' : ''
+      pageIndex === currentPage
+        ? ' compact-button_active'
+        : ' compact-button_white'
     }`
+  }
+
+  const handlePageClick = (pageIndex: number) => {
+    onPageChange(pageIndex)
+    navigate(`${location.pathname}?page=${pageIndex}`)
+  }
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      handlePageClick(currentPage - 1)
+    }
+  }
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      handlePageClick(currentPage + 1)
+    }
   }
 
   return (
     <div className={`pagination${className ? ` ${className}` : ''}`}>
-      {Array.from({ length: total }).map((_, index) => {
-        return (
-          <Button
-            key={index}
-            className={getClassName(index)}
-            onClick={() => navigate(`/forum/${index}`)}
-            text={(++index).toString()}
-            useFixWidth={false}></Button>
-        )
-      })}
       <Button
         className="compact-button compact-button_white"
-        onClick={() => navigate('/forum')}
+        onClick={handlePreviousPage}
+        text="Назад"
+        useFixWidth={false}
+      />
+
+      {Array.from({ length: totalPages }).map((_, index) => (
+        <Button
+          key={index}
+          className={getClassName(index + 1)}
+          onClick={() => handlePageClick(index + 1)}
+          text={(index + 1).toString()}
+          useFixWidth={false}
+        />
+      ))}
+
+      <Button
+        className="compact-button compact-button_white"
+        onClick={handleNextPage}
         text="Вперед"
-        useFixWidth={false}></Button>
+        useFixWidth={false}
+      />
     </div>
   )
 }
