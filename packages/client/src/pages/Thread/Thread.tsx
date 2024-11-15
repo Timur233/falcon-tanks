@@ -17,6 +17,7 @@ import { Avatar } from '@/components/ui/Avatar/Avatar'
 import { File } from '@/components/ui/File/File'
 import AvatarPlaceholder from '@/assets/images/avatar-placeholder.png'
 import './Thread.scss'
+import { Reaction } from '@/components/common/Reaction/Reaction'
 import { mockComments, mockThread } from '../../../mocks/Threads'
 
 const breadCrumbs = [
@@ -144,6 +145,7 @@ export const Thread = () => {
               <span className="author__login">{comment.author}</span>
               <span className="author__date">{comment.date}</span>
               <div className="author__controlls controlls">
+                <Reaction topicId={TEST_THREAD_ID} />
                 <button className="controlls__item">
                   <Icon id="message-icon" width={12} height={12}></Icon>
                 </button>
