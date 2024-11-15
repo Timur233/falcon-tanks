@@ -6,6 +6,8 @@ import path from 'path'
 import serialize from 'serialize-javascript'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 import { createClientAndConnect } from './db'
+import { ReactionController } from './controllers/reaction'
+import { ReactionModel } from './models/reaction'
 
 dotenv.config()
 
@@ -15,9 +17,40 @@ const isDev = process.env.NODE_ENV === 'development'
 
 async function createServer() {
   const app = express()
-  app.use(cors())
+  app.use(
+    cors({
+      origin: 'http://localhost:3000',
+      credentials: true,
+    })
+  )
+  app.use(express.json())
+
+  app.use((req, _res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`, {
+      body: req.body,
+      params: req.params,
+    })
+    next()
+  })
+
+  try {
+    // Инициализируем таблицы при запуске
+    await ReactionModel.initializeTables()
+  } catch (error) {
+    console.error('Failed to initialize database:', error)
+  }
 
   await createClientAndConnect()
+
+  app.post('/api/topics/:topicId/reactions', (req, res) =>
+    ReactionController.toggleReaction(req, res)
+  )
+  app.get('/api/topics/:topicId/reactions', (req, res) =>
+    ReactionController.getReactions(req, res)
+  )
+  app.get('/api/emojis', (req, res) =>
+    ReactionController.getAvailableEmojis(req, res)
+  )
 
   let vite: ViteDevServer | undefined
   if (isDev) {
