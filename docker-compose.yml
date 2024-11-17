@@ -1,33 +1,29 @@
-version: "3.7"
-
 networks:
   bridge: ~
 
 services:
-  client:
-    container_name: Practicum-frontend
+
+  server:
+    container_name: Prakticum-server
+    depends_on:
+      - postgres
     build:
       context: .
-      dockerfile: .docker/nodejs/Dockerfile
-      target: preview
-      # init - install deps ()
-      # preview - run build version as prod
-      # dev - run dev, with vite hot (entry /packages/server/index)
+      dockerfile: .docker/server/Dockerfile
+      target: prod
     ports:
-      - "${CLIENT_PORT}:${CLIENT_PORT}"
       - "${SERVER_PORT}:${SERVER_PORT}"
-    volumes:
-      - ./:/usr/src/app
+      - "24678:24678"
     networks:
       - bridge
+    volumes:
+      - .:/usr/src/app
     environment:
-      - CLIENT_PORT=${CLIENT_PORT}
-      - SERVER_PORT=${SERVER_PORT}
-      - POSTGRES_PORT=${POSTGRES_PORT}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+      SERVER_PORT: ${SERVER_PORT}
 
   postgres:
     image: postgres:14
-    user: postgres
     container_name: Practicum-postgres
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
@@ -39,4 +35,3 @@ services:
       - bridge
     volumes:
       - ./tmp/pgdata:/var/lib/postgresql/data
-

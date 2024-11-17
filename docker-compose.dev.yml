@@ -1,12 +1,10 @@
-version: '3.7'
-
 networks:
   traefik:
     name: 'traefik_traefik'
     external: true
 
 services:
-  client:
+  server:
     build:
       target: dev
     restart: always
