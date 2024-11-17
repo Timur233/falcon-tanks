@@ -2,7 +2,6 @@ networks:
   bridge: ~
 
 services:
-
   server:
     container_name: Prakticum-server
     depends_on:
@@ -18,6 +17,7 @@ services:
       - bridge
     volumes:
       - .:/usr/src/app
+    working_dir: /usr/src/app
     environment:
       POSTGRES_PORT: ${POSTGRES_PORT}
       SERVER_PORT: ${SERVER_PORT}
