@@ -5,11 +5,12 @@ export class ReactionController {
   static async getReactions(req: Request, res: Response) {
     try {
       const topicId = parseInt(req.params.topicId)
-      if (isNaN(topicId)) {
-        return res.status(400).json({ error: 'Invalid topic ID' })
+      const userId = parseInt(req.query.userId as string)
+      if (isNaN(topicId) || isNaN(userId)) {
+        return res.status(400).json({ error: 'Invalid topic ID or user ID' })
       }
 
-      const reactions = await ReactionModel.getReactions(topicId)
+      const reactions = await ReactionModel.getReactions(topicId, userId)
       return res.json({ success: true, data: { reactions } })
     } catch (error) {
       return res.status(500).json({
@@ -22,11 +23,11 @@ export class ReactionController {
   static async toggleReaction(req: Request, res: Response) {
     try {
       const topicId = parseInt(req.params.topicId)
-      const userId = 1 // TODO: Заменить на реального пользователя
+      const userId = parseInt(req.body.userId)
       const { emojiCode } = req.body
 
-      if (isNaN(topicId)) {
-        return res.status(400).json({ error: 'Invalid topic ID' })
+      if (isNaN(topicId) || isNaN(userId)) {
+        return res.status(400).json({ error: 'Invalid topic ID or user ID' })
       }
 
       if (!emojiCode) {

@@ -46,6 +46,7 @@ $thread-page-color: #c5c5c5;
 
   .comment {
     display: flex;
+    position: relative;
 
     &__author {
       padding: 25px;
@@ -91,6 +92,8 @@ $thread-page-color: #c5c5c5;
         .item {
           &__message {
             align-items: center;
+            position: relative;
+            padding-bottom: 48px;
           }
         }
       }
@@ -98,6 +101,7 @@ $thread-page-color: #c5c5c5;
 
     &__text {
       padding: 25px;
+      padding-bottom: 48px;
     }
   }
 

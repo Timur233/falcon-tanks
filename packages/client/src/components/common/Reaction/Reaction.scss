@@ -1,5 +1,119 @@
-.controlls__item {
-  &--active {
-    color: $primary-color;
+@import "../../../scss/vars.scss";
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reactions {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  &__list {
+    position: relative;
+    display: flex;
+    gap: 2px;
+    overflow: visible;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 2px 4px;
+    border: 1px solid rgba($c_input-default-border, 0.4);
+    border-radius: 12px;
+    background: rgba($c_black, 0.8);
+    backdrop-filter: blur(4px);
+    color: $c_white;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+
+    &:hover:not(:disabled) {
+      background-color: rgba($c_black, 0.9);
+      transform: translateY(-2px);
+    }
+
+    &--active {
+      background-color: rgba($primary-color, 0.2);
+      border-color: $primary-color;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+
+  &__add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba($c_input-default-border, 0.4);
+    border-radius: 50%;
+    background: rgba($c_black, 0.8);
+    backdrop-filter: blur(4px);
+    color: $c_white;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: rgba($c_black, 0.9);
+      transform: translateY(-2px);
+    }
+  }
+
+  &__picker {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+    padding: 8px;
+    background: rgba($c_black, 0.95);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba($c_input-default-border, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    animation: fadeIn 0.2s ease-out;
+
+    &-item {
+      padding: 6px;
+      border: none;
+      background: transparent;
+      font-size: 20px;
+      cursor: pointer;
+      transition: transform 0.2s;
+      border-radius: 4px;
+
+      &:hover {
+        background-color: rgba($c_white, 0.1);
+        transform: scale(1.2);
+      }
+
+      &--active {
+        background-color: rgba($primary-color, 0.2);
+      }
+    }
   }
 }
