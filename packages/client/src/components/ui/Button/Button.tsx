@@ -7,6 +7,7 @@ export const Button = (props: {
   className?: string | undefined
   useFixWidth?: boolean | undefined
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void | Promise<void>
+  disabled?: boolean
 }) => {
   const { text, className = '', useFixWidth = false, onClick } = props
   return (
@@ -14,7 +15,8 @@ export const Button = (props: {
       className={`custom-button ${className} ${
         useFixWidth ? 'custom-button_fix-width' : ''
       }`}
-      onClick={onClick}>
+      onClick={onClick}
+      disabled={props.disabled}>
       <span>{text}</span>
     </button>
   )
