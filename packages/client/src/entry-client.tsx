@@ -16,4 +16,6 @@ hydrateRoot(
   </React.StrictMode>
 )
 
-registerServiceWorker()
+if (process.env.NODE_ENV === 'production') {
+  registerServiceWorker()
+}

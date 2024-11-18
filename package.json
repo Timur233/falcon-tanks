@@ -6,6 +6,7 @@
     "build": "lerna run build",
     "dev:client": "lerna run dev  --scope=client",
     "dev:server": "lerna run dev --scope=server",
+    "start": "lerna run start",
     "dev": "lerna run dev",
     "test": "lerna run test",
     "lint": "lerna run lint",

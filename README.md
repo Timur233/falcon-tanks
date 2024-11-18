@@ -62,11 +62,24 @@ VITE_AUTH_PATHNAMES='/sign-in, /sign-up'
 
 ---
 
-### Для работы с докером
+### Для работы с docker compose
 
 1. Скопировать .env.sample в .env
-2. Проверить режим сборки сервиса client (preview, init, dev)
-3. Установить зависимости docker compose build
-4. Смонтировать контейнер docker compose up -d, приложение будет доступно по порту сервера env.SERVER_PORT
+2. Для просмотра в режиме prod = 
+  .env -> 
+  COMPOSE_FILE=docker-compose.yml ->
+    terminal ->
+      `docker compose build` -> 
+      `docker compose up -d`
+      Развернется проект на порте ${SERVER_PORT}
+3. Для разработки в режиме dev =
+  .env ->
+  COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml ->
+    terminal ->
+      `docker compose build` ->
+      `docker compose up -d`
+      Развернется проект на порте ${SERVER_PORT} - будет работать nodemon с прослушкой файлов сервера и vite с прослушкой hmr
+4. При работе с traefik добавить в /etc/hosts - 127.0.0.1 tanks.docker
 5. Размонтировать docker compose down --remove-orphans
-6. Для работы с traefik добавить в .env `COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml`
+
+При разворачивании локально установить переменную POSTGRES_HOST - localhost/127.0.0.1, тк при работе в docker необходимо обращаться внутри контейнеров по имени сервисов.
