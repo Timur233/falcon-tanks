@@ -10,8 +10,6 @@ services:
     restart: always
     networks:
       - traefik
-    ports:
-      - "24678:24678"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.tanks.rule=Host(`tanks.docker`)"
