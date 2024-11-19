@@ -10,11 +10,13 @@ import { Loader } from '@/components/ui/Loader/Loader'
 
 export const Main = () => {
   const [isLoaded, setIsLoaded] = useState(false)
-  const userIsLogged = userService.isLoggedIn()
+  const userIsLogged = useRef(false)
   const navigate = useNavigate()
   const showLoader = useRef(true)
 
   useEffect(() => {
+    userIsLogged.current = userService.isLoggedIn()
+
     YandexOAuth.signIn(navigate).finally(() => {
       showLoader.current = false
       setIsLoaded(true)
