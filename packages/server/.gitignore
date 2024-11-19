@@ -1,5 +1,7 @@
 db.js
+db.d.ts
 index.js
+index.d.ts
 tsconfig.server.tsbuildinfo
 
 types/reaction.js
