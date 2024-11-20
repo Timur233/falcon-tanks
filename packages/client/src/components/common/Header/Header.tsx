@@ -1,6 +1,10 @@
 import { Link, NavLink } from 'react-router-dom'
 import SiteLogo from '@/assets/images/site-logo.svg'
 import './Header.scss'
+import { updateTheme } from '@/store/reducers/theme-reducer'
+import { RootState, store } from '@/store'
+import { ChristmasToggle } from '@/components/ui/ChristmasToggle/ChristmasToggle'
+import { useSelector } from 'react-redux'
 
 type HeaderProps = {
   className?: string
@@ -10,6 +14,18 @@ export const Header = (props: HeaderProps) => {
   const { className = '' } = props
   const getNavLinkClassName = (isActive: boolean) =>
     isActive ? 'main-nav__link main-nav__link_active' : 'main-nav__link'
+  const themeAlias = useSelector<RootState, string>(
+    state => state.themeReducer.themeAlias
+  )
+
+  const toggleTheme = (isChecked: boolean) => {
+    store
+      .dispatch(updateTheme(isChecked ? 'christmas' : 'standart'))
+      .unwrap()
+      .then(() => {
+        window.location.reload()
+      })
+  }
 
   return (
     <header className={`main-header ${className}`}>
@@ -46,6 +62,10 @@ export const Header = (props: HeaderProps) => {
               to="/profile">
               Профиль
             </NavLink>
+            <ChristmasToggle
+              checked={themeAlias === 'christmas'}
+              onChange={toggleTheme}
+            />
           </nav>
         </div>
       </div>
