@@ -1,4 +1,5 @@
 import authReducer from '@/store/reducers/auth-reducer'
+import themeReducer, { BASE_THEME_ALIAS } from '@/store/reducers/theme-reducer'
 import { configureStore } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
 
@@ -10,14 +11,22 @@ declare global {
   }
 }
 
+const initialState =
+  typeof window === 'undefined' ? undefined : window.APP_INITIAL_STATE
+
+if (initialState) {
+  initialState.themeReducer.themeAlias =
+    window.sessionStorage.getItem('themeAlias') || BASE_THEME_ALIAS
+}
+
 export const rootReducer = combineReducers({
   authReducer,
+  themeReducer,
 })
 
 export const store = configureStore({
   reducer: rootReducer,
-  preloadedState:
-    typeof window === 'undefined' ? undefined : window.APP_INITIAL_STATE,
+  preloadedState: initialState,
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
