@@ -11,8 +11,12 @@
   "include": [
     "index.ts",
     "db.ts",
+    "relationships.ts",
     "models/**/*.ts",
+    "instances/**/*.ts",
     "controllers/**/*.ts",
+    "routes/**/*.ts",
+    "utils/**/*.ts",
     "types/**/*.ts",
     "data/**/*.ts"
   ]

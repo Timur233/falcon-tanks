@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react'
-import { fetchThreads } from '@/api/forumApi'
-import { Thread } from '@/types/forum'
 import PromoLogo from '@/assets/images/svg/FT-promo.svg'
 import { Button } from '@/components/ui/Button/Button'
 import { Card } from '@/components/ui/Card/Card'
 import { PageTitle } from '@/components/ui/PageTitle/PageTitle'
 import { Pagination } from '@/components/ui/Pagination/Pagination'
+import { Thread } from '@/types/forum'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import './Forum.scss'
 import { mockForumThreads } from '../../../mocks/Forum'
+import './Forum.scss'
 
 const THREADS_COUNT = 10
 
@@ -21,15 +20,17 @@ export const Forum = () => {
 
   useEffect(() => {
     const loadThreads = async () => {
-      try {
-        const data = await fetchThreads(currentPage, THREADS_COUNT)
-        setThreads(data.threads)
-        setTotalPages(data.totalPages)
-      } catch (err) {
-        console.error('Ошибка загрузки тем форума:', err)
-        setError('Не удалось загрузить темы. Отображаются заглушки.')
-        setThreads(mockForumThreads) // Используем заглушки
-      }
+      setThreads(mockForumThreads) // Используем заглушки
+
+      // try {
+      //   const data = await fetchThreads(currentPage, THREADS_COUNT)
+      //   setThreads(data.threads)
+      //   setTotalPages(data.totalPages)
+      // } catch (err) {
+      //   console.error('Ошибка загрузки тем форума:', err)
+      //   setError('Не удалось загрузить темы. Отображаются заглушки.')
+      //   setThreads(mockForumThreads) // Используем заглушки
+      // }
     }
 
     loadThreads()
