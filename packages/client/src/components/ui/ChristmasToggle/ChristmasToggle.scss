@@ -1,0 +1,44 @@
+.christmas-toggle {
+    width: 46px;
+    height: 24px;
+    background-color: #e5e5e5;
+    border-radius: 50px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        opacity: 1;
+        background-image: url('https://media.istockphoto.com/id/1181274264/vector/christmas-backgrounds-seamless-pattern-vector-illustration.jpg?s=612x612&w=0&k=20&c=qjaiUif53nf-OjYeLwgOgtmoPlhoqFNpiN9Xw1PHY50=');
+        background-size: 350%;
+        transition: opacity 0.3s ease-in-out;
+    }
+  
+    &.checked {
+      background-color: #839d22;
+
+      &::before {
+        opacity: 0;
+      }
+    }
+  
+    &__slider {
+      width: 20px;
+      height: 20px;
+      background-color: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s ease-in-out;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+  
+    &.checked .christmas-toggle__slider {
+      transform: translateX(22px);
+    }
+  }
