@@ -3,7 +3,7 @@ import withAuthUser from '@/components/hoc/withAuthUser'
 import { Loader } from '@/components/ui/Loader/Loader'
 import { RootState, useAppDispatch } from '@/store'
 import { actions, getUser, UserType } from '@/store/reducers/auth-reducer'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
@@ -12,11 +12,13 @@ import './PrivateLayout.scss'
 export function PrivateLayout() {
   const user = useSelector<RootState, UserType>(state => state.authReducer.user)
   const navigate = useNavigate()
-  const userIsLogged = window.sessionStorage.getItem('userIsLogged') === '1'
+  const [isLogged, setIsLogged] = useState(false)
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    if (!userIsLogged) {
+    setIsLogged(window.sessionStorage.getItem('userIsLogged') === '1')
+
+    if (!isLogged) {
       dispatch(getUser())
         .unwrap()
         .then(data => {
@@ -34,9 +36,9 @@ export function PrivateLayout() {
           })
         })
     }
-  }, [dispatch, navigate, userIsLogged])
+  }, [dispatch, navigate, isLogged, setIsLogged])
 
-  if (userIsLogged) {
+  if (isLogged) {
     return (
       <div className="private-layout">
         <Header className="private-layout__header"></Header>
@@ -46,6 +48,7 @@ export function PrivateLayout() {
       </div>
     )
   }
+
   return user === null ? <Loader show={true} /> : <Outlet />
 }
 
