@@ -6,8 +6,10 @@ import path from 'path'
 import serialize from 'serialize-javascript'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
 import { createClientAndConnect } from './db'
-import { ReactionController } from './controllers/reaction'
 import { ReactionModel } from './models/reaction'
+import { UserThemeModel } from './models/user_theme'
+import { ReactionController } from './controllers/reaction'
+import { UserThemeController } from './controllers/user_theme'
 
 dotenv.config()
 
@@ -36,6 +38,7 @@ async function createServer() {
   try {
     // Инициализируем таблицы при запуске
     await ReactionModel.initializeTables()
+    await UserThemeModel.initializeTables()
   } catch (error) {
     console.error('Failed to initialize database:', error)
   }
@@ -50,6 +53,13 @@ async function createServer() {
   )
   app.get('/api/emojis', (req, res) =>
     ReactionController.getAvailableEmojis(req, res)
+  )
+
+  app.post('/api/theme/set/:userId', (req, res) =>
+    UserThemeController.updateTheme(req, res)
+  )
+  app.get('/api/theme/get/:userId', (req, res) =>
+    UserThemeController.getTheme(req, res)
   )
 
   let vite: ViteDevServer | undefined
