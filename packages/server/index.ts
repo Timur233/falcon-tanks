@@ -68,8 +68,8 @@ async function createServer() {
     }
   }
 
-  app.use('/api', isUserLoggedInMiddleware, topicRoutes)
-  app.use('/api', isUserLoggedInMiddleware, commentRoutes)
+  app.use('/api/topics/', isUserLoggedInMiddleware, topicRoutes)
+  app.use('/api/comments/', isUserLoggedInMiddleware, commentRoutes)
 
   app.post('/api/topics/:topicId/reactions', (req, res) =>
     ReactionController.toggleReaction(req, res)
