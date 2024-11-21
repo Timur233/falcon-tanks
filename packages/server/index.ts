@@ -7,12 +7,12 @@ import fs from 'fs'
 import path from 'path'
 import serialize from 'serialize-javascript'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
-import { ReactionModel } from './models/reaction'
-import { UserThemeModel } from './models/user_theme'
-import { ReactionController } from './controllers/reaction'
+import { ReactionController } from './controllers/reaction-sql'
+import { UserThemeController } from './controllers/user_theme'
 import { createClientAndConnect } from './db'
 import { sequelize } from './instances/sequelize'
-import { UserThemeController } from './controllers/user_theme'
+import { ReactionModel } from './models/reaction-sql'
+import { UserThemeModel } from './models/user_theme'
 import './relationships'
 import commentRoutes from './routes/comment'
 import topicRoutes from './routes/topic'
@@ -20,7 +20,7 @@ import topicRoutes from './routes/topic'
 dotenv.config()
 
 const port = process.env.SERVER_PORT || 3000
-const clientPath = path.join(__dirname, '../client')
+const clientPath = path.join(__dirname, '../../client')
 const isDev = process.env.NODE_ENV === 'development'
 
 async function createServer() {

@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev:vite": "vite",
-    "dev": "tsc --project ../server/tsconfig.server.json && cross-env NODE_ENV=development node ../server/index.js",
+    "dev": "tsc --project ../server/tsconfig.server.json && cross-env NODE_ENV=development node ../server/ts-dist/index.js",
     "build:vite": "tsc && vite build",
     "build": "tsc --project ../server/tsconfig.server.json && vite build && vite build --ssr src/entry-server.tsx --outDir dist/server --ssrManifest",
     "preview:vite": "vite preview",

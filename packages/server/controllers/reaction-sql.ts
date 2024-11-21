@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { ReactionModel } from '../models/reaction'
+import { ReactionModel } from '../models/reaction-sql'
 
 export class ReactionController {
   static async getReactions(req: Request, res: Response) {
