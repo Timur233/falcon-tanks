@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "ts-dist",
     "composite": true,
     "target": "es2019",
     "module": "commonjs",
@@ -11,9 +12,13 @@
   "include": [
     "index.ts",
     "db.ts",
+    "relationships.ts",
+    "data/**/*.ts",
     "models/**/*.ts",
+    "instances/**/*.ts",
     "controllers/**/*.ts",
-    "types/**/*.ts",
-    "data/**/*.ts"
+    "routes/**/*.ts",
+    "utils/**/*.ts",
+    "types/**/*.ts"
   ]
 }

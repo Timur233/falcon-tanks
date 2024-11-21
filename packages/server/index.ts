@@ -1,20 +1,26 @@
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import dotenv from 'dotenv'
+import type { RequestHandler } from 'express'
 import express from 'express'
 import fs from 'fs'
 import path from 'path'
 import serialize from 'serialize-javascript'
 import { createServer as createViteServer, ViteDevServer } from 'vite'
-import { createClientAndConnect } from './db'
-import { ReactionModel } from './models/reaction'
-import { UserThemeModel } from './models/user_theme'
-import { ReactionController } from './controllers/reaction'
+import { ReactionController } from './controllers/reaction-sql'
 import { UserThemeController } from './controllers/user_theme'
+import { createClientAndConnect } from './db'
+import { sequelize } from './instances/sequelize'
+import { ReactionModel } from './models/reaction-sql'
+import { UserThemeModel } from './models/user_theme'
+import './relationships'
+import commentRoutes from './routes/comment'
+import topicRoutes from './routes/topic'
 
 dotenv.config()
 
 const port = process.env.SERVER_PORT || 3000
-const clientPath = path.join(__dirname, '../client')
+const clientPath = path.join(__dirname, '../../client')
 const isDev = process.env.NODE_ENV === 'development'
 
 async function createServer() {
@@ -26,11 +32,12 @@ async function createServer() {
     })
   )
   app.use(express.json())
-
+  app.use(cookieParser())
   app.use((req, _res, next) => {
     console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`, {
       body: req.body,
       params: req.params,
+      cookies: req.cookies,
     })
     next()
   })
@@ -44,6 +51,25 @@ async function createServer() {
   }
 
   await createClientAndConnect()
+
+  try {
+    await sequelize.authenticate()
+    await sequelize.sync()
+    console.log('Connection has been established successfully.')
+  } catch (error) {
+    console.error('Unable to connect to the database:', error)
+  }
+
+  const isUserLoggedInMiddleware: RequestHandler = (req, res, next) => {
+    if (req.cookies.authCookie) {
+      next()
+    } else {
+      res.status(403).json({ message: 'Forbidden' })
+    }
+  }
+
+  app.use('/api/topics/', isUserLoggedInMiddleware, topicRoutes)
+  app.use('/api/comments/', isUserLoggedInMiddleware, commentRoutes)
 
   app.post('/api/topics/:topicId/reactions', (req, res) =>
     ReactionController.toggleReaction(req, res)

@@ -1,13 +1,18 @@
-import { Client } from 'pg'
 import dotenv from 'dotenv'
 import path from 'path'
+import { Client } from 'pg'
 
 dotenv.config({
-  path: path.resolve(__dirname, '../../.env'), // Путь к корневому .env файлу
+  path: path.resolve(__dirname, '../../../.env'), // Путь к корневому .env файлу
 })
 
-const { POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB, POSTGRES_PORT, POSTGRES_HOST } =
-  process.env
+const {
+  POSTGRES_USER,
+  POSTGRES_PASSWORD,
+  POSTGRES_DB,
+  POSTGRES_PORT,
+  POSTGRES_HOST,
+} = process.env
 
 export const createClientAndConnect = async (): Promise<Client | null> => {
   try {
