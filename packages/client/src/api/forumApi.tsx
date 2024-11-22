@@ -5,14 +5,12 @@ export const fetchThreads = async (
   page: number,
   limit: number
 ): Promise<{ threads: Thread[]; totalPages: number }> => {
-  const response = await localApi.get('/threads', {
-    params: { page, limit },
-  })
+  const response = await localApi.get('/api/topics/')
   return response.data
 }
 
 export const fetchThreadById = async (id: number): Promise<Thread> => {
-  const response = await localApi.get(`/threads/${id}`)
+  const response = await localApi.get(`/api/topics/${id}`)
   return response.data
 }
 
@@ -20,7 +18,7 @@ export const createThread = async (data: {
   title: string
   message: string
 }): Promise<Thread> => {
-  const response = await localApi.post('/threads', data)
+  const response = await localApi.post('/api/topics/', data)
   return response.data
 }
 
@@ -28,7 +26,7 @@ export const createComment = async (
   threadId: number,
   message: string
 ): Promise<Comment> => {
-  const response = await localApi.post(`/threads/${threadId}/comments`, {
+  const response = await localApi.post(`/api/topics/${threadId}/comments`, {
     message,
   })
   return response.data
@@ -39,7 +37,7 @@ export const fetchComments = async (
   page: number,
   limit: number
 ) => {
-  const response = await localApi.get(`/threads/${threadId}/comments`, {
+  const response = await localApi.get(`/api/topics/${threadId}/comments`, {
     params: { page, limit },
   })
   return {

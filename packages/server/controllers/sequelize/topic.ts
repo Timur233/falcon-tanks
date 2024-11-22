@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { Topic } from '../../models/sequelize/Topic'
 
-export const getTopics = async (req: Request, res: Response) => {
+export const getTopics = async (_req: Request, res: Response) => {
   try {
     const topics = await Topic.findAll()
     res.status(200).json(topics)
@@ -23,9 +23,11 @@ export const getTopicById = async (req: Request, res: Response) => {
 }
 
 export const createTopic = async (req: Request, res: Response) => {
-  const { title } = req.body
+  const { title } = req.body.title
+  const { message } = req.body.message
+  console.log(req.body)
   try {
-    const newTopic = await Topic.create({ title })
+    const newTopic = await Topic.create({ title, message })
     res.status(201).json(newTopic)
   } catch (e) {
     res.status(500).json(e)

@@ -7,6 +7,7 @@ import { Thread } from '@/types/forum'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { mockForumThreads } from '../../../mocks/Forum'
+import { fetchThreads } from '@/api/forumApi'
 import './Forum.scss'
 
 const THREADS_COUNT = 10
@@ -20,17 +21,17 @@ export const Forum = () => {
 
   useEffect(() => {
     const loadThreads = async () => {
-      setThreads(mockForumThreads) // Используем заглушки
+      // setThreads(mockForumThreads) // Используем заглушки
 
-      // try {
-      //   const data = await fetchThreads(currentPage, THREADS_COUNT)
-      //   setThreads(data.threads)
-      //   setTotalPages(data.totalPages)
-      // } catch (err) {
-      //   console.error('Ошибка загрузки тем форума:', err)
-      //   setError('Не удалось загрузить темы. Отображаются заглушки.')
-      //   setThreads(mockForumThreads) // Используем заглушки
-      // }
+      try {
+        const data = await fetchThreads(currentPage, THREADS_COUNT)
+        setThreads(data.threads)
+        setTotalPages(data.totalPages)
+      } catch (err) {
+        console.error('Ошибка загрузки тем форума:', err)
+        setError('Не удалось загрузить темы. Отображаются заглушки.')
+        setThreads(mockForumThreads) // Используем заглушки
+      }
     }
 
     loadThreads()

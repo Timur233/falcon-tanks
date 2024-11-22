@@ -4,6 +4,7 @@ import { sequelize } from '../../instances/sequelize'
 export type TopicAttributes = {
   id: number
   title: string
+  message: string
 }
 
 export type TopicCreationAttributes = Sequelize.Optional<TopicAttributes, 'id'>
@@ -14,6 +15,7 @@ export class Topic extends Sequelize.Model<
 > {
   declare id: number
   declare title: string
+  declare message: string
 }
 
 Topic.init(
@@ -24,6 +26,10 @@ Topic.init(
       primaryKey: true,
     },
     title: {
+      type: Sequelize.STRING,
+      allowNull: false,
+    },
+    message: {
       type: Sequelize.STRING,
       allowNull: false,
     },
