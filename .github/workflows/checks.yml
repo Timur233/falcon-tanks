@@ -25,6 +25,8 @@ jobs:
         run: yarn test
 
   build-and-push:
+    permissions:
+      packages: write
     runs-on: ubuntu-latest
 
     steps:
