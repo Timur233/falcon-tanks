@@ -74,7 +74,7 @@ VITE_AUTH_PATHNAMES='/sign-in, /sign-up'
       Развернется проект на порте ${SERVER_PORT}
 3. Для разработки в режиме dev =
   .env ->
-  COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml ->
+  COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml -> # Если windows то docker-compose.yml;docker-compose.dev.yml
     terminal ->
       `docker compose build` ->
       `docker compose up -d`
