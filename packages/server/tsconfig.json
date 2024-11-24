@@ -5,6 +5,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "esModuleInterop": true,
+    "jsx": "react",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
@@ -17,13 +18,13 @@
     "noUnusedParameters": true,
     "noUnusedLocals": true,
     "forceConsistentCasingInFileNames": true,
-    "importsNotUsedAsValues": "error",
     "lib": ["es2019", "esnext.asynciterable"],
     "types": ["node", "jest"],
     "baseUrl": ".",
+    "skipLibCheck": true,
     "paths": {
       "*": ["types/*"]
     },
-    "outDir": "dist"
+    "outDir": "./dist"
   }
 }

@@ -1,0 +1,75 @@
+.custom-theme__christmas {
+  .main-nav {
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -8px;
+      height: 40px;
+      background: url('@/assets/images/themes/christmas/garland.png') repeat-x;
+      background-size: contain;
+    }
+  }
+
+  .logo-block {
+    position: relative;
+
+    &__image {
+      filter: grayscale(1);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      z-index: 1;
+      left: 16px;
+      top: 4px;
+      width: 44px;
+      height: 32px;
+      background: url('@/assets/images/themes/christmas/head.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
+  }
+
+  .custom-page-title__content {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    background-image: url('@/assets/images/themes/christmas/titlebar__bg.jpg');
+    background-size: cover;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: -1;
+    }
+  }
+
+  .preloader__road {
+    background-image: url('@/assets/images/themes/christmas/christmas-ground.png');
+  }
+
+  .custom-button {
+    position: relative;
+    z-index: 1;
+
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url('@/assets/images/themes/christmas/snow.png');
+      background-position: -60% 24%;
+      background-size: 60%;
+      background-repeat: no-repeat;
+      z-index: -1;
+      border-radius: 6px;
+      opacity: 0.3;
+    }
+  }
+}

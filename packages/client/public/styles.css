@@ -1,0 +1,52 @@
+body {
+  background-color: #242424;
+}
+
+.preloader {
+  position: fixed;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  inset: 0;
+  z-index: 10;
+  background-color: rgb(0, 0, 0);
+}
+.preloader_show {
+  display: flex;
+}
+.preloader__road {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  background-color: #2c414c;
+  background-image: url('@/assets/images/ground.png');
+  background-size: 50px 50px;
+  border-radius: 20px;
+  animation: moveRoad 2s linear infinite;
+}
+.preloader__image {
+  width: 60px;
+}
+.preloader__close-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, 100px);
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+  color: #f8f8f8;
+  font-size: 14px;
+}
+.preloader__close-btn:hover {
+  text-decoration: underline;
+}
+@keyframes moveRoad {
+  100% {
+    background-position: 0px 50px;
+  }
+}

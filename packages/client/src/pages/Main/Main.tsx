@@ -1,19 +1,27 @@
-import './Main.scss'
-import { useEffect, useState } from 'react'
-import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { Button } from '@/components/ui/Button/Button'
-import { EnemyTank } from './components/EnemyTanks/EnemyTank'
-import { useNavigate } from 'react-router-dom'
+import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { userService } from '@/services/userService'
+import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { EnemyTank } from './components/EnemyTanks/EnemyTank'
+import './Main.scss'
+import { YandexOAuth } from '@/services/o-auth/YandexOAuth'
+import { Loader } from '@/components/ui/Loader/Loader'
 
 export const Main = () => {
   const [isLoaded, setIsLoaded] = useState(false)
-  const userIsLogged = userService.isLoggedIn()
+  const userIsLogged = useRef(false)
   const navigate = useNavigate()
+  const showLoader = useRef(true)
 
   useEffect(() => {
-    setIsLoaded(true)
-  }, [])
+    userIsLogged.current = userService.isLoggedIn()
+
+    YandexOAuth.signIn(navigate).finally(() => {
+      showLoader.current = false
+      setIsLoaded(true)
+    })
+  }, [navigate])
 
   return (
     <section className={'promo-page'}>
@@ -52,6 +60,8 @@ export const Main = () => {
           </div>
         </div>
       </div>
+
+      <Loader show={showLoader.current} />
     </section>
   )
 }

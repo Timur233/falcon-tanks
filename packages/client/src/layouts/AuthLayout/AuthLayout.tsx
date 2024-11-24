@@ -4,4 +4,5 @@ import withAuthUser from '@/components/hoc/withAuthUser'
 const AuthLayout = () => {
   return <Outlet />
 }
+
 export default withAuthUser(AuthLayout, '/game')

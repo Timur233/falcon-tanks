@@ -1,11 +1,12 @@
-import { ComponentType, useEffect } from 'react'
-import { UserType } from '@/store/reducers/auth-reducer'
-import { toast } from 'react-toastify'
-import { useNavigate, useLocation } from 'react-router-dom'
-import { RootState, useAppDispatch } from '@/store'
-import { useSelector } from 'react-redux'
 import { userService } from '@/services/userService'
+import { RootState, useAppDispatch } from '@/store'
+import { UserType } from '@/store/reducers/auth-reducer'
+import { ComponentType, useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
 import { Loader } from '../ui/Loader/Loader'
+import { getTheme } from '@/store/reducers/theme-reducer'
 
 type WithAuthUserProps = {
   userIsLogged: boolean
@@ -30,6 +31,8 @@ export default function withAuthUser<P extends object>(
 
     const handleAuthentication = async () => {
       const isAuthenticated = await userService.fetchUser(dispatch)
+
+      dispatch(getTheme())
 
       if (!isAuthenticated && !isAuthPath) {
         toast.error('Необходимо авторизоваться', { autoClose: 1500 })

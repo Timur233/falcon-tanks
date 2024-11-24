@@ -1,45 +1,19 @@
 import React from 'react'
-import { getRandomEdgePosition } from './utils'
-import { AbstractEntity, Enemy, Obstacle } from '@/components/Game/gameTypes'
+import { AbstractEntity, Enemy } from '@/components/Game/gameTypes'
 import { createBullet } from '@/components/Game/bullet'
 import {
   detectCollision,
   detectEnemyCollision,
 } from '@/components/Game/collision'
-
-const enemyParams = {
-  width: 70,
-  height: 70,
-  speed: 1,
-  direction: { x: 0, y: 0 },
-}
-
-export const initializeRandomEnemies = (numberOfEnemies: number) => {
-  const initialEnemies: Enemy[] = []
-  for (let i = 0; i < numberOfEnemies; i++) {
-    // количество врагов
-    const { x, y } = getRandomEdgePosition(800, 600)
-    const enemy: Enemy = {
-      ...enemyParams,
-      id: i,
-      x,
-      y,
-      animation: {
-        currentFrame: 0,
-        totalFrames: 4,
-        frameInterval: 10,
-        frameCount: 0,
-      },
-    }
-    initialEnemies.push(enemy)
-  }
-  return initialEnemies as Enemy[]
-}
+import { DefaultEnemy } from '@/components/Game/constants'
+import { GameMap } from '@/components/Game/gameMap'
+import { enemyTankShootSound } from '@/components/Game/sound/shoot'
+import { playShotSound } from '@/components/Game/sound/surround'
 
 export const initializeCampanyEnemies = (): Enemy[] => {
   return [
     {
-      ...enemyParams,
+      ...DefaultEnemy,
       id: 0,
       x: 360,
       y: 0,
@@ -51,7 +25,7 @@ export const initializeCampanyEnemies = (): Enemy[] => {
       },
     },
     {
-      ...enemyParams,
+      ...DefaultEnemy,
       id: 1,
       x: 0,
       y: 108,
@@ -63,7 +37,7 @@ export const initializeCampanyEnemies = (): Enemy[] => {
       },
     },
     {
-      ...enemyParams,
+      ...DefaultEnemy,
       id: 2,
       x: 720,
       y: 108,
@@ -78,14 +52,12 @@ export const initializeCampanyEnemies = (): Enemy[] => {
 }
 
 export const updateEnemyPositions = (
-  player: AbstractEntity,
-  enemiesRef: React.MutableRefObject<Enemy[]>,
-  obstacles: Obstacle[]
+  gameMap: React.MutableRefObject<GameMap>
 ) => {
-  enemiesRef.current = enemiesRef.current.map(enemy => {
+  gameMap.current.enemies = gameMap.current.enemies.map(enemy => {
     // Определяем разницу по X и Y
-    const directionX = player.x - enemy.x
-    const directionY = player.y - enemy.y
+    const directionX = gameMap.current.player.x - enemy.x
+    const directionY = gameMap.current.player.y - enemy.y
 
     // Выбираем ближайшую ось для начала движения
     const moveAlongX = Math.abs(directionX) > Math.abs(directionY)
@@ -121,13 +93,13 @@ export const updateEnemyPositions = (
     const newY = enemy.y + stepY
 
     // Проверка столкновений с другими врагами
-    const hasEnemyCollision = enemiesRef.current.some(otherEnemy => {
+    const hasEnemyCollision = gameMap.current.enemies.some(otherEnemy => {
       if (otherEnemy === enemy) return false
       return detectEnemyCollision({ ...enemy, x: newX, y: newY }, otherEnemy)
     })
 
     // Проверка коллизий с препятствиями
-    const hasObstacleCollision = obstacles.some(obstacle => {
+    const hasObstacleCollision = gameMap.current.obstacles.some(obstacle => {
       return detectCollision({ ...enemy, x: newX, y: newY }, obstacle)
     })
 
@@ -142,65 +114,29 @@ export const updateEnemyPositions = (
   })
 }
 
-const isPositionOccupied = (
-  position: { x: number; y: number },
-  enemies: AbstractEntity[]
-) => {
-  return enemies.some(enemy =>
-    detectEnemyCollision({ ...enemy, x: position.x, y: position.y }, enemy)
-  )
-}
-
-const respawnEnemy = (
-  enemy: Enemy,
-  enemies: Enemy[],
-  canvasWidth: number,
-  canvasHeight: number
-) => {
-  let newPosition
-  do {
-    newPosition = {
-      x: Math.random() * canvasWidth, // Предполагается, что canvasWidth доступен
-      y: Math.random() * canvasHeight, // Предполагается, что canvasHeight доступен
-    }
-  } while (isPositionOccupied(newPosition, enemies))
-
-  return { ...enemy, ...newPosition } // Возвращаем врага с новой позицией
-}
-
-// Пример использования respawnEnemy в вашем коде
-export const respawnEnemies = (
-  enemiesRef: React.MutableRefObject<Enemy[]>,
-  canvasRef: React.MutableRefObject<HTMLCanvasElement | null>
-) => {
-  if (!canvasRef.current) {
-    return
-  }
-  const { width: canvasWidth, height: canvasHeight } =
-    canvasRef.current.getBoundingClientRect()
-  enemiesRef.current = enemiesRef.current.map(enemy =>
-    respawnEnemy(enemy, enemiesRef.current, canvasWidth, canvasHeight)
-  )
-}
-
 export const killEnemy = (
-  enemiesRef: React.MutableRefObject<AbstractEntity[]>,
+  gameMap: React.MutableRefObject<GameMap>,
   enemy: AbstractEntity
 ) => {
-  enemiesRef.current = enemiesRef.current.filter(e => e !== enemy)
+  gameMap.current.enemies = gameMap.current.enemies.filter(e => e !== enemy)
 }
 
 export const handleEnemyShooting = (
-  enemies: Enemy[],
+  gameMap: React.MutableRefObject<GameMap>,
   bulletsRef: React.MutableRefObject<AbstractEntity[]>
 ) => {
   const currentTime = Date.now() // Текущее время в миллисекундах
 
-  enemies.forEach(enemy => {
+  gameMap.current.enemies.forEach(enemy => {
     // Проверяем, если прошло больше 2 секунд (2000 миллисекунд) с последнего выстрела
     if (!enemy.lastShotTime || currentTime - enemy.lastShotTime >= 2000) {
-      bulletsRef.current.push(createBullet(enemy)) // Создаём новую пулю для врага
-
+      bulletsRef.current.push(createBullet(enemy, false)) // Создаём новую пулю для врага
+      playShotSound(
+        enemyTankShootSound,
+        enemy,
+        gameMap.current.window_width,
+        gameMap.current.window_height
+      )
       // Обновляем время последнего выстрела
       enemy.lastShotTime = currentTime
     }

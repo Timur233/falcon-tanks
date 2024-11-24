@@ -1,8 +1,12 @@
+'use client'
+
 import GameInfo from '@/assets/images/game-info.jpg'
 import { Modal } from '@/components/common/Modal/Modal'
 import { Game as GamePrototype } from '@/components/Game/Game'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
 import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 import { Arrows } from './components/Arrows/Arrows'
 import { FireControll } from './components/FireControll/FireControll'
 import { KillsCounter } from './components/KillsCounter/KillsCounter'
@@ -12,6 +16,15 @@ import { Icon } from '@/components/ui/Icon/Icon'
 import { BtnStates } from '@/components/Game/gameTypes'
 import { StatusScreen } from './components/StatusScreen/StatusScreen'
 import { Button } from '@/components/ui/Button/Button'
+import { Suspense } from 'react'
+import { Loader } from '@/components/ui/Loader/Loader'
+import Pobeda from '@/assets/sounds/pobeda.mp3'
+import Proigrish from '@/assets/sounds/retreat-battle.mp3'
+import { showNotificationWithSound } from '@/components/Game/sound/showNotification'
+import { startBattleSound } from '@/components/Game/sound/battle'
+
+import { toast } from 'react-toastify'
+import { leaderboardApi } from '@/store/reducers/leaderbord-reducer'
 
 interface GameState {
   lives: number
@@ -43,6 +56,7 @@ export const Game = () => {
   })
 
   const [kills, setKills] = useState(0)
+  const user = useSelector((state: RootState) => state.authReducer.user)
 
   const startGameHandler = () => {
     setGameState({
@@ -66,6 +80,25 @@ export const Game = () => {
     })
   }
 
+  const saveScore = useCallback(async () => {
+    if (user?.id && kills > 0) {
+      try {
+        await leaderboardApi.addScore({
+          id: user.id,
+          login: user.login || 'Неизвестный игрок',
+          avatar: user.avatar || undefined,
+          score: kills,
+        })
+      } catch (error) {
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : 'Ошибка сохранения результата'
+        )
+      }
+    }
+  }, [kills, user])
+
   const pauseHandler = useCallback(() => {
     setGameState(state => ({
       ...state,
@@ -84,16 +117,35 @@ export const Game = () => {
     setKills(newKills)
   }, [])
 
-  const gameOverHandler = useCallback((isVictory: boolean) => {
-    setGameState({
-      lives: 0,
-      isGameOver: !isVictory,
-      isGameWinning: isVictory,
-      isGameStarted: false,
-      isCompanyStarted: false,
-      isGamePaused: true,
-    })
-  }, [])
+  const gameOverHandler = useCallback(
+    (isVictory: boolean) => {
+      setGameState({
+        lives: 0,
+        isGameOver: !isVictory,
+        isGameWinning: isVictory,
+        isGameStarted: false,
+        isCompanyStarted: false,
+        isGamePaused: true,
+      })
+      startBattleSound.stop()
+      if (isVictory) {
+        showNotificationWithSound(
+          'Победа!',
+          { body: 'Вы уничтожили врагов!' },
+          Pobeda
+        )
+      } else {
+        showNotificationWithSound(
+          'Поражение',
+          { body: 'Вы потерпели поражение!' },
+          Proigrish
+        )
+      }
+
+      saveScore()
+    },
+    [saveScore]
+  )
 
   const arrowClickHandler = (
     eventName: string,
@@ -146,114 +198,116 @@ export const Game = () => {
   }, [pauseHandler])
 
   return (
-    <section className="game-page">
-      <Modal show={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
-        <img src={GameInfo} alt="Инструкция к игре" />
-      </Modal>
-      <div className="container-fluid game-page__container">
-        <div className="row">
-          <div className="column col-8">
-            <div className="game-page__wrapper game-wrapper">
-              <div className="game-wrapper__decor-hr"></div>
-              <div className="game-wrapper__decor-vr"></div>
-              <GamePrototype
-                lives={gameState.lives}
-                onKill={onKill}
-                isGameStarted={gameState.isGameStarted}
-                isCompanyStarted={gameState.isCompanyStarted}
-                isGamePaused={gameState.isGamePaused}
-                onDeath={deathHandler}
-                onGameOver={gameOverHandler}
-                onKeyDownUp={changeButtonsState}
-              />
+    <Suspense fallback={<Loader show={true} />}>
+      <section className="game-page">
+        <Modal show={isInfoModalOpen} onClose={() => setIsInfoModalOpen(false)}>
+          <img src={GameInfo} alt="Инструкция к игре" />
+        </Modal>
+        <div className="container-fluid game-page__container">
+          <div className="row">
+            <div className="column col-8">
+              <div className="game-page__wrapper game-wrapper">
+                <div className="game-wrapper__decor-hr"></div>
+                <div className="game-wrapper__decor-vr"></div>
+                <GamePrototype
+                  lives={gameState.lives}
+                  onKill={onKill}
+                  isGameStarted={gameState.isGameStarted}
+                  isCompanyStarted={gameState.isCompanyStarted}
+                  isGamePaused={gameState.isGamePaused}
+                  onDeath={deathHandler}
+                  onGameOver={gameOverHandler}
+                  onKeyDownUp={changeButtonsState}
+                />
 
-              <StatusScreen
-                isVisible={
-                  !gameState.isGameStarted &&
-                  !gameState.isCompanyStarted &&
-                  !gameState.isGameOver &&
-                  !gameState.isGameWinning
-                }>
-                <Button
-                  text={'Начать игру'}
-                  onClick={startGameHandler}
-                  useFixWidth
-                />
-                <Button
-                  className={'custom-button_blue'}
-                  text={'Начать компанию'}
-                  onClick={startCompanyHandler}
-                  useFixWidth
-                />
-              </StatusScreen>
+                <StatusScreen
+                  isVisible={
+                    !gameState.isGameStarted &&
+                    !gameState.isCompanyStarted &&
+                    !gameState.isGameOver &&
+                    !gameState.isGameWinning
+                  }>
+                  <Button
+                    text={'Начать игру'}
+                    onClick={startGameHandler}
+                    useFixWidth
+                  />
+                  <Button
+                    className={'custom-button_blue'}
+                    text={'Начать компанию'}
+                    onClick={startCompanyHandler}
+                    useFixWidth
+                  />
+                </StatusScreen>
 
-              <StatusScreen
-                isVisible={gameState.isGameOver}
-                title="Game Over"
-                type="game-over">
-                <Button
-                  text={'Начать заново'}
-                  onClick={startGameHandler}
-                  useFixWidth
-                />
-                <Button
-                  className={'custom-button_blue'}
-                  text={'Начать компанию'}
-                  onClick={startCompanyHandler}
-                  useFixWidth
-                />
-              </StatusScreen>
+                <StatusScreen
+                  isVisible={gameState.isGameOver}
+                  title="Game Over"
+                  type="game-over">
+                  <Button
+                    text={'Начать заново'}
+                    onClick={startGameHandler}
+                    useFixWidth
+                  />
+                  <Button
+                    className={'custom-button_blue'}
+                    text={'Начать компанию'}
+                    onClick={startCompanyHandler}
+                    useFixWidth
+                  />
+                </StatusScreen>
 
-              <StatusScreen
-                isVisible={gameState.isGameWinning}
-                title="Победа!"
-                type="victory">
-                <Button
-                  text={'Начать заново'}
-                  onClick={startGameHandler}
-                  useFixWidth
-                />
-                <Button
-                  className={'custom-button_blue'}
-                  text={'Начать компанию'}
-                  onClick={startCompanyHandler}
-                  useFixWidth
-                />
-              </StatusScreen>
+                <StatusScreen
+                  isVisible={gameState.isGameWinning}
+                  title="Победа!"
+                  type="victory">
+                  <Button
+                    text={'Начать заново'}
+                    onClick={startGameHandler}
+                    useFixWidth
+                  />
+                  <Button
+                    className={'custom-button_blue'}
+                    text={'Начать компанию'}
+                    onClick={startCompanyHandler}
+                    useFixWidth
+                  />
+                </StatusScreen>
+              </div>
             </div>
-          </div>
-          <div className="column col-4">
-            <div className="game-controll">
-              <KillsCounter className="game-controll__kills" kills={kills} />
+            <div className="column col-4">
+              <div className="game-controll">
+                <KillsCounter className="game-controll__kills" kills={kills} />
 
-              <CustomPageTitle
-                className="game-controll__lives"
-                text={gameState.lives.toString()}
-                tagName="span"
-              />
+                <CustomPageTitle
+                  className="game-controll__lives"
+                  text={gameState.lives.toString()}
+                  tagName="span"
+                />
 
-              <PauseHelpFullscreen
-                className="game-controll__pause-help-buttons"
-                pauseIcon={getPauseIcon()}
-                pauseHandler={pauseHandler}
-                helpHandler={() => setIsInfoModalOpen(true)}
-              />
+                <PauseHelpFullscreen
+                  className="game-controll__pause-help-buttons"
+                  pauseIcon={getPauseIcon()}
+                  pauseHandler={pauseHandler}
+                  helpHandler={() => setIsInfoModalOpen(true)}
+                />
 
-              <Arrows
-                buttonsState={buttonsState}
-                className="game-controll__arrows"
-                mouseDownUpHandler={arrowClickHandler}
-              />
+                <Arrows
+                  buttonsState={buttonsState}
+                  className="game-controll__arrows"
+                  mouseDownUpHandler={arrowClickHandler}
+                />
 
-              <FireControll
-                className="game-controll__fire"
-                buttonPressed={buttonsState.fire}
-                mouseDownUpHandler={arrowClickHandler}
-              />
+                <FireControll
+                  className="game-controll__fire"
+                  buttonPressed={buttonsState.fire}
+                  mouseDownUpHandler={arrowClickHandler}
+                />
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </Suspense>
   )
 }

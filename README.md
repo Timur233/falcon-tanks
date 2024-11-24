@@ -61,3 +61,25 @@ VITE_AUTH_PATHNAMES='/sign-in, /sign-up'
 - `yarn run format` - Автоматическое форматирование
 
 ---
+
+### Для работы с docker compose
+
+1. Скопировать .env.sample в .env
+2. Для просмотра в режиме prod = 
+  .env -> 
+  COMPOSE_FILE=docker-compose.yml ->
+    terminal ->
+      `docker compose build` -> 
+      `docker compose up -d`
+      Развернется проект на порте ${SERVER_PORT}
+3. Для разработки в режиме dev =
+  .env ->
+  COMPOSE_FILE=docker-compose.yml:docker-compose.dev.yml -> # Если windows то docker-compose.yml;docker-compose.dev.yml
+    terminal ->
+      `docker compose build` ->
+      `docker compose up -d`
+      Развернется проект на порте ${SERVER_PORT} - будет работать nodemon с прослушкой файлов сервера и vite с прослушкой hmr
+4. При работе с traefik добавить в /etc/hosts - 127.0.0.1 tanks.docker
+5. Размонтировать docker compose down --remove-orphans
+
+При разворачивании локально установить переменную POSTGRES_HOST - localhost/127.0.0.1, тк при работе в docker необходимо обращаться внутри контейнеров по имени сервисов.

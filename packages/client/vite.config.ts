@@ -1,14 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import path from 'path'
 import dotenv from 'dotenv'
 dotenv.config()
-import path from 'path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
     port: Number(process.env.CLIENT_PORT) || 3000,
     host: '0.0.0.0',
+    hmr: true,
+    open: true,
     watch: {
       usePolling: true,
     },
@@ -24,11 +26,22 @@ export default defineConfig({
   plugins: [react()],
   envDir: '../../',
   build: {
-    outDir: 'dist',
+    outDir: path.join(__dirname, 'dist/client'),
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
         serviceWorker: path.resolve(__dirname, 'public/serviceWorker.js'),
+      },
+    },
+  },
+  ssr: {
+    format: 'cjs',
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler', // or "modern"
+        silenceDeprecations: ['legacy-js-api'],
       },
     },
   },
