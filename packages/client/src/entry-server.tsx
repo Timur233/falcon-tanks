@@ -30,7 +30,9 @@ export default async function renderHtml(req: Request) {
   if (context instanceof Response) {
     throw context
   }
+
   const router = createStaticRouter(dataRoutes, context)
+
   return {
     html: renderToString(
       <React.StrictMode>

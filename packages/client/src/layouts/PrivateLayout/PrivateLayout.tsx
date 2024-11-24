@@ -24,9 +24,11 @@ export function PrivateLayout() {
         .then(data => {
           dispatch(actions.setUser(data))
           window.sessionStorage.setItem('userIsLogged', '1') // 0
+          window.sessionStorage.setItem('userId', data.id.toString())
         })
         .catch(() => {
           window.sessionStorage.setItem('userIsLogged', '0') // 0
+          window.sessionStorage.setItem('userId', '')
 
           toast.error('Необходимо авторизоваться', {
             autoClose: 1500,

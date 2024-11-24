@@ -32,8 +32,6 @@ const slice = createSlice({
   initialState,
   reducers: {
     setTheme(state, action: PayloadAction<string>) {
-      console.log('setTheme', action.payload)
-
       state.themeAlias = action.payload
     },
   },
@@ -101,12 +99,11 @@ export const updateTheme = createAsyncThunk<
   { rejectValue: string }
 >('UserTheme/updateTheme', async (newThemeAlias: string, thunkAPI) => {
   try {
-    const state = thunkAPI.getState() as RootState
-    const user = state.authReducer.user
+    const userId = window.sessionStorage.getItem('userId')
 
-    if (user && user.id) {
+    if (userId) {
       const response = await userThemeApi.setTheme(
-        parseFloat(user.id),
+        parseFloat(userId),
         newThemeAlias
       )
 

@@ -11,7 +11,20 @@ export default function RootLayout() {
   )
 
   useEffect(() => {
-    document.body.classList.add('custom-theme__' + themeAlias)
+    const bodyEl = document?.body
+    const bodyClassname = bodyEl?.getAttribute('class') || ''
+
+    if (typeof bodyClassname === 'string') {
+      const classListString = bodyClassname
+        .replace(/\bcustom-theme__\S*/g, '')
+        .replace(/\btypescript\b/g, '')
+        .trim()
+
+      bodyEl.setAttribute(
+        'class',
+        `${classListString} custom-theme__${themeAlias}`
+      )
+    }
   })
 
   return (
