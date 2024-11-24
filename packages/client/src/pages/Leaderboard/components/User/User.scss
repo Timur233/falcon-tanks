@@ -2,9 +2,11 @@
 
 // Константы для медалей
 $medal-colors: (
-  1: #ffd700, // Gold
-  2: #c0c0c0, // Silver
-  3: #cd7f32  // Bronze
+  1: #ffd700,
+  // Gold
+  2: #c0c0c0,
+  // Silver
+  3: #cd7f32 // Bronze,
 );
 
 $c_item-border-main-color: #9d9b9b;
@@ -15,14 +17,22 @@ $c_item-border-secondary-color: #474747;
     &__item-wrapper {
       position: relative;
       border-radius: 16px;
-      background: linear-gradient(90deg, $c_item-border-main-color 52.5%, $c_item-border-secondary-color 100%);
+      background: linear-gradient(
+        90deg,
+        $c_item-border-main-color 52.5%,
+        $c_item-border-secondary-color 100%
+      );
       margin: 5px 0;
       padding: 2px;
 
       // Медальные рамки
       @each $rank, $color in $medal-colors {
         &__rank-#{$rank} {
-          background: linear-gradient(90deg, $color 52.5%, darken($color, 20%) 100%);
+          background: linear-gradient(
+            90deg,
+            $color 52.5%,
+            darken($color, 20%) 100%
+          );
         }
       }
     }
