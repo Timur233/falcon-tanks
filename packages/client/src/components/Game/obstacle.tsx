@@ -85,7 +85,8 @@ export const handleBulletObstacleCollisions = (
     gameMap.current.obstacles.forEach(obstacle => {
       if (detectCollision(bullet, obstacle)) {
         // Логика для уничтожения пули, если она попала в препятствие
-        bullets.splice(bullets.indexOf(bullet), 1) // Пример, удаляем пулю, если попала в препятствие
+
+        bullets = bullets.filter(i => i !== bullet)
         createBangEffect(
           bullet.x + bullet.width / 2,
           bullet.y + bullet.height / 2
@@ -94,6 +95,8 @@ export const handleBulletObstacleCollisions = (
       }
     })
   })
+
+  return bullets
 }
 
 const killObstacle = (

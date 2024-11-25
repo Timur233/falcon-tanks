@@ -88,7 +88,10 @@ export const gameLoop = (
   handleEnemyShooting(gameMap, bulletsRef)
 
   // Обработка столкновений с препятствиями
-  handleBulletObstacleCollisions(bulletsRef.current, gameMap)
+  bulletsRef.current = handleBulletObstacleCollisions(
+    bulletsRef.current,
+    gameMap
+  )
 
   initEffects(effectsRef)
 
