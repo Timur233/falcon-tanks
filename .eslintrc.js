@@ -26,9 +26,10 @@ module.exports = {
     'quotes': ['error', 'single']
   },
   ignorePatterns: [
-    "packages/client/dist",
-    "packages/server/dist",
-    "packages/server/db.js",
-    "packages/server/index.js"
+    'packages/client/dist',
+    'packages/server/dist',
+    'packages/server/db.js',
+    'packages/server/index.js',
+    'packages/server/ts-dist/*',
   ]
 }

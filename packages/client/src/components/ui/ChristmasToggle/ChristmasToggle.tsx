@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './ChristmasToggle.scss'
 
 interface IosToggleProps {
@@ -10,13 +10,17 @@ export const ChristmasToggle: React.FC<IosToggleProps> = ({
   checked = false,
   onChange,
 }) => {
-  const [isChecked, setIsChecked] = useState(checked)
+  const [isChecked, setIsChecked] = useState(false)
 
   const handleToggle = () => {
     const newChecked = !isChecked
     setIsChecked(newChecked)
     if (onChange) onChange(newChecked)
   }
+
+  useEffect(() => {
+    setIsChecked(checked)
+  }, [checked])
 
   return (
     <div

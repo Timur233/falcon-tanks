@@ -1,13 +1,15 @@
 {
   "compilerOptions": {
     "outDir": "ts-dist",
+    "rootDir": "./",
     "composite": true,
     "target": "es2019",
     "module": "commonjs",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "lib": ["es2019", "DOM"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "types": ["node"]
   },
   "include": [
     "index.ts",
@@ -20,5 +22,6 @@
     "routes/**/*.ts",
     "utils/**/*.ts",
     "types/**/*.ts"
-  ]
+  ],
+  "exclude": ["ts-dist"]
 }
