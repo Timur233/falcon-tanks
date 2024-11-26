@@ -1,15 +1,21 @@
 export interface Comment {
   id: number
-  author: string
-  date: string
-  message: string
-  avatarUrl?: string
+  text: string
+  topicId: number
+  parentId?: number | null
+  author: string | null | JSON
+  createdAt: string
+  updatedAt: string
 }
 
 export interface Thread {
   id: number
+  author: JSON
   title: string
+  message: string
   views: number
   commentsCount: number
   comments?: Comment[]
+  createdAt: Date
+  updatedAt: Date
 }

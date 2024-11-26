@@ -1,7 +1,7 @@
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import dotenv from 'dotenv'
-import type { RequestHandler } from 'express'
+// import type { RequestHandler } from 'express'
 import express from 'express'
 import fs from 'fs'
 import path from 'path'
@@ -60,16 +60,17 @@ async function createServer() {
     console.error('Unable to connect to the database:', error)
   }
 
-  const isUserLoggedInMiddleware: RequestHandler = (req, res, next) => {
-    if (req.cookies.authCookie) {
-      next()
-    } else {
-      res.status(403).json({ message: 'Forbidden' })
-    }
-  }
+  // TODO: пофиксить в 9м спринте
+  // const isUserLoggedInMiddleware: RequestHandler = (req, res, next) => {
+  //   if (req.cookies.authCookie) {
+  //     next()
+  //   } else {
+  //     res.status(403).json({ message: 'Forbidden' })
+  //   }
+  // }
 
-  app.use('/api/topics/', isUserLoggedInMiddleware, topicRoutes)
-  app.use('/api/comments/', isUserLoggedInMiddleware, commentRoutes)
+  app.use('/api/topics/', topicRoutes)
+  app.use('/api/comments/', commentRoutes)
 
   app.post('/api/topics/:topicId/reactions', (req, res) =>
     ReactionController.toggleReaction(req, res)

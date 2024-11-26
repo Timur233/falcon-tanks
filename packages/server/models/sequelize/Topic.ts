@@ -1,10 +1,14 @@
+import { Comment } from './Comment'
 import * as Sequelize from 'sequelize'
 import { sequelize } from '../../instances/sequelize'
 
-export type TopicAttributes = {
+export interface TopicAttributes {
   id: number
   title: string
-  message: string
+  author?: JSON
+  createdAt?: Date
+  updatedAt?: Date
+  comments?: Comment[]
 }
 
 export type TopicCreationAttributes = Sequelize.Optional<TopicAttributes, 'id'>
@@ -15,7 +19,10 @@ export class Topic extends Sequelize.Model<
 > {
   declare id: number
   declare title: string
-  declare message: string
+  declare author: JSON
+  declare comments: Comment[]
+  declare createdAt: Date
+  declare updatedAt: Date
 }
 
 Topic.init(
@@ -29,10 +36,14 @@ Topic.init(
       type: Sequelize.STRING,
       allowNull: false,
     },
-    message: {
-      type: Sequelize.STRING,
-      allowNull: false,
+    author: {
+      type: Sequelize.JSONB,
+      allowNull: true,
     },
   },
-  { sequelize }
+  {
+    sequelize,
+    tableName: 'topics',
+    modelName: 'Topic',
+  }
 )

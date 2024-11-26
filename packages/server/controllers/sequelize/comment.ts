@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { Comment } from '../../models/sequelize/Comment'
 import { Reaction } from '../../models/sequelize/Reaction'
-import { buildCommentTree } from '../../utils/buildComponentTree'
 
 export const getCommentsByTopicId = async (req: Request, res: Response) => {
   const { topicId } = req.params
@@ -9,7 +8,7 @@ export const getCommentsByTopicId = async (req: Request, res: Response) => {
   try {
     const comments = await Comment.findAll({
       where: { topicId },
-      order: [['id', 'ASC']],
+      order: [['createdAt', 'ASC']],
       include: [
         {
           model: Reaction,
@@ -18,25 +17,31 @@ export const getCommentsByTopicId = async (req: Request, res: Response) => {
       ],
     })
 
-    const commentsTree = buildCommentTree(comments)
-
-    res.status(200).json(commentsTree)
+    res.status(200).json({
+      comments,
+      total: comments.length,
+    })
   } catch (e) {
+    console.error('Error fetching comments:', e)
     res.status(500).json(e)
   }
 }
 
 export const createComment = async (req: Request, res: Response) => {
-  const { text } = req.body
-  const { topicId, commentId } = req.params
+  const { topicId } = req.params
+  const { author, text, parentCommentId } = req.body
+
   try {
     const newComment = await Comment.create({
       text,
-      topicId: parseInt(topicId),
-      parentCommentId: commentId ? parseInt(commentId) : null,
+      topicId: Number(topicId),
+      parentCommentId: parentCommentId ? Number(parentCommentId) : null,
+      author,
     })
+
     res.status(201).json(newComment)
   } catch (e) {
+    console.error('Error creating comment:', e)
     res.status(500).json(e)
   }
 }

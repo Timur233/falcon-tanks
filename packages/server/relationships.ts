@@ -12,11 +12,11 @@ Comment.belongsTo(Topic, {
 })
 
 Comment.hasMany(Comment, {
-  foreignKey: 'parentId',
+  foreignKey: 'parentCommentId',
   as: 'replies',
 })
 Comment.belongsTo(Comment, {
-  foreignKey: 'parentId',
+  foreignKey: 'parentCommentId',
   as: 'parent',
 })
 
