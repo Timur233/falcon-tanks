@@ -11,6 +11,7 @@ export type CommentAttributes = {
   text: string
   topicId: number | null
   parentCommentId: number | null
+  author: JSON | null
 }
 
 export class Comment extends Sequelize.Model<
@@ -21,6 +22,7 @@ export class Comment extends Sequelize.Model<
   declare text: string
   declare topicId: number | null
   declare parentCommentId: number | null
+  declare author: JSON | null
 }
 
 Comment.init(
@@ -31,17 +33,28 @@ Comment.init(
       primaryKey: true,
     },
     text: {
-      type: Sequelize.STRING,
+      type: Sequelize.TEXT,
       allowNull: false,
     },
     topicId: {
       type: Sequelize.INTEGER,
-      allowNull: true,
+      references: {
+        model: 'topics',
+        key: 'id',
+      },
     },
     parentCommentId: {
       type: Sequelize.INTEGER,
       allowNull: true,
     },
+    author: {
+      type: Sequelize.JSONB,
+      allowNull: true,
+    },
   },
-  { sequelize }
+  {
+    sequelize,
+    tableName: 'comments',
+    modelName: 'Comment',
+  }
 )

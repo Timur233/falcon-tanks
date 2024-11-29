@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import './BreadCrumbs.scss'
 
 type BreadCrumb = {
-  title: string
+  title: string | undefined
   href: string
 }
 

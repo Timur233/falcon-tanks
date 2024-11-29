@@ -6,16 +6,20 @@ import { Input } from '@/components/ui/Input/Input'
 import { PageTitle } from '@/components/ui/PageTitle/PageTitle'
 import './CreateThread.scss'
 import { File } from '@/components/ui/File/File'
+import { useSelector } from 'react-redux'
+import { RootState } from '@/store'
 
 export const CreateThread = () => {
   const [title, setTitle] = useState('')
   const [message, setMessage] = useState('')
   const [attachedFile, setAttachedFile] = useState<File | null>(null)
+  const user = useSelector((state: RootState) => state.authReducer.user)
   const navigate = useNavigate()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    await createThread({ title, message })
+    const author = user
+    await createThread({ title, message, author })
     navigate('/forum')
   }
 
