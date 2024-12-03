@@ -37,8 +37,8 @@ Game - основной класс, здесь запускается игров
 |      **handleEnemyShooting**       | Обработчик стрельбы противника                          |                                                       
 |        **HandlePlayerHit**         | Обработчик проверки остатка жизней игрока               |                                                       
 |          **initEffects**           | Инициализация эффектов                                  |
-|    **initializeCampanyEnemies**    | Инициализация вражеских танков в компании               |
-|  **initializeCompanyMapObstacle**  | Инициализация препятствий в компании                    |
+|    **initializeCampanyEnemies**    | Инициализация вражеских танков в кампании               |
+|  **initializeCompanyMapObstacle**  | Инициализация препятствий в кампании                    |
 |    **initializeRandomEnemies**     | Инициализация случайно расставленных вражеских танков   |
 |    **initializeRandomObstacle**    | Инициализация случайно расставленных препятствий        |
 |           **killEnemy**            | Удаляет вражеский танк                                  |
