@@ -95,7 +95,7 @@ export const SignIn = () => {
                 <div className={'login-page__error-message'}>{error}</div>
               )}
 
-              <Button text={'Войти'} useFixWidth={true} />
+              <Button text={'Войти'} useFixWidth={true} type={'submit'} />
             </Form>
             <Button
               className={'link-button'}

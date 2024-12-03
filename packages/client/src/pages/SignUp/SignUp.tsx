@@ -129,7 +129,7 @@ export const SignUp = () => {
               {error && (
                 <div className={'login-page__error-message'}>{error}</div>
               )}
-              <Button text={'Создать аккаунт'} useFixWidth />
+              <Button text={'Создать аккаунт'} useFixWidth type="submit" />
             </Form>
 
             <Button
