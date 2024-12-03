@@ -5,7 +5,7 @@ import { NavigateFunction } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 const BASE_URL = import.meta.env.VITE_AUTH_URL
-const REDIRECT_URI = 'http://localhost:3000'
+const REDIRECT_URI = import.meta.env.VITE_OAUTH_REDIRECTURL || 'http://localhost:3000'
 const YANDEX_AUTH_LINK = 'https://oauth.yandex.ru/authorize'
 
 export class YandexOAuth {
