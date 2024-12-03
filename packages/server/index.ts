@@ -20,6 +20,7 @@ import topicRoutes from './routes/topic'
 dotenv.config()
 
 const port = process.env.SERVER_PORT || 3000
+const host = process.env.SERVER_HOST || 'http://localhost'
 const clientPath = path.join(__dirname, '../../client')
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -27,7 +28,7 @@ async function createServer() {
   const app = express()
   app.use(
     cors({
-      origin: `http://localhost:${port}`,
+      origin: `${host}:${port}`,
       credentials: true,
     })
   )
