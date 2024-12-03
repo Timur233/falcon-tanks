@@ -15,9 +15,6 @@ services:
       - "24678:24678"
     networks:
       - bridge
-    volumes:
-      - .:/usr/src/app
-      # - /usr/src/app/node_modules
     working_dir: /usr/src/app
     environment:
       POSTGRES_PORT: ${POSTGRES_PORT}
