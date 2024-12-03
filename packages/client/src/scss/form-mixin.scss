@@ -81,5 +81,8 @@
   &__error-message {
     color: $error-color;
     text-wrap: wrap;
+    margin-bottom: 16px;
+
+    text-align: center;
   }
 }

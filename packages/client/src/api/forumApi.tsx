@@ -22,10 +22,7 @@ export const createThread = async (data: {
   message: string
   author: JSON | UserType | null
 }): Promise<Thread> => {
-  const response = await localApi.post(
-    `/api/topics?author=${data.author}`,
-    data
-  )
+  const response = await localApi.post('/api/topics', data)
   return response.data
 }
 

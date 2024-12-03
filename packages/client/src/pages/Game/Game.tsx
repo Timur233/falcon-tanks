@@ -234,7 +234,7 @@ export const Game = () => {
                   />
                   <Button
                     className={'custom-button_blue'}
-                    text={'Начать компанию'}
+                    text={'Начать кампанию'}
                     onClick={startCompanyHandler}
                     useFixWidth
                   />
@@ -251,7 +251,7 @@ export const Game = () => {
                   />
                   <Button
                     className={'custom-button_blue'}
-                    text={'Начать компанию'}
+                    text={'Начать кампанию'}
                     onClick={startCompanyHandler}
                     useFixWidth
                   />
@@ -268,7 +268,7 @@ export const Game = () => {
                   />
                   <Button
                     className={'custom-button_blue'}
-                    text={'Начать компанию'}
+                    text={'Начать кампанию'}
                     onClick={startCompanyHandler}
                     useFixWidth
                   />

@@ -48,4 +48,8 @@
       align-self: flex-start;
     }
   }
+
+  &__error-message.error-message {
+    text-align: left;
+  }
 }

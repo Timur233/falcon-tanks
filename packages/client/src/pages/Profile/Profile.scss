@@ -67,6 +67,8 @@
         justify-content: flex-start;
         margin-bottom: 16px;
         overflow: hidden;
+        flex-flow: wrap;
+        align-content: center;
 
         label {
           flex: 0 0 auto;
@@ -111,6 +113,12 @@
       &__save-button {
         margin-bottom: 16px;
         font-size: 16px;
+      }
+
+      &__save-button {
+        margin: 0 auto;
+        margin-bottom: -28px;
+        margin-top: 32px;
       }
 
       &__change-password {
@@ -185,5 +193,12 @@
         }
       }
     }
+  }
+}
+
+.profile-page__profile-container__profile-form__change-password {
+  .save {
+    margin-top: 30px;
+    margin-bottom: -50px;
   }
 }
