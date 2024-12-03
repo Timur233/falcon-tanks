@@ -1,5 +1,5 @@
 import './SignUp.scss'
-import React, { useState } from 'react'
+import React, { useState, Fragment } from 'react'
 import { signUpUser } from '@/store/reducers/auth-reducer'
 import { useAppDispatch } from '@/store'
 import { Link, useNavigate } from 'react-router-dom'
@@ -12,6 +12,10 @@ import { YandexOAuth } from '@/services/o-auth/YandexOAuth'
 import { Icon } from '@/components/ui/Icon/Icon'
 import { OauthLinks } from '@/components/ui/OauthLinks/OauthLinks'
 
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import fields from '@/form/fields'
+
 type UserType = {
   first_name: string | null
   second_name: string | null
@@ -19,15 +23,6 @@ type UserType = {
   password: string | null
   email: string | null
   phone: string | null
-}
-
-const fieldLabels: { [key: string]: string } = {
-  first_name: 'Имя',
-  second_name: 'Фамилия',
-  login: 'Никнейм',
-  password: 'Пароль',
-  email: 'Email',
-  phone: 'Телефон',
 }
 
 export const SignUp = () => {
@@ -51,16 +46,38 @@ export const SignUp = () => {
       }))
     }
 
-  const handleSubmit = () => {
-    dispatch(signUpUser({ form: formData }))
-      .unwrap()
-      .then(() => {
-        navigate('/game')
-      })
-      .catch(error => {
-        setError('Ошибка! Регистрация не выполнена.')
-      })
-  }
+  const formik = useFormik({
+    initialValues: formData,
+    enableReinitialize: true,
+    validateOnBlur: true,
+    validateOnChange: true,
+    validationSchema: Yup.object().shape(
+      fields.reduce(
+        (
+          acc: { [x: string]: Yup.Maybe<Yup.AnyObject> } | any = {},
+          field: { id: string; rules: Yup.Maybe<Yup.AnyObject> }
+        ) => {
+          if (field.rules !== undefined) acc[field.id] = field.rules
+          return acc
+        },
+        {}
+      )
+    ),
+    onSubmit: values => {
+      dispatch(signUpUser({ form: formData }))
+        .unwrap()
+        .then(() => {
+          navigate('/game')
+        })
+        .catch(error => {
+          if (error.data?.reason) {
+            setError(error.data?.reason)
+          } else {
+            setError('Ошибка! Регистрация не выполнена.')
+          }
+        })
+    },
+  })
 
   return (
     <div className="registration-page">
@@ -79,28 +96,42 @@ export const SignUp = () => {
               className={'login-page__title'}
               text={'Регистрация'}
             />
-            <Form className={'registration-page__registration-form'}>
-              {Object.keys(fieldLabels).map(field => (
-                <>
-                  <Input
-                    value={formData[field as keyof UserType] || ''}
-                    className={field}
-                    name={field}
-                    type={field === 'password' ? 'password' : 'text'}
-                    placeholder={fieldLabels[field]}
-                    onChange={handleInputChange(field as keyof UserType)}
-                  />
-                </>
-              ))}
+            <Form
+              className={'registration-page__registration-form'}
+              onSubmit={formik.handleSubmit}>
+              {fields.map(
+                (field: {
+                  id: string
+                  label: string
+                  defaultValue: string | number
+                  type: string
+                  rules: Yup.Maybe<Yup.AnyObject>
+                }) => (
+                  <Fragment key={field.id}>
+                    <Input
+                      value={formData[field.id as keyof UserType] || ''}
+                      className={field.id}
+                      name={field.id}
+                      type={field.type}
+                      placeholder={field.label}
+                      onChange={handleInputChange(field.id as keyof UserType)}
+                      onFocus={() => formik.setTouched({ [field?.id]: true })}
+                      onBlur={() => formik.setTouched({ [field?.id]: true })}
+                    />
+                    {formik?.touched[field.id] && !!formik.errors[field.id] ? (
+                      <div className={'error-message'}>
+                        {formik.errors[field.id]}
+                      </div>
+                    ) : null}
+                  </Fragment>
+                )
+              )}
               {error && (
                 <div className={'login-page__error-message'}>{error}</div>
               )}
+              <Button text={'Создать аккаунт'} useFixWidth />
             </Form>
-            <Button
-              text={'Создать аккаунт'}
-              useFixWidth
-              onClick={handleSubmit}
-            />
+
             <Button
               className={'link-button'}
               text={'Войти'}

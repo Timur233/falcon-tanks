@@ -8,7 +8,8 @@ import { useNavigate } from 'react-router-dom'
 import { changeUserPassword } from '@/store/reducers/user-reducer'
 import { useAppDispatch } from '@/store'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
-
+import * as Yup from 'yup'
+import { useFormik } from 'formik'
 export const ChangePassword = () => {
   const dispatch = useAppDispatch()
   const [showSaveMessage, setShowSaveMessage] = useState(false)
@@ -28,25 +29,8 @@ export const ChangePassword = () => {
       }))
     }
 
-  // TODO: перенести в компонент валдиации (добаваленно сюда времено)
-  const validatePassword = () => {
-    if (userData.new_password !== userData.new_password_confirm) {
-      setError('Пароли не совпадают')
-      return false
-    }
-    return true
-  }
-
-  const saveData = async (
-    event:
-      | React.FormEvent<HTMLFormElement>
-      | React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault()
+  const saveData = async () => {
     setError(null)
-    if (!validatePassword()) {
-      return
-    }
 
     try {
       await dispatch(
@@ -71,6 +55,30 @@ export const ChangePassword = () => {
     }
   }
 
+  const ChangePasswordSchema = Yup.object().shape({
+    old_password: Yup.string().required('Обязательно для заполнения'),
+    new_password: Yup.string()
+      .min(8, 'Минимум 8 символов')
+      .max(40, 'Максимум 40 символов')
+      .matches(/[0-9]/g, 'Необходима одна цифра')
+      .matches(/[A-ZА-Я]/g, 'Необходим один заглавный символ')
+      .required('Обязательно для заполнения'),
+    new_password_confirm: Yup.string()
+      .min(8, 'Минимум 8 символов')
+      .max(40, 'Максимум 40 символов')
+      .matches(/[0-9]/g, 'Необходима одна цифра')
+      .matches(/[A-ZА-Я]/g, 'Необходим один заглавный символ')
+      .required('Обязательно для заполнения')
+      .oneOf([Yup.ref('new_password')], 'Введенные пароли не совпадают'),
+  })
+
+  const formik = useFormik({
+    initialValues: userData,
+    enableReinitialize: true,
+    validationSchema: ChangePasswordSchema,
+    onSubmit: () => saveData(),
+  })
+
   return (
     <div className={'profile-page'}>
       <div className="profile-page__profile-container">
@@ -81,7 +89,8 @@ export const ChangePassword = () => {
         <Form
           className={
             'profile-page__profile-container__profile-form__change-password'
-          }>
+          }
+          onSubmit={formik.handleSubmit}>
           <Input
             className={'old_password'}
             name={'oldPassword'}
@@ -89,6 +98,9 @@ export const ChangePassword = () => {
             placeholder={'Текущий пароль'}
             onChange={handleInputChange('old_password')}
           />
+          {formik?.touched.old_password && !!formik.errors.old_password ? (
+            <div className={'error-message'}>{formik.errors.old_password}</div>
+          ) : null}
           <Input
             className={'new_password'}
             name={'newPassword'}
@@ -96,6 +108,9 @@ export const ChangePassword = () => {
             placeholder={'Новый пароль'}
             onChange={handleInputChange('new_password')}
           />
+          {formik?.touched.new_password && !!formik.errors.new_password ? (
+            <div className={'error-message'}>{formik.errors.new_password}</div>
+          ) : null}
           <Input
             className={'new_password_confirm'}
             name={'new_password_confirm'}
@@ -103,18 +118,26 @@ export const ChangePassword = () => {
             placeholder={'Подтвердите пароль'}
             onChange={handleInputChange('new_password_confirm')}
           />
+          {formik?.touched.new_password_confirm &&
+          !!formik.errors.new_password_confirm ? (
+            <div className={'error-message'}>
+              {formik.errors.new_password_confirm}
+            </div>
+          ) : null}
           {error && (
             <div className={'profile-page__profile-container__error-message'}>
               {error}
             </div>
           )}
+          <Button
+            text={'Сохранить'}
+            className={'save'}
+            useFixWidth
+            type={'submit'}
+            // onClick={saveData}
+          />
         </Form>
-        <Button
-          text={'Сохранить'}
-          className={'save'}
-          useFixWidth
-          onClick={saveData}
-        />
+
         <Button
           text={'Назад'}
           className={'link-button back'}

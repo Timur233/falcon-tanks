@@ -12,6 +12,14 @@ import { YandexOAuth } from '@/services/o-auth/YandexOAuth'
 import { Icon } from '@/components/ui/Icon/Icon'
 import { OauthLinks } from '@/components/ui/OauthLinks/OauthLinks'
 
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+
+type SignInType = {
+  login: string
+  password: string
+}
+
 export const SignIn = () => {
   const [userData, setUserData] = useState({ login: '', password: '' })
   const [error, setError] = useState<string | null>(null)
@@ -26,16 +34,26 @@ export const SignIn = () => {
       }))
     }
 
-  const handleSubmit = () => {
-    dispatch(signInUser({ form: userData }))
-      .unwrap()
-      .then(() => {
-        navigate('/game')
-      })
-      .catch((_error?: any, _code?: any) => {
-        setError('Ошибка входа в аккаунт!')
-      })
-  }
+  const SignInSchema = Yup.object().shape({
+    login: Yup.string().required('Обязательно для заполнения'),
+    password: Yup.string().required('Обязательно для заполнения'),
+  })
+
+  const formik = useFormik({
+    initialValues: userData,
+    enableReinitialize: true,
+    validationSchema: SignInSchema,
+    onSubmit: values => {
+      dispatch(signInUser({ form: userData }))
+        .unwrap()
+        .then(() => {
+          navigate('/game')
+        })
+        .catch((_error?: any, _code?: any) => {
+          setError('Ошибка входа в аккаунт!')
+        })
+    },
+  })
 
   return (
     <div className={'login-page'}>
@@ -51,13 +69,18 @@ export const SignIn = () => {
         <div className={'row'}>
           <div className={'column col-6'}>
             <CustomPageTitle className={'login-page__title'} text={'Вход'} />
-            <Form className={'login-page__login-form'}>
+            <Form
+              className={'login-page__login-form'}
+              onSubmit={formik.handleSubmit}>
               <Input
                 className={'login'}
                 name={'login'}
                 placeholder={'Логин'}
                 onChange={handleInputChange('login')}
               />
+              {formik.touched.login && !!formik.errors.login ? (
+                <div className={'error-message'}>{formik.errors.login}</div>
+              ) : null}
               <Input
                 className={'password'}
                 name={'password'}
@@ -65,11 +88,15 @@ export const SignIn = () => {
                 placeholder={'Пароль'}
                 onChange={handleInputChange('password')}
               />
+              {formik.touched.password && !!formik.errors.password ? (
+                <div className={'error-message'}>{formik.errors.password}</div>
+              ) : null}
               {error && (
                 <div className={'login-page__error-message'}>{error}</div>
               )}
+
+              <Button text={'Войти'} useFixWidth={true} />
             </Form>
-            <Button text={'Войти'} useFixWidth={true} onClick={handleSubmit} />
             <Button
               className={'link-button'}
               text={'Регистрация'}

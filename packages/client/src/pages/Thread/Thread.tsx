@@ -21,6 +21,8 @@ import { Reaction } from '@/components/common/Reaction/Reaction'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/store'
 import { Loader } from '@/components/ui/Loader/Loader'
+import * as Yup from 'yup'
+import { useFormik } from 'formik'
 
 export const Thread = () => {
   const { id } = useParams<{ id: string }>()
@@ -81,8 +83,21 @@ export const Thread = () => {
     loadComments()
   }, [id, currentPage])
 
-  const handleSubmitComment = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const AnswerSchema = Yup.object().shape({
+    commentText: Yup.string().required('Обязательно для заполнения'),
+  })
+
+  const formik = useFormik({
+    initialValues: {
+      commentText,
+    },
+    enableReinitialize: true,
+    validationSchema: AnswerSchema,
+    onSubmit: () => handleSubmitComment(),
+  })
+
+  const handleSubmitComment = async () => {
+    // e.preventDefault()
     if (!id || !commentText.trim()) return
 
     try {
@@ -144,11 +159,7 @@ export const Thread = () => {
       <div className="thread-page__info thread-info">
         <div className="thread-info__label">
           <Icon id="profile-icon" width={10} height={12}></Icon>
-          <span>
-            {author.login
-              ? author.login
-              : 'Автор неизвестен' || 'Автор неизвестен'}
-          </span>
+          <span>{author.login ? author.login : 'Автор неизвестен'}</span>
         </div>
         <div className="thread-info__label">
           <Icon id="time-icon" width={13} height={12}></Icon>
@@ -187,7 +198,9 @@ export const Thread = () => {
                     {new Date(comment.createdAt).toLocaleTimeString()}
                   </span>
                   <div className="author__controlls controlls">
-                    <Reaction topicId={comment.id} userId={user.id} />
+                    {user?.id ? (
+                      <Reaction topicId={comment.id} userId={user.id} />
+                    ) : null}
                     <button
                       className="controlls__item"
                       onClick={() => handleReply(comment.id)}>
@@ -210,7 +223,7 @@ export const Thread = () => {
         onPageChange={handlePageChange}
       />
       <div className="thread-page__answer answer">
-        <form className="answer__form form" onSubmit={handleSubmitComment}>
+        <form className="answer__form form" onSubmit={formik.handleSubmit}>
           <label className="form__label" htmlFor="answer-message">
             <span>
               {replyToComment
@@ -232,13 +245,19 @@ export const Thread = () => {
             id="answer-message"
             placeholder="Сообщение"
             value={commentText}
-            onChange={e => setCommentText(e.target.value)}></textarea>
+            onChange={e => setCommentText(e.target.value)}
+          />
+          {formik?.touched.commentText && !!formik.errors.commentText ? (
+            <div className={'error-message'}>{formik.errors.commentText}</div>
+          ) : null}
+
           <File className="form__file" onChange={handleFileAttach}></File>
           <Button
             text="Отправить"
             className="form__submit"
             useFixWidth
-            disabled={!commentText.trim()}
+            type="submit"
+            // disabled={!commentText.trim()}
           />
         </form>
       </div>

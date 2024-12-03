@@ -1,5 +1,5 @@
 import './Profile.scss'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, Fragment } from 'react'
 import { useSelector } from 'react-redux'
 import { Form } from '@/components/ui/Form/Form'
 import { Input } from '@/components/ui/Input/Input'
@@ -15,6 +15,9 @@ import {
 } from '@/store/reducers/auth-reducer'
 import { RootState, useAppDispatch } from '@/store'
 import { CustomPageTitle } from '@/components/ui/CustomPageTitle/CustomPageTitle'
+import fields from '@/form/fields'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 
 const fieldLabels: { [key: string]: string } = {
   first_name: 'Имя',
@@ -33,7 +36,16 @@ export const Profile = () => {
   const user = useSelector<RootState, UserType | null>(
     state => state.authReducer.user
   )
-  const [formData, setFormData] = useState<UserType | null>(null)
+  const [formData, setFormData] = useState<UserType>({
+    avatar: '',
+    display_name: '',
+    email: '',
+    first_name: '',
+    id: '',
+    login: '',
+    phone: '',
+    second_name: '',
+  })
   const [isEditable, setIsEditable] = useState(false)
   const [showSaveMessage, setShowSaveMessage] = useState(false)
   const [changedFields, setChangedFields] = useState<{
@@ -176,6 +188,30 @@ export const Profile = () => {
     })
   }
 
+  const formik = useFormik({
+    initialValues: formData,
+    enableReinitialize: true,
+    validateOnBlur: true,
+    validateOnChange: true,
+    validationSchema: Yup.object().shape(
+      fields
+        .filter(field => field.id !== 'password')
+        .reduce(
+          (
+            acc: { [x: string]: Yup.Maybe<Yup.AnyObject> } | any = {},
+            field: { id: string; rules: Yup.Maybe<Yup.AnyObject> }
+          ) => {
+            if (field.rules !== undefined) acc[field.id] = field.rules
+            return acc
+          },
+          {}
+        )
+    ),
+    onSubmit: () => {
+      handleSaveData()
+    },
+  })
+
   // TODO: заменить на компонент прелоадера из другого реквеста
   if (isLoading) {
     return (
@@ -213,22 +249,35 @@ export const Profile = () => {
           src={formData.avatar ? `${AVATAR_SRC}/${formData.avatar}` : ''}
           onChange={handleAvatarChange}
         />
-        <Form className={'profile-page__profile-container__profile-form'}>
-          {Object.keys(fieldLabels).map(field => (
-            <div key={field} className="form-group">
-              <label htmlFor={field}>{fieldLabels[field]}</label>
-              <div className="dotted-line"></div>
-              <Input
-                value={formData[field as keyof UserType] || ''}
-                className={`${field} dynamic-input ${
-                  changedFields[field] ? 'changed' : ''
-                }`}
-                disabled={!isEditable}
-                onChange={handleInputChange(field as keyof UserType)}
-                style={{ width: `${inputWidths[field] || 50}px` }}
-              />
-            </div>
-          ))}
+        <Form
+          className={'profile-page__profile-container__profile-form'}
+          onSubmit={formik.handleSubmit}>
+          {fields
+            .filter(field => field.id !== 'password')
+            .map(field => (
+              <Fragment key={field.id}>
+                <div className="form-group">
+                  <label htmlFor={field.id}>{field.label}</label>
+                  <div className="dotted-line"></div>
+                  <Input
+                    value={formData[field.id as keyof UserType] || ''}
+                    className={`${field} dynamic-input ${
+                      changedFields[field.id] ? 'changed' : ''
+                    }`}
+                    disabled={!isEditable}
+                    onChange={handleInputChange(field.id as keyof UserType)}
+                    onFocus={() => formik.setTouched({ [field?.id]: true })}
+                    onBlur={() => formik.setTouched({ [field?.id]: true })}
+                    style={{ width: `${inputWidths[field.id] || 50}px` }}
+                  />
+                </div>
+                {formik?.touched[field.id] && !!formik.errors[field.id] ? (
+                  <div className={'error-message'}>
+                    {formik.errors[field.id]}
+                  </div>
+                ) : null}
+              </Fragment>
+            ))}
           {showSaveMessage && (
             <div className={'profile-page__profile-container__success-message'}>
               {(location.state as LocationState)?.successMessage ||
@@ -240,6 +289,17 @@ export const Profile = () => {
               {error}
             </div>
           )}
+          {isEditable ? (
+            <Button
+              className={
+                'profile-page__profile-container__profile-form__save-button'
+              }
+              text={'Сохранить'}
+              useFixWidth
+              type={'submit'}
+              // onClick={handleSaveData}
+            />
+          ) : null}
         </Form>
         <Button
           className={`profile-page__profile-container__profile-form__edit-button ${
@@ -249,16 +309,7 @@ export const Profile = () => {
           useFixWidth
           onClick={toggleSettings}
         />
-        {isEditable ? (
-          <Button
-            className={
-              'profile-page__profile-container__profile-form__save-button'
-            }
-            text={'Сохранить'}
-            useFixWidth
-            onClick={handleSaveData}
-          />
-        ) : (
+        {isEditable ? null : (
           <Button
             className={
               'custom-button_blue profile-page__profile-container__profile-form__edit-button'
