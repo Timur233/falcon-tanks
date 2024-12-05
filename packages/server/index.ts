@@ -19,8 +19,11 @@ import topicRoutes from './routes/topic'
 
 dotenv.config()
 
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : ['http://localhost', 'http://localhost:3001']
+
 const port = process.env.SERVER_PORT || 3000
-const host = process.env.SERVER_HOST || 'http://localhost'
 const clientPath = path.join(__dirname, '../../client')
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -28,7 +31,13 @@ async function createServer() {
   const app = express()
   app.use(
     cors({
-      origin: `${host}:${port}`,
+      origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+          callback(null, true)
+        } else {
+          callback(new Error('Not allowed by CORS'))
+        }
+      },
       credentials: true,
     })
   )

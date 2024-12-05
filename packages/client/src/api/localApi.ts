@@ -1,15 +1,11 @@
 import axios from 'axios'
-import dotenv from 'dotenv'
 
-dotenv.config()
+const host = import.meta.env.VITE_SERVER_HOST || 'http://localhost:3001'
 
-const port = process.env.SERVER_PORT || 3000
-const host = process.env.SERVER_HOST || 'http://localhost'
-
-console.log(`Local API: ${host}:${port}`)
+console.log(`Local API: ${host}`)
 
 const localApi = axios.create({
-  baseURL: `${host}:${port}`,
+  baseURL: `${host}`,
   headers: {
     'Content-Type': 'application/json',
   },
