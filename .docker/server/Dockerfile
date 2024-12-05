@@ -1,18 +1,21 @@
 FROM --platform=linux/amd64 node:20 AS base
-
-COPY . /usr/src/app
 WORKDIR /usr/src/app
+COPY . .
+RUN yes | yarn install
 
-RUN yes | yarn bootstrap
-
-EXPOSE $SERVER_PORT
-
-FROM base AS dev
-CMD [ "npm", "run", "dev" ]
-# CMD /bin/bash -c "tail -f /dev/null"
-
-FROM base AS prod
-
+FROM base AS build
 RUN yarn build
 
-CMD [ "npm", "run", "preview" ]
+FROM base AS dev
+CMD [ "yarn", "run", "dev" ]
+
+FROM --platform=linux/amd64 node:20 AS prod
+ENV NODE_ENV=production
+WORKDIR /usr/src/app
+COPY --from=build /usr/src/app/packages/server/ts-dist ./server/ts-dist
+COPY --from=build /usr/src/app/packages/client/dist ./client/dist
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY .env ./.env
+# EXPOSE $SERVER_PORT
+CMD [ "node", "server/ts-dist" ]
+# CMD /bin/bash -c "tail -f /dev/null"
