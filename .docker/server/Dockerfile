@@ -15,7 +15,7 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/packages/server/ts-dist ./server/ts-dist
 COPY --from=build /usr/src/app/packages/client/dist ./client/dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
-COPY .env ./.env
+COPY --from=build .env ./.env
 # EXPOSE $SERVER_PORT
 CMD [ "node", "server/ts-dist" ]
 # CMD /bin/bash -c "tail -f /dev/null"
