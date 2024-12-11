@@ -43,7 +43,14 @@ export const Main = () => {
           </div>
 
           <div className="promo-page__actions">
-            {!userIsLogged && (
+            {userIsLogged.current ? (
+              <Button
+                className="promo-page__btn"
+                useFixWidth
+                onClick={() => navigate('/game')}
+                text="Играть"
+              />
+            ) : (
               <Button
                 className="promo-page__btn custom-button_blue"
                 useFixWidth
@@ -51,12 +58,6 @@ export const Main = () => {
                 text="Вход / Регистрация"
               />
             )}
-            <Button
-              className="promo-page__btn"
-              useFixWidth
-              onClick={() => navigate('/game')}
-              text="Играть"
-            />
           </div>
         </div>
       </div>
