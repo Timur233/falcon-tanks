@@ -15,7 +15,10 @@ WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/packages/server/ts-dist ./server/ts-dist
 COPY --from=build /usr/src/app/packages/client/dist ./client/dist
 COPY --from=build /usr/src/app/node_modules ./node_modules
-COPY --from=build .env ./.env
+
+# Ensure .env exists, if it does, copy it, otherwise copy .env.example to .env
+RUN if [ -f .env ]; then cp .env .env; else cp .env.example .env; fi
+
 # EXPOSE $SERVER_PORT
 CMD [ "node", "server/ts-dist" ]
 # CMD /bin/bash -c "tail -f /dev/null"
