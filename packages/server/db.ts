@@ -2,8 +2,11 @@ import dotenv from 'dotenv'
 import path from 'path'
 import { Client } from 'pg'
 
+const PATH_TO_ENV_DEV = path.resolve(__dirname, '../../../.env')
+const PATH_TO_ENV_PROD = path.resolve(__dirname, '../../.env')
+
 dotenv.config({
-  path: path.resolve(__dirname, '../../../.env'), // Путь к корневому .env файлу
+  path: process.env.NODE_ENV === 'production' ? PATH_TO_ENV_PROD : PATH_TO_ENV_DEV, // Путь к корневому .env файлу
 })
 
 const {
