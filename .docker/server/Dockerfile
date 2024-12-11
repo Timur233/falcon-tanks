@@ -1,9 +1,11 @@
 FROM --platform=linux/amd64 node:20 AS base
 WORKDIR /usr/src/app
 COPY . .
+COPY ./.env ./.env
 RUN yes | yarn install
 
 FROM base AS build
+
 RUN yarn build
 
 FROM base AS dev
