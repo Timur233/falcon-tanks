@@ -25,9 +25,7 @@ export default function withAuthUser<P extends object>(
     const navigate = useNavigate()
     const dispatch = useAppDispatch()
     const { pathname } = useLocation()
-    const isAuthPath = import.meta.env.VITE_AUTH_PATHNAMES.split(', ').includes(
-      pathname
-    )
+    const isAuthPath = '/sign-in, /sign-up'.split(', ').includes(pathname)
 
     const handleAuthentication = async () => {
       const isAuthenticated = await userService.fetchUser(dispatch)
