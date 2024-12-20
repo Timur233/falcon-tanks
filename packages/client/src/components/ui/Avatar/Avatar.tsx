@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { Image } from '@/components/ui/Image/Image'
 import AvatarPlaceholder from '@/assets/images/avatar-placeholder.png'
 
-export const AVATAR_SRC = import.meta.env.VITE_SRC_URL
+export const AVATAR_SRC = 'https://ya-praktikum.tech/api/v2/resources'
 
 export const Avatar = (props: {
   src: string
