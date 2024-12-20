@@ -6,7 +6,6 @@
 # “publish” is the directory to publish (relative to the root of your repo).
 
 [build]
-  command = "cd /packages/client
   command = "npm run build"
   publish = "/packages/client/dist/client"
 
