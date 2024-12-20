@@ -7,7 +7,7 @@
 
 [build]
   command = "npm run build"
-  publish = "/packages/client/dist/client"
+  publish = "/dist/client"
 
 [[redirects]]
   from = "/*"
