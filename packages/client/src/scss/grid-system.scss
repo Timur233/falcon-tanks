@@ -1,0 +1,40 @@
+@use 'sass:math';
+@import './vars.scss';
+
+.container-fluid {
+  display: block;
+  width: 100%;
+  max-width: $container_fluid-max-width;
+  padding: $container_fluid-padding;
+}
+
+.container {
+  max-width: $container-max-width;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: $gutter-width;
+  padding-left: $gutter-width;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-right: calc($gutter-width / 2 * -1);
+  margin-left: calc($gutter-width / 2 * -1);
+}
+
+.column {
+  padding-right: calc($gutter-width / 2);
+  padding-left: calc($gutter-width / 2);
+  flex-basis: 0;
+  flex-grow: 1;
+  max-width: 100%;
+}
+
+@for $i from 1 through $grid-columns {
+  .col-#{$i} {
+    flex: 0 0 math.percentage(math.div($i, $grid-columns));
+    max-width: math.percentage(math.div($i, $grid-columns));
+  }
+}

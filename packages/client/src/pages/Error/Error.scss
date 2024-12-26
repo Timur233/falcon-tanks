@@ -1,0 +1,57 @@
+@import '../../scss/vars';
+
+.error-page-layout {
+  height: 600px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+
+  &__body {
+    flex: 1 1 100%;
+  }
+}
+
+.error-page {
+  height: 100%;
+
+  position: relative;
+  display: flex;
+
+  font-family: $f_default-font-family;
+
+  &__info {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    max-width: 350px;
+
+    z-index: 1;
+
+    span {
+      font-size: 160px;
+      font-weight: 900;
+      color: $c_font-default;
+      text-shadow: -4px -4px 0 $c_black, 4px -4px 0 $c_black,
+        -4px 4px 0 $c_black, 4px 4px 0 $c_black;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 400;
+      text-align: center;
+      color: $c_font-default;
+    }
+  }
+
+  &__destroyed-tanks {
+    max-width: 100%;
+
+    position: absolute;
+
+    bottom: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

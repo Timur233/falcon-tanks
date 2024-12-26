@@ -1,0 +1,101 @@
+@import './../../scss/vars.scss';
+
+$decor-width: 90px;
+$decor-height: 7px;
+
+$padding-color: $c_gray;
+$row-background: $c_almost-black;
+$title-color: #bebebe;
+
+@mixin decor($top, $bottom) {
+  content: '';
+  position: absolute;
+  top: $top;
+  bottom: $bottom;
+  left: calc(50% - ($decor-width / 2));
+
+  display: block;
+  width: $decor-width;
+  height: $decor-height;
+
+  background-image: url('@/assets/images/svg/title-decor.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.forum-page {
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    bottom: 0;
+    width: 360px;
+    height: 165px;
+    background-image: url('@/assets/images/destroyed-tanks.png');
+  }
+
+  margin-top: 40px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header {
+    &__title {
+      display: flex;
+      margin: 40px 0;
+    }
+  }
+
+  &__logo {
+    display: block;
+    margin: 0 auto 44px auto;
+
+    max-width: 255px;
+    height: 124px;
+  }
+
+  &__threads {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 32px;
+
+    a {
+      text-decoration: none;
+      color: $c_white;
+    }
+  }
+
+  .thread {
+    display: flex;
+    padding: 12px;
+
+    &__title {
+      width: 100%;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    &__views {
+      margin-right: 35px;
+    }
+
+    .views,
+    .answers {
+      font-size: 18px;
+
+      &__title {
+        font-weight: 300;
+        margin-right: 17px;
+      }
+
+      &__count {
+        font-weight: 600;
+      }
+    }
+  }
+}

@@ -1,0 +1,58 @@
+@import '../../scss/vars';
+
+$img_default-canvas-background: '@/assets/images/ground.png';
+
+.game-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: stretch;
+  background-color: $c_default-background;
+  font-family: $f_default-font-family;
+  overflow: hidden;
+  position: relative;
+}
+
+canvas {
+  background-image: url($img_default-canvas-background);
+  background-repeat: repeat;
+}
+
+.player {
+  position: absolute;
+  background-color: $c_button;
+  border: 2px solid $c_button-top;
+  border-radius: 4px;
+  transition: transform 0.1s ease;
+}
+
+.obstacle {
+  position: absolute;
+  background-color: $c_button-bottom;
+  border: 2px solid $c_black;
+  border-radius: 4px;
+}
+
+.game-text {
+  color: $c_font-default;
+  font-size: 16px;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.game-info {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  color: $c_font-default;
+  font-size: 18px;
+  background: rgba($c_black, 0.5);
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.lives {
+  color: $c_button-top;
+  font-weight: bold;
+}

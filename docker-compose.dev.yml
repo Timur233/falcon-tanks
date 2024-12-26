@@ -1,0 +1,16 @@
+networks:
+  traefik:
+    name: 'traefik_traefik'
+    external: true
+
+services:
+  server:
+    build:
+      target: dev
+    restart: always
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.tanks.rule=Host(`tanks.docker`)"
+      - "traefik.docker.network=${TRAEFIK_NETWORK_NAME}"

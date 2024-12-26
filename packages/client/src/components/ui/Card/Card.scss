@@ -1,0 +1,45 @@
+@import '../../../scss/vars';
+
+$decor-width: 90px;
+$decor-height: 7px;
+$c_card-background: $c_almost-black;
+$c_card-border: #9baf5d;
+$c_card-padding: $c_gray;
+
+@mixin decor($top, $bottom) {
+  content: '';
+  position: absolute;
+  top: $top;
+  bottom: $bottom;
+  left: calc(50% - ($decor-width / 2));
+
+  display: block;
+  width: $decor-width;
+  height: $decor-height;
+
+  background-image: url('@/assets/images/svg/title-decor.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.card {
+  border: 2px solid $c_card-border;
+  background-color: $c_card-padding;
+  border-radius: 16px;
+  padding: 8px;
+  position: relative;
+
+  &::before {
+    @include decor(0, 'auto');
+  }
+
+  &::after {
+    @include decor('auto', 0);
+
+    transform: rotate(180deg);
+  }
+
+  &__content {
+    background-color: $c_card-background;
+  }
+}

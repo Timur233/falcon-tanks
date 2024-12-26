@@ -1,0 +1,21 @@
+@import '../../../../scss/vars.scss';
+
+.pause-help {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: inherit;
+  height: 56px;
+
+  background: url('@/assets/images/svg/pause-help-fullscreen-controll-bg.svg')
+    no-repeat center center;
+  background-size: contain;
+
+  &__buttons {
+    width: 100%;
+    padding: 0 62px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

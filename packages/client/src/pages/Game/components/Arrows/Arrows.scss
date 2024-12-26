@@ -1,0 +1,33 @@
+@import '../../../../scss/vars.scss';
+
+.controll-arrows {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 290px;
+
+  background: url('@/assets/images/svg/arrow-controll-bg.svg') no-repeat center
+    center;
+}
+
+.horizontal-arrows {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.vertical-arrows {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  transform: translateX(-50%);
+  padding: 20px 0;
+}

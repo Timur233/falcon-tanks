@@ -1,0 +1,13 @@
+.oauth-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+}

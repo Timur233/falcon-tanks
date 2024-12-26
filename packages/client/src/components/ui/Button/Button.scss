@@ -1,0 +1,71 @@
+@import '../../../scss/vars';
+
+.custom-button {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  border-radius: $border-radius--default;
+  background-color: $c_button;
+  transition: border-color $animation-base-speed;
+
+  padding: 16px 12px;
+  padding: 16px 12px;
+  display: block;
+
+  border-top: 5px solid $c_button-top;
+  border-bottom: 5px solid $c_button-bottom;
+
+  font-size: 16px;
+  font-family: $f_default-font-family;
+  font-weight: 900;
+  color: $c_font-default;
+  text-decoration: none;
+  text-align: center;
+
+  &:hover {
+    border-bottom-color: $c_button-top;
+    border-top-color: $c_button-bottom;
+  }
+
+  &_fix-width {
+    min-width: 300px;
+  }
+
+  &_blue {
+    background-color: $c_button_blue;
+    border-top: 5px solid $c_button-top_blue;
+    border-bottom: 5px solid $c_button-bottom_blue;
+
+    &:hover {
+      border-top-color: $c_button-bottom_blue;
+      border-bottom-color: $c_button-top_blue;
+    }
+  }
+
+  span {
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: $main-text-shadow;
+  }
+}
+
+.link-button {
+  background: none;
+  border-color: transparent;
+  font-size: $nav_link-font-size;
+  font-weight: $nav_link-font-weight;
+  letter-spacing: 1px;
+
+  text-shadow: $main-text-shadow;
+  text-transform: uppercase;
+  text-decoration: none;
+
+  color: $text-color;
+  transition: color $animation-base-speed;
+
+  &:hover,
+  &_active {
+    border-color: transparent;
+    color: $primary-color;
+  }
+}
