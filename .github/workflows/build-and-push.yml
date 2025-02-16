@@ -1,0 +1,33 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-and-push:
+    permissions:
+      packages: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push client image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: .docker/server/Dockerfile
+          target: prod
+          push: true
+          tags: ghcr.io/${{ env.OWNER_LC }}/${{ github.event.repository.name }}/client:${{ github.sha }}
