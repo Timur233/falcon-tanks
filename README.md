@@ -6,7 +6,7 @@
 
 ---
 
-[!preview](https://github.com/Timur233/falcon-tanks/blob/main/tanks.gif)
+![preview](https://github.com/Timur233/falcon-tanks/blob/main/tanks.gif)
 
 ### При разработке были использованы следующие технологии:
 
